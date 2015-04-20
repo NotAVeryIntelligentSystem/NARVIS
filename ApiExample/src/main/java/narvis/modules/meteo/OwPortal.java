@@ -8,6 +8,7 @@ package narvis.modules.meteo;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.NoSuchElementException;
 import net.aksingh.owmjapis.CurrentWeather;
 import net.aksingh.owmjapis.OpenWeatherMap;
 import org.json.JSONException;
@@ -18,7 +19,7 @@ import sun.management.MemoryUsageCompositeData;
  *
  * @author Puma
  */
-public class OwPortal {
+public class OwPortal implements IWeatherApi {
     
     private final CurrentWeather _currentWeather;
     
@@ -79,6 +80,7 @@ public class OwPortal {
         return this._currentWeather.getMainInstance().getMaxTemperature();
     }
     
+    @Override
     public double getMaxTemperatureInCelsius()
     {
         
@@ -86,21 +88,24 @@ public class OwPortal {
         return (farenheitTemperature  -  32.0) *5.0/9.0;
     }
  
-    public double getWindSpeed() throws NoSuchFieldException
+    @Override
+    public double getWindSpeed() throws NoSuchElementException
     {
         if( this._currentWeather.getWindInstance().hasWindSpeed() )
             return this._currentWeather.getWindInstance().getWindSpeed();
+       
         
-        throw new NoSuchFieldException("No wind speed found");
+        throw new NoSuchElementException("No wind speed found");
     }
     
     
-    public double getPercentageOfCloud() throws NoSuchFieldException
+    @Override
+    public double getPercentageOfCloud() throws NoSuchElementException
     {
         if( this._currentWeather.getCloudsInstance().hasPercentageOfClouds() )
             return this._currentWeather.getCloudsInstance().getPercentageOfClouds();
         
-        throw new NoSuchFieldException("No cloud percentage found");
+        throw new NoSuchElementException("No cloud percentage found");
     }
     
     
@@ -108,6 +113,7 @@ public class OwPortal {
      * Quick and rough way to know if the weather is good or not
      * @return 
      */
+    @Override
     public boolean isSkyClear()
     {
        double pressure = this._currentWeather.getMainInstance().getPressure();
