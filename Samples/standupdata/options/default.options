@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE optionspackage SYSTEM "optionspackage.dtd">
+<optionspackage>
+  <optionslexicon>
+    <customlexiconfilenames>
+      <file>default.lexicon</file>
+    </customlexiconfilenames>
+    <blacklistfilenames>
+      <file>default.blacklist</file>
+    </blacklistfilenames>
+    <topicfilenames>
+      <file>default.topic</file>
+    </topicfilenames>
+  </optionslexicon>
+</optionspackage>
