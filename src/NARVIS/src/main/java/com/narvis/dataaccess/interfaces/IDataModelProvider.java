@@ -26,6 +26,7 @@ package com.narvis.dataaccess.interfaces;
 /**
  *
  * @author uwy
+ * @param <T>
  */
 public interface IDataModelProvider<T> extends IDataProvider {
     public T getModel(String... keywords);

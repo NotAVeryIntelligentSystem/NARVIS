@@ -1,5 +1,4 @@
 /*
-<<<<<<< HEAD
  * The MIT License
  *
  * Copyright 2015 uwy.
@@ -21,14 +20,20 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
-*/
+ */
+package com.narvis.dataaccess.models.lang;
 
-package com.narvis.dataaccess.interfaces;
+import org.simpleframework.xml.*;
 
-/*
+/**
+ *
  * @author uwy
  */
-public interface IDataProvider {
-    public String getData(String... keywords);
+@Root(name = "Language")
+public class Language {
+    @Element(name = "Name")
+    private String name;
     
+    
+    //private List<String> ignoreWords; 
 }

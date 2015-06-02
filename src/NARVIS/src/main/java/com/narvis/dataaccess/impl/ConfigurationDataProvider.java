@@ -40,6 +40,4 @@ public class ConfigurationDataProvider implements IDataProvider {
         throw new UnsupportedOperationException("TODO."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    
-    
 }
