@@ -48,16 +48,15 @@ public class ApiKeyProvider implements IDataProvider{
             {
                 return nList.item(0).getTextContent();
             }
-            else
-            {
-                return "null";
+            else {
+            
+                return null;
             }
             
             
         } catch ( SAXException | IOException | ParserConfigurationException ex) {
-            return "null";
-        }
-        
+            return null;
+        }        
     }
     
   
