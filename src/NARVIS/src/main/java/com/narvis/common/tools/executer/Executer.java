@@ -21,10 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.common.tools;
+package com.narvis.common.tools.executer;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RunnableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -55,11 +57,12 @@ public class Executer implements AutoCloseable {
         this.executionLoop.start();
     }
     
-    public void addToExecute(Runnable executable) {
+    public <T> T addToExecute(RunnableFuture<T> executable) throws ExecuterException {
         try {
             this.toExecute.put(executable);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Executer.class.getName()).log(Level.SEVERE, null, ex);
+            return executable.get();
+        } catch (InterruptedException | ExecutionException ex) {
+            throw new ExecuterException(ex);
         }
     }
 
