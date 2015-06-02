@@ -59,8 +59,6 @@ public class OpenWeatherMapPortal implements IDataProvider {
 
             return this._answer;
 
-            
-            //return buildResponse(city,celsiusTemperature, percentageOfClouds);
        
             
         } catch (IOException | JSONException | NoSuchElementException  ex ) {
