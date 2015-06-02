@@ -35,6 +35,8 @@ public class FondamentalAnalyser {
     private final static String ROUTESPATH = "src\\main\\java\\narvis\\engine\\fondamentalAnalyser\\routes.xml"; // Le chemin d'accès au fichier XML contenant les routes
     private Document document = null; // Le document XML contenant les routes
     
+    private IRoutesProvider routesProvider;
+    
     private String providerName = "";
     private List<String> askFor = null;
     private List<String> details = null; // La phrase parsée à partir de laquelle l'arbre est parcouru. Elle devient par la suite la liste des détails de la phrase.
@@ -52,17 +54,25 @@ public class FondamentalAnalyser {
      * @return Retourne l'action correspondant à la phrase, ou NULL si aucune n'est trouvée.
      */
     public Action findAction(List<String> pParsedSentence){
-        Action action = null;
+        //Action action = null;
         details = pParsedSentence;
-        Element actionElement = searchPath(document.getDocumentElement(), 0);
+        List<IWord> rootWords = routesProvider.getWords();
+        IAction action = null;
         
-        if(actionElement != null && actionElement.getNodeName().equals("action")){
-            providerName = actionElement.getAttribute("provider");
+        for(IWord word : rootWords)
+        {
+            action = searchPath(word, 0);
             
-            askFor=new LinkedList();
-            askFor.addAll(Arrays.asList(actionElement.getAttribute("askfor").split("[+]")));
+            if(action != null)
+                break;
+        }
+
+        if(action != null){
+            providerName = action.getProviderName();
             
-            action = new Action(providerName, askFor, details);
+            askFor = action.getAskFor();
+            
+            implAction = new Action(providerName, askFor, details);
         }else{
             providerName = "";
             askFor = null;
@@ -139,41 +149,34 @@ public class FondamentalAnalyser {
      * @param iWord : L'indice du mot courrant
      * @return Un noeud de l'arbre correspondant à une action, ou NULL si aucune action n'est trouvée.
      */
-    private Element searchPath(Element pBranche, int iWord){
-        final NodeList routesWords = pBranche.getChildNodes();
+    private IAction searchPath(IWord pWord, int iWord){
         
-        Element action = null;
-        
+        final List<IWord> words = pWord.getWords();
+
+        IAction action = null;
+
         if(iWord < details.size()){
             final String currentSentenceWord = details.get(iWord);
-            for(int i=0; i<routesWords.getLength(); i++){
-                if(routesWords.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    final Element currentRouteBranche = (Element) routesWords.item(i);
+            for (IWord currentWordNode : words) {
+                if(currentWordNode.getValue().isEmpty()){
+                    action = searchPath(currentWordNode, iWord+1);
+                    break;
                     
-                    if(currentRouteBranche.getNodeName().equals("word")){
-                        if(currentRouteBranche.getAttribute("value").isEmpty()){
-                            action = searchPath(currentRouteBranche, iWord+1);
-                            break;
-                        }else if(currentRouteBranche.getAttribute("value").equals(currentSentenceWord)){
-                            details.remove(iWord);
-                            action = searchPath(currentRouteBranche, iWord);
-                            break;
-                        }
-                    }
+                }else if(currentWordNode.getValue().equals(currentSentenceWord)){
+                    details.remove(iWord);
+                    action = searchPath(currentWordNode, iWord);
+                    break;
+                    
                 }
             }
         }
         
         if(action == null){
-            for(int i=0; i<routesWords.getLength(); i++){
-                if(routesWords.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    final Element currentRouteBranche = (Element) routesWords.item(i);
-                    
-                    if(currentRouteBranche.getNodeName().equals("action")){
-                        action = currentRouteBranche;
-                        break;
-                    }
-                }
+            final List<IAction> actions = pWord.getActions();
+            
+            if(actions.size() > 0)
+            {
+                action = actions.get(0);
             }
         }
         

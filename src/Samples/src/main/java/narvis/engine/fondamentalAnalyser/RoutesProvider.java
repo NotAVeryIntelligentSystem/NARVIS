@@ -11,6 +11,6 @@ import java.util.List;
  *
  * @author Zack
  */
-public interface IRoutesProvider extends IDataModelAccess{
+public interface RoutesProvider extends IDataModelAccess{
     List<IWord> getWords();
 }

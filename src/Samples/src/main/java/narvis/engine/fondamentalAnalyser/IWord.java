@@ -13,5 +13,6 @@ import java.util.List;
  */
 public interface IWord extends INode {
     String getValue();
-    List<INode> getChildren();
+    List<IAction> getActions();
+    List<IWord> getWords();
 }
