@@ -17,8 +17,7 @@
            <groupId>org.twitter4j</groupId>
            <artifactId>twitter4j-core</artifactId>
            <version>[4.0,)</version>
-       </dependency>
-       
+       </dependency>       
        <!-- Open Weather map repository -->
        <dependency>
            <groupId>net.aksingh</groupId>
@@ -30,6 +29,11 @@
             <artifactId>junit</artifactId>
             <version>4.10</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.simpleframework</groupId>
+            <artifactId>simple-xml</artifactId>
+            <version>2.7.1</version>
         </dependency>
     </dependencies>
 </project>
