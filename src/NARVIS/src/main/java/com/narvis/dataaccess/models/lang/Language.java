@@ -23,6 +23,7 @@
  */
 package com.narvis.dataaccess.models.lang;
 
+import java.util.List;
 import org.simpleframework.xml.*;
 
 /**
