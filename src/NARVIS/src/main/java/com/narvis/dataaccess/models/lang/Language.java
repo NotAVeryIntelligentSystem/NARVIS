@@ -35,5 +35,5 @@ public class Language {
     private String name;
     
     
-    //private List<String> ignoreWords; 
+    private List<String> ignoreWords; 
 }
