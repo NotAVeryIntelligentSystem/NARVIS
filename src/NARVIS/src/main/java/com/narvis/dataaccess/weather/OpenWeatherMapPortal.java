@@ -45,17 +45,20 @@ public class OpenWeatherMapPortal implements IDataProvider {
             IDataProvider keyProvider = new ApiKeyProvider();
             String key = keyProvider.getData(KEY_FOLDER, KEY_TAG);
             
+            if( key == null )
+                return null;
+
             OpenWeatherMap owm = new OpenWeatherMap(key);
             this._currentWeather = owm.currentWeatherByCityName(keyWords[0]);
-            
+
             //For each command call the method and format the answer
             for( int i = 1; i < keyWords.length; i++ ) {
                 String result = CallMethodByCommand(keyWords[i].toLowerCase(Locale.FRENCH));
                 AppendToAnswer(keyWords[i], result);
             }
-            
+
             return this._answer;
-            
+
             
             //return buildResponse(city,celsiusTemperature, percentageOfClouds);
        

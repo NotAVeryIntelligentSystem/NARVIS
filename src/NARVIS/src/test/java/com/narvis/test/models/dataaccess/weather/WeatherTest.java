@@ -5,14 +5,8 @@
  */
 package com.narvis.test.models.dataaccess.weather;
 
-<<<<<<< HEAD
-
 
 import com.narvis.dataaccess.weather.OpenWeatherMapPortal;
-=======
-import com.narvis.models.dataaccess.weather.OpenWeatherMapPortal;
-
->>>>>>> cb19d94c71b36c3bdf45b819e55dac22f9dbefc0
 import org.junit.Test;
 /**
  *
