@@ -5,7 +5,13 @@
  */
 package com.narvis.models.dataaccess.weather;
 
+import com.narvis.dataaccess.conf.ApiKeyProvider;
+import com.narvis.dataaccess.interfaces.IDataProvider;
+import com.narvis.models.dataaccess.weather.annotations.Command;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 import net.aksingh.owmjapis.CurrentWeather;
 import net.aksingh.owmjapis.OpenWeatherMap;
@@ -14,29 +20,44 @@ import org.json.JSONException;
 
 /**
  *
+ * Get Data implementation for the OpenWeatherMapPortal
+ * The first Parameter must be the name of the city the other parameters could be (Not case sensitive)
  * @author puma
  */
-public class OpenWeatherMapPortal implements IWeather {
+public class OpenWeatherMapPortal implements IDataProvider {
 
     private CurrentWeather _currentWeather;
+    private String _answer = "";
+    
+    private final String KEY_FOLDER = "WeatherApi";
+    private final String KEY_TAG = "OpenWeatherMap";
     
     public OpenWeatherMapPortal() {
         
         
     }
 
-    
     @Override
-    public String getInfoMeteo(String city) {
+    public String getData(String... keyWords) {
         
         try {
-            OpenWeatherMap owm = new OpenWeatherMap("01b5f54b9605d5bbae6cf9f831560fb5");
-            _currentWeather = owm.currentWeatherByCityName(city);
             
-            float celsiusTemperature = getTemperatureInCelsius();
-            float percentageOfClouds = GetPercentageOfCloud();
+            IDataProvider keyProvider = new ApiKeyProvider();
+            String key = keyProvider.getData(KEY_FOLDER, KEY_TAG);
             
-            return buildResponse(city,celsiusTemperature, percentageOfClouds);
+            OpenWeatherMap owm = new OpenWeatherMap(key);
+            this._currentWeather = owm.currentWeatherByCityName(keyWords[0]);
+            
+            //For each command call the method and format the answer
+            for( int i = 1; i < keyWords.length; i++ ) {
+                String result = CallMethodByCommand(keyWords[i].toLowerCase(Locale.FRENCH));
+                AppendToAnswer(keyWords[i], result);
+            }
+            
+            return this._answer;
+            
+            
+            //return buildResponse(city,celsiusTemperature, percentageOfClouds);
        
             
         } catch (IOException | JSONException | NoSuchElementException  ex ) {
@@ -50,39 +71,87 @@ public class OpenWeatherMapPortal implements IWeather {
      * Return the temperature in the city in celsius 
      * @return 
      */
-    private float getTemperatureInCelsius() {
+    @Command(CommandName = "temperature")
+    public String getTemperatureInCelsius() {
      
         //Early out
         if( this._currentWeather == null || !this._currentWeather.hasMainInstance()  ||  !this._currentWeather.getMainInstance().hasMaxTemperature() )
             throw new NoSuchElementException("Can not find temperature");
         
         float farenheitTemperature = this._currentWeather.getMainInstance().getTemperature();
-        return (farenheitTemperature - 32.0f)* 5.0f/9.0f;
+        float celsiusTemp = (farenheitTemperature - 32.0f)* 5.0f/9.0f;
+        return Float.toString(celsiusTemp);
     }
     
     /**
      * Return the percentage of clouds 
      * @return 
      */
-    private float GetPercentageOfCloud() {
+    @Command(CommandName = "cloud")
+    public String GetPercentageOfCloud() {
         
         //Early out
         if( this._currentWeather == null || !this._currentWeather.hasCloudsInstance() || !this._currentWeather.getCloudsInstance().hasPercentageOfClouds() )
             throw new NoSuchElementException("Can not find clouds percentage");
         
-        return this._currentWeather.getCloudsInstance().getPercentageOfClouds();
+        float cloudPercentage = this._currentWeather.getCloudsInstance().getPercentageOfClouds();
+        
+        return Float.toString(cloudPercentage);
+        
+    }
+
+    
+    /**
+     * Call the method wich provide the answer for the given method
+     * @param command
+     * @return the return value of the called method
+     */
+    private String CallMethodByCommand(String command) {
+        
+        if( command == null )
+            return null;
+        
+        Method[] methods = this.getClass().getMethods();
+
+        
+        //Heizenberg is behind you...
+        for( Method meth : methods ) {
+            
+            Command[] comAnnotations = meth.getAnnotationsByType(Command.class);
+            for( Command comAnnot : comAnnotations ) {
+                if(comAnnot.CommandName().equals(command) ) {
+                    try {
+                        //Method found we call it
+                        return (String)meth.invoke(this);
+                        
+                    } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                        //The user came to the wrong methodhood, we quit
+                        return null;
+                    }
+                }
+            }
+            
+                    
+        }
+        
+        return null;
         
     }
     
     /**
-     * Build the responsse using the data 
-     * @return 
+     * The answer builder, add to the answer the result to the command
      */
-    private String buildResponse(String city, float celsiusTemperature, float percentageOfClouds) {
+    private void AppendToAnswer(String command, String result){
         
-        return "The temperature in "+ city + " is " + celsiusTemperature + "°C" + " The clouds percentage is " + percentageOfClouds + "%";
+        this._answer += " The " + command;
         
+        if( result == null )
+            this._answer += " can not be found ";
+        else
+            this._answer += " is " + result;
+      
     }
+    
     
     
     
