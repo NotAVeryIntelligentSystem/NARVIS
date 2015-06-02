@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<routes>
+	<word value="what">
+		<word value="is">
+			<word value="weather"> <!-- What is weather -->
+				<action provider="weather"/>
+			</word>
+			<word value="temperature"> <!-- What is temperature -->
+				<action askfor="temperature" provider="weather"/>
+			</word>
+			<word value="new">
+				<action provider="news"/>
+			</word>
+		</word>
+		<word value="weather"> 
+			<word value="is"> <!-- What weather is -->
+				<action provider="weather"/>
+			</word>
+		</word>
+		<word value="temperature">
+			<word value="is"> <!-- What temperature is -->
+				<action askfor="temperature" provider="weather"/>
+			</word>
+		</word>
+	</word>
+
+	<word value="give">
+		<word> <!-- Just need a word, no matter what (me, you, us, humanity) -->
+			<word value="weather"> <!-- Give me weather --> <!-- Give someone weather -->
+				<action provider="weather"/>
+			</word>
+		</word>
+                
+                <word value="weather"> <!-- Give me weather --> <!-- Give someone weather -->
+                    <action provider="weather"/>
+                </word>
+	</word>
+
+	<word value="is">
+		<word value="it">
+			<word value="cloudy">
+				<action askfor="sunshine" provider="weather"/>
+			</word>
+			<word value="sunny">
+				<action askfor="sunshine" provider="weather"/>
+			</word>
+		</word>
+	</word>
+
+	<word value="can">
+		<word value="you">
+			<action provider="ability"/>
+		</word>
+	</word>
+<word value="bring">
+    <word>
+      <word value="weather">
+        <action provider="weather"/>
+      </word>
+    </word>
+  </word>
+</routes>
