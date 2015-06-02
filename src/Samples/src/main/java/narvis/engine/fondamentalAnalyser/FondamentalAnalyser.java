@@ -9,7 +9,6 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,7 +19,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import narvis.engine.parser.Parser;
+import narvis.engine.logger.NarvisLogger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -32,7 +31,6 @@ import org.xml.sax.SAXException;
  * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class FondamentalAnalyser {
-    private final static Logger LOGGER = Logger.getLogger(Parser.class.getName());
     
     private final static String ROUTESPATH = "src\\main\\java\\narvis\\engine\\fondamentalAnalyser\\routes.xml"; // Le chemin d'accès au fichier XML contenant les routes
     private Document document = null; // Le document XML contenant les routes
@@ -89,14 +87,14 @@ public class FondamentalAnalyser {
                 findedAction = currentAction;
                 indexOfKnownSentence = i;
             }else if(findedAction != null && currentAction != null){
-                LOGGER.warning("Plusieurs phrases correspondent déjà à une action...");
+                NarvisLogger.getInstance().warning("Plusieurs phrases correspondent déjà à une action...");
                 return;
             }
             i++;
         }
         
         if(findedAction == null){
-            LOGGER.warning("Aucune phrase n'est déjà connue...");
+            NarvisLogger.getInstance().warning("Aucune phrase n'est déjà connue...");
             return;
         }
         
