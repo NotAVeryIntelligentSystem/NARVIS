@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.common.tools.executer;
+package com.narvis.common.tools;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -32,18 +32,19 @@ import java.util.logging.Logger;
  * Execute 
  * @author uwy
  */
-public class Executer {
+public class Executer implements AutoCloseable {
     private final BlockingQueue<Runnable> toExecute;
-    private final Runnable executionLoop;
+    private final Thread executionLoop;
     
-    public Executer() {
+    @SuppressWarnings("CallToThreadStartDuringObjectConstruction") // this is intended
+    public Executer(String name) {
         this.toExecute = new LinkedBlockingQueue<>();
-        this.executionLoop = new Runnable() {
-
+        this.executionLoop = new Thread(name){
             @Override
             public void run() {
                 while(true) {
                     try {
+                        // Automatically interrupted when this thread is interrupted so we shouldn't worry much
                         toExecute.take().run();
                     } catch (InterruptedException ex) {
                         Logger.getLogger(Executer.class.getName()).log(Level.SEVERE, null, ex);
@@ -51,6 +52,20 @@ public class Executer {
                 }
             }
         };
+        this.executionLoop.start();
+    }
+    
+    public void addToExecute(Runnable executable) {
+        try {
+            this.toExecute.put(executable);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Executer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void close() throws Exception {
+        this.executionLoop.interrupt();
     }
     
 }
