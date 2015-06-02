@@ -50,12 +50,12 @@ public class ApiKeyProvider implements IDataProvider{
             }
             else
             {
-                return "null";
+                return null;
             }
             
             
         } catch ( SAXException | IOException | ParserConfigurationException ex) {
-            return "null";
+            return null;
         }
         
     }
