@@ -6,6 +6,7 @@
 package narvis.engine.logger;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.logging.Logger;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
@@ -16,22 +17,14 @@ import narvis.engine.parser.Parser;
  * @author Zack
  */
 public class NarvisLogger extends Logger {
-
+    private final static String PATH = "src\\main\\java\\narvis\\engine\\logger\\logs\\";
     private static NarvisLogger INSTANCE = null;
     
     
     /** Constructeur privé */
     private NarvisLogger() 
     {
-        super(Parser.class.getName(), null);
-        
-        INSTANCE.addHandler(new ConsoleHandler());
-        
-        try {
-            INSTANCE.addHandler(new FileHandler("%t\narvis-log.%u.txt"));
-        } catch (IOException | SecurityException ex) {
-            INSTANCE.severe(ex.getMessage());
-        }
+        super(NarvisLogger.class.getName(), null);
     }
  
     /**
@@ -42,7 +35,17 @@ public class NarvisLogger extends Logger {
     {			
     	if (INSTANCE == null)
 	{ 	
-            INSTANCE = new NarvisLogger();	
+            INSTANCE = new NarvisLogger();
+            
+            INSTANCE.addHandler(new ConsoleHandler());
+        
+            try {
+                Date date= new Date();
+                System.out.println("Date : "+date.getTime());
+                INSTANCE.addHandler(new FileHandler(PATH+"narvis-log."+date.getTime()+".txt"));
+            } catch (IOException | SecurityException ex) {
+                INSTANCE.severe(ex.getMessage());
+            }
 	}
 	return INSTANCE;
     }
