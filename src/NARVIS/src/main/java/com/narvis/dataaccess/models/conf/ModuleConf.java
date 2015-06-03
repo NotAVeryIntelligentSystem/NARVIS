@@ -23,6 +23,7 @@
  */
 package com.narvis.dataaccess.models.conf;
 
+import com.narvis.common.tools.reflection.Factory;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import org.simpleframework.xml.*;
 
@@ -48,6 +49,8 @@ public class ModuleConf implements IDataProvider {
     public void setModuleClassPaht(String val) {
         this.moduleClassPath = val;
     }
+    
+
     
     @Override
     public String getData(String... keywords) {
