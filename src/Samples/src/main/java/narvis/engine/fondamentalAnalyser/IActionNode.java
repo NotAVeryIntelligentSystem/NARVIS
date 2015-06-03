@@ -5,11 +5,13 @@
  */
 package narvis.engine.fondamentalAnalyser;
 
+import java.util.List;
+
 /**
  *
  * @author Zack
  */
-public interface IDataModelAccess<T> {
-    T getModel();
-    void persist();
+public interface IActionNode extends INode {
+    String getProviderName();
+    List<String> getAskFor();
 }

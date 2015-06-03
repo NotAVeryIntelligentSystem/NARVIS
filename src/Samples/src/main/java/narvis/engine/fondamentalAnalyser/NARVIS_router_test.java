@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import org.xml.sax.SAXException;
 
 /**
@@ -44,8 +43,6 @@ public class NARVIS_router_test {
         parsedSentence3.add("weather");
         allSentences.add(parsedSentence3);
         
-        
-        
         try {
             final FondamentalAnalyser fondamentalAnalyser = new FondamentalAnalyser();
             Action action = fondamentalAnalyser.findAction(parsedSentence);
@@ -74,13 +71,10 @@ public class NARVIS_router_test {
             
             fondamentalAnalyser.createSimilarityBetween(allSentences);
             fondamentalAnalyser.saveRoutes();
-        }
-        catch (final ParserConfigurationException e) {
+        } catch (final ParserConfigurationException e) {
         } catch (SAXException ex) {
             Logger.getLogger(NARVIS_router_test.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(NARVIS_router_test.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TransformerException ex) {
             Logger.getLogger(NARVIS_router_test.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

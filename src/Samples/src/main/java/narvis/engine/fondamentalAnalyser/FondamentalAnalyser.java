@@ -6,24 +6,9 @@
 package narvis.engine.fondamentalAnalyser;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import narvis.engine.logger.NarvisLogger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
@@ -31,21 +16,14 @@ import org.xml.sax.SAXException;
  * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class FondamentalAnalyser {
-    
-    private final static String ROUTESPATH = "src\\main\\java\\narvis\\engine\\fondamentalAnalyser\\routes.xml"; // Le chemin d'accès au fichier XML contenant les routes
-    private Document document = null; // Le document XML contenant les routes
-    
-    private IRoutesProvider routesProvider;
+    private final IRoutesProvider routesProvider;
     
     private String providerName = "";
     private List<String> askFor = null;
     private List<String> details = null; // La phrase parsée à partir de laquelle l'arbre est parcouru. Elle devient par la suite la liste des détails de la phrase.
     
-    public FondamentalAnalyser() throws ParserConfigurationException, SAXException, IOException{
-        final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        
-        final DocumentBuilder builder = factory.newDocumentBuilder();
-        document= builder.parse(new File(ROUTESPATH));
+    public FondamentalAnalyser() throws ParserConfigurationException, SAXException, IOException{        
+        routesProvider = new RoutesProvider();
     }
     
     /**
@@ -56,15 +34,26 @@ public class FondamentalAnalyser {
     public Action findAction(List<String> pParsedSentence){
         //Action action = null;
         details = pParsedSentence;
-        List<IWord> rootWords = routesProvider.getWords();
-        IAction action = null;
+        List<IWordNode> rootWords = routesProvider.getWords();
+        IActionNode action = null;
+        Action implAction = null;
         
-        for(IWord word : rootWords)
+        for(IWordNode word : rootWords)
         {
-            action = searchPath(word, 0);
-            
-            if(action != null)
-                break;
+            final String currentSentenceWord = details.get(0);
+            if(word.getValue().isEmpty() || word.getValue().equals(currentSentenceWord))
+            {
+                action = searchPath(word, 1);
+
+                if(action != null)
+                {
+                    if(!word.getValue().isEmpty())
+                    {
+                        details.remove(0);
+                    }
+                    break;
+                }
+            }
         }
 
         if(action != null){
@@ -79,7 +68,7 @@ public class FondamentalAnalyser {
             details = null;
         }
         
-        return action;
+        return implAction;
     }
     
      /**
@@ -111,34 +100,53 @@ public class FondamentalAnalyser {
         /* On retire de la liste la phrase déjà connnue */
         pParsedSentences.remove(indexOfKnownSentence);
 
+        /* On récupère l'arbre des routes */
+        List<IWordNode> words = routesProvider.getWords();
+        
         /* Pour chaque phrase, on créé une route avec comme finalitée l'action connue */
         for(List<String> parsedSentence : pParsedSentences){
-            createPath(document.getDocumentElement(), parsedSentence, findedAction);
+            
+            boolean isFound = false;
+        
+            if(parsedSentence.size() > 0){
+                final String currentSentenceWord = parsedSentence.get(0);
+                parsedSentence.remove(0);
+                
+                for (IWordNode routesWord : words) {
+
+                    if(routesWord.getValue().isEmpty() || routesWord.getValue().equals(currentSentenceWord)){
+                        createPath(routesWord, parsedSentence, findedAction);
+                        isFound = true;
+                        break;
+                    }
+                }
+
+                /* Si aucun noeud enfant ne correspond au mot, on créé un nouveau noeud */
+                if(!isFound){
+                    IWordNode newWordNode;
+
+                    if(!currentSentenceWord.equals("something") && !currentSentenceWord.equals("someone")){
+                        newWordNode = new WordNode(currentSentenceWord);
+                    }else{
+                        newWordNode = new WordNode(null);
+                    }
+
+                    words.add(newWordNode);
+
+                    createPath(newWordNode, parsedSentence, findedAction);
+                }
+            }
         }
+        
+        /* On remplace avec le nouvel arbre des routes */
+        routesProvider.setWords(words);
     }
     
-        /**
+     /**
      * Enregistre l'état des routes dans le fichier XML
-     * @throws java.io.FileNotFoundException
-     * @throws javax.xml.transform.TransformerConfigurationException
      */
-    public void saveRoutes() throws FileNotFoundException, TransformerConfigurationException, TransformerException{
-        final TransformerFactory transformerFactory = TransformerFactory.newInstance();
-	final Transformer transformer = transformerFactory.newTransformer();
-	final DOMSource source = new DOMSource(document);
-	final StreamResult sortie = new StreamResult(new File(ROUTESPATH));
-			
-	//prologue
-	transformer.setOutputProperty(OutputKeys.VERSION, "1.0");
-	transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-	transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");			
-	    		
-	//formatage
-	transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-	transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-			
-	//sortie
-	transformer.transform(source, sortie);	
+    public void saveRoutes(){
+        routesProvider.persist();
     }
     
     /**
@@ -149,15 +157,15 @@ public class FondamentalAnalyser {
      * @param iWord : L'indice du mot courrant
      * @return Un noeud de l'arbre correspondant à une action, ou NULL si aucune action n'est trouvée.
      */
-    private IAction searchPath(IWord pWord, int iWord){
+    private IActionNode searchPath(IWordNode pWord, int iWord){
         
-        final List<IWord> words = pWord.getWords();
+        final List<IWordNode> words = pWord.getWords();
 
-        IAction action = null;
+        IActionNode action = null;
 
         if(iWord < details.size()){
             final String currentSentenceWord = details.get(iWord);
-            for (IWord currentWordNode : words) {
+            for (IWordNode currentWordNode : words) {
                 if(currentWordNode.getValue().isEmpty()){
                     action = searchPath(currentWordNode, iWord+1);
                     break;
@@ -172,7 +180,7 @@ public class FondamentalAnalyser {
         }
         
         if(action == null){
-            final List<IAction> actions = pWord.getActions();
+            final List<IActionNode> actions = pWord.getActions();
             
             if(actions.size() > 0)
             {
@@ -185,63 +193,48 @@ public class FondamentalAnalyser {
     
     /**
      * Ajoute un nouveau chemin.
-     * @param pBranche : La branche de l'arbre à parcourir
+     * @param pWordNode : Le noeud de l'arbre à parcourir
      * @param pParsedSentence : La phrase préalablement parsée
      * @param pAction : L'action correspondante
      */
-    private void createPath(Element pBranche, List<String> pParsedSentence, Action pAction){
-        final NodeList routesWords = pBranche.getChildNodes();
+    private void createPath(IWordNode pWordNode, List<String> pParsedSentence, Action pAction){
+        final List<IWordNode> routesWords = pWordNode.getWords();
         boolean isFound = false;
         
         if(pParsedSentence.size() > 0){
             final String currentSentenceWord = pParsedSentence.get(0);
             pParsedSentence.remove(0);
             
-            for(int i=0; i<routesWords.getLength(); i++){
-                if(routesWords.item(i).getNodeType() == Node.ELEMENT_NODE) {
-                    final Element currentRouteBranche = (Element) routesWords.item(i);
-                    
-                    if(currentRouteBranche.getNodeName().equals("word")){
-                        if(currentRouteBranche.getAttribute("value").isEmpty() || currentRouteBranche.getAttribute("value").equals(currentSentenceWord)){
-                            createPath(currentRouteBranche, pParsedSentence, pAction);
-                            isFound = true;
-                            break;
-                        }
-                    }
+            for (IWordNode routesWord : routesWords) {
+                
+                if(routesWord.getValue().isEmpty() || routesWord.getValue().equals(currentSentenceWord)){
+                    createPath(routesWord, pParsedSentence, pAction);
+                    isFound = true;
+                    break;
                 }
             }
             
             /* Si aucun noeud enfant ne correspond au mot, on créé un nouveau noeud */
             if(!isFound){
-                Element newElement = (Element) document.createElement("word");
+                IWordNode newWordNode;
              
                 if(!currentSentenceWord.equals("something") && !currentSentenceWord.equals("someone")){
-                    newElement.setAttribute("value", currentSentenceWord);
+                    newWordNode = new WordNode(currentSentenceWord);
+                }else{
+                    newWordNode = new WordNode(null);
                 }
 
-                pBranche.appendChild(newElement);
+                pWordNode.addWord(newWordNode);
                 
-                createPath(newElement, pParsedSentence, pAction);
+                createPath(newWordNode, pParsedSentence, pAction);
             }
         }else{
         
-            /* On fois qu'on a finit de générer le chemin, on ajoute l'action à la fin */
-            Element newAction = (Element) document.createElement("action");
+            /* On fois qu'on a finit de générer le chemin, on ajoute l'action à la fin */          
+            ActionNode newActionNode = new ActionNode(pAction.getProviderName());
+            newActionNode.setAskFor(pAction.getPrecisions());
 
-            newAction.setAttribute("provider", pAction.getProviderName());
-            
-            String askFor = "";
-            for(String precision : pAction.getPrecisions()){
-                if(!askFor.isEmpty()){
-                    askFor += "+";
-                }
-                askFor += precision;
-            }
-            if(!askFor.isEmpty()){
-                newAction.setAttribute("askfor", askFor);
-            }
-
-            pBranche.appendChild(newAction);
+            pWordNode.addAction(newActionNode);
         }
     }
     

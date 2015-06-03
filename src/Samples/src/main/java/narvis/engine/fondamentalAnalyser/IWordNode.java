@@ -11,8 +11,10 @@ import java.util.List;
  *
  * @author Zack
  */
-public interface IWord extends INode {
+public interface IWordNode extends INode {
     String getValue();
-    List<IAction> getActions();
-    List<IWord> getWords();
+    List<IActionNode> getActions();
+    List<IWordNode> getWords();
+    void addWord(IWordNode newWord);
+    void addAction(IActionNode newAction);
 }
