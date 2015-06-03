@@ -25,10 +25,13 @@ package com.narvis.dataaccess.impl;
 
 import com.narvis.common.extensions.filefilters.*;
 import com.narvis.common.functions.serialization.XmlSerializer;
+import com.narvis.common.tools.reflection.Factory;
+import com.narvis.common.tools.reflection.FactoryException;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.models.conf.*;
 import java.io.File;
 import java.util.*;
+import java.util.Map.*;
 
 /**
  *
@@ -56,6 +59,17 @@ public class ConfigurationDataProvider implements IDataProvider {
             }
         }
     }
+    
+
+    
+    // Returns the MODULES not the configuration
+    public Map<String, IDataProvider> getDataProviders() throws FactoryException {
+        Map<String, IDataProvider> retVal = new HashMap<>();
+        for(Entry<String, ModuleConfigurationDataProvider> entry : this.modulesConfs.entrySet()) {
+            retVal.put(entry.getKey(), (IDataProvider) Factory.fromName(entry.getValue().getConf().getModuleClassPath(), entry.getValue(), ModuleConfigurationDataProvider.class));
+        }
+        return retVal;
+    } 
 
     @Override
     public String getData(String... keywords) {
@@ -64,8 +78,7 @@ public class ConfigurationDataProvider implements IDataProvider {
             nextKeywords[i - 1] = keywords[i];
         }
         if(NARVIS_CONF_KEYWORD.equals(keywords[0])) {
-            // Todo, considering next keywords what to return
-            return null;
+            return this.narvisConf.getData(nextKeywords);
         }
         return this.modulesConfs.get(keywords[0]).getData(nextKeywords);
     }

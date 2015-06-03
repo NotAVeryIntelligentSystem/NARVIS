@@ -29,4 +29,5 @@ package com.narvis.dataaccess.interfaces;
  */
 public interface IMetaDataProvider {
     public IDataProvider getDataProvider(String... keywords);
+    
 }

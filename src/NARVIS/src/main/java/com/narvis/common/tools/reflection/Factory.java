@@ -21,42 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.impl;
+package com.narvis.common.tools.reflection;
 
-import com.narvis.common.generics.NarvisLogger;
-import com.narvis.dataaccess.interfaces.IDataProvider;
-import com.narvis.dataaccess.interfaces.IMetaDataProvider;
-import java.util.Map;
-import java.util.logging.Level;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  *
  * @author uwy
  */
-public class MetaDataProvider implements IMetaDataProvider {
+public class Factory {
+    private Factory() {
+        
+    }
     
-    private final ConfigurationDataProvider config;
-    private final Map<String, IDataProvider> providers;
-    
-    private static final String CONF_KEYWORD = "Conf";
-    
-    public MetaDataProvider() throws Exception {
+    public static <T, U> T fromName(String name, U constructorParam, Class<U> paramType) throws FactoryException {
         try {
-            this.config = new ConfigurationDataProvider();
-            this.providers = this.config.getDataProviders();
-
-        } catch (Exception ex) {
-           NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
-           throw ex;
+            Class<?> clazz = Class.forName(name);
+            Constructor<?> constructor = clazz.getConstructor(paramType);
+            return (T) constructor.newInstance(constructorParam);
+        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            throw new FactoryException(ex);
         }
+        
     }
-    
-    @Override
-    public IDataProvider getDataProvider(String... keywords) {
-        if(CONF_KEYWORD.equals(keywords[0])) {
-            return this.config;
-        }
-        return this.providers.get(keywords[0]);
-    }
-    
 }

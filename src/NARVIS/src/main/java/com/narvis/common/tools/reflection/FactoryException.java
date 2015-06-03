@@ -21,42 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.impl;
-
-import com.narvis.common.generics.NarvisLogger;
-import com.narvis.dataaccess.interfaces.IDataProvider;
-import com.narvis.dataaccess.interfaces.IMetaDataProvider;
-import java.util.Map;
-import java.util.logging.Level;
+package com.narvis.common.tools.reflection;
 
 /**
  *
  * @author uwy
  */
-public class MetaDataProvider implements IMetaDataProvider {
-    
-    private final ConfigurationDataProvider config;
-    private final Map<String, IDataProvider> providers;
-    
-    private static final String CONF_KEYWORD = "Conf";
-    
-    public MetaDataProvider() throws Exception {
-        try {
-            this.config = new ConfigurationDataProvider();
-            this.providers = this.config.getDataProviders();
+public class FactoryException extends Exception {
 
-        } catch (Exception ex) {
-           NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
-           throw ex;
-        }
+    /**
+     * Creates a new instance of <code>FactoryException</code> without detail
+     * message.
+     */
+    public FactoryException() {
+        super();
     }
     
-    @Override
-    public IDataProvider getDataProvider(String... keywords) {
-        if(CONF_KEYWORD.equals(keywords[0])) {
-            return this.config;
-        }
-        return this.providers.get(keywords[0]);
+    public FactoryException(Exception ex) {
+        super(ex);
     }
-    
+
+    /**
+     * Constructs an instance of <code>FactoryException</code> with the
+     * specified detail message.
+     *
+     * @param msg the detail message.
+     */
+    public FactoryException(String msg) {
+        super(msg);
+    }
 }

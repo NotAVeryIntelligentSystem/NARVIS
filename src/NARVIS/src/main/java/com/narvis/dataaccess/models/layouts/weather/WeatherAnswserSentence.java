@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 puma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,42 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.impl;
+package com.narvis.dataaccess.models.layouts.weather;
 
-import com.narvis.common.generics.NarvisLogger;
-import com.narvis.dataaccess.interfaces.IDataProvider;
-import com.narvis.dataaccess.interfaces.IMetaDataProvider;
-import java.util.Map;
-import java.util.logging.Level;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 /**
- *
- * @author uwy
+ * Represent the created answer attached to the command
+ * @author puma
  */
-public class MetaDataProvider implements IMetaDataProvider {
+@Root(name = "Sentence")
+public class WeatherAnswserSentence {
+ 
+    @Attribute
+    private String command;
     
-    private final ConfigurationDataProvider config;
-    private final Map<String, IDataProvider> providers;
-    
-    private static final String CONF_KEYWORD = "Conf";
-    
-    public MetaDataProvider() throws Exception {
-        try {
-            this.config = new ConfigurationDataProvider();
-            this.providers = this.config.getDataProviders();
+    @Element
+    private String Value;
 
-        } catch (Exception ex) {
-           NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
-           throw ex;
-        }
+    public WeatherAnswserSentence(@Attribute(name = "command") String command, @Element(name = "Value") String Value) {
+        this.command = command;
+        this.Value = Value;
     }
     
-    @Override
-    public IDataProvider getDataProvider(String... keywords) {
-        if(CONF_KEYWORD.equals(keywords[0])) {
-            return this.config;
-        }
-        return this.providers.get(keywords[0]);
+    
+    public String getCommand() {
+        return command;
     }
+
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
+    public String getSentence() {
+        return Value;
+    }
+
+    public void setSentence(String Sentence) {
+        this.Value = Sentence;
+    }
+    
     
 }
