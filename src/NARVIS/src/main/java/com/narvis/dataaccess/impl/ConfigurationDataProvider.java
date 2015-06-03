@@ -23,21 +23,51 @@
  */
 package com.narvis.dataaccess.impl;
 
+import com.narvis.common.extensions.filefilters.*;
+import com.narvis.common.functions.serialization.XmlSerializer;
 import com.narvis.dataaccess.interfaces.IDataProvider;
+import com.narvis.dataaccess.models.conf.*;
+import java.io.File;
+import java.util.*;
 
 /**
  *
  * @author uwy
  */
 public class ConfigurationDataProvider implements IDataProvider {
+    private static final String GLOBAL_CONF_PATH = "../";
+    private static final String CONF_FOLDER_NAME = "conf";
+    private static final String CONF_FILE_NAME = "narvis.conf";
+    private static final String MODULES_FOLDER_NAME = "modules";
     
-    public ConfigurationDataProvider() {
-        
+    public static final String NARVIS_CONF_KEYWORD = "NarvisConf";
+
+    private final NarvisConf narvisConf;
+    private final Map<String, ModuleConfigurationDataProvider> modulesConfs;
+    
+    public ConfigurationDataProvider() throws Exception {
+        this.modulesConfs = new HashMap<>();
+        File globalFolder = new File(CONF_FOLDER_NAME);
+        assert globalFolder.isDirectory() == true  : "Path for global folder isn't a folder !";
+        this.narvisConf = XmlSerializer.fromFile(NarvisConf.class, globalFolder.listFiles(new FolderNameFileFilter(CONF_FOLDER_NAME))[0].listFiles(new FileNameFileFilter(CONF_FILE_NAME))[0]);
+        for(File moduleFolder : globalFolder.listFiles(new FolderNameFileFilter(MODULES_FOLDER_NAME))) {
+            if(moduleFolder.isDirectory()) {
+                this.modulesConfs.put(moduleFolder.getName(), new ModuleConfigurationDataProvider(moduleFolder));
+            }
+        }
     }
 
     @Override
     public String getData(String... keywords) {
-        throw new UnsupportedOperationException("TODO."); //To change body of generated methods, choose Tools | Templates.
+        String[] nextKeywords = new String[keywords.length - 1];
+        for (int i = 1; i < keywords.length; i++) {
+            nextKeywords[i - 1] = keywords[i];
+        }
+        if(NARVIS_CONF_KEYWORD.equals(keywords[0])) {
+            // Todo, considering next keywords what to return
+            return null;
+        }
+        return this.modulesConfs.get(keywords[0]).getData(nextKeywords);
     }
     
 }

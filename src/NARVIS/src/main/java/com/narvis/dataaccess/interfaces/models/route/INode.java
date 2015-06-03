@@ -3,15 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package narvis.engine.fondamentalAnalyser;
-
-import java.util.List;
+package com.narvis.dataaccess.interfaces.models.route;
 
 /**
  *
  * @author Zack
  */
-public interface IRoutesProvider extends IDataModelAccess{
-    List<IWordNode> getWords();
-    void setWords(List<IWordNode> words);
+public interface INode {
 }

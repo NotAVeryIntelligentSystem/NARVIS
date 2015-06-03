@@ -6,8 +6,8 @@
 package com.narvis.test.models.dataaccess.weather;
 
 
-
 import com.narvis.dataaccess.weather.OpenWeatherMapPortal;
+
 
 import org.junit.Test;
 /**

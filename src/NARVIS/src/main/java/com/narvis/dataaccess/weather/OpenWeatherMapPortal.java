@@ -154,11 +154,7 @@ public class OpenWeatherMapPortal implements IDataProvider {
         else
             this._answer += " is " + result;
       
-    }
-    
-    
-    
-    
+    }    
 }
 
     
