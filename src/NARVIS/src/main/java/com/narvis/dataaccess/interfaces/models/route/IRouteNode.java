@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package narvis.engine.fondamentalAnalyser;
+package com.narvis.dataaccess.interfaces.models.route;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author Zack
  */
-public interface IWord extends INode {
-    String getValue();
-    List<INode> getChildren();
+public interface IRouteNode extends INode{
+    List<IWordNode> getWords();
+    void addWord(IWordNode newWord);
 }

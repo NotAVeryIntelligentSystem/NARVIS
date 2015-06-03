@@ -21,42 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.impl;
+package com.narvis.common.functions.serialization;
 
-import com.narvis.common.generics.NarvisLogger;
-import com.narvis.dataaccess.interfaces.IDataProvider;
-import com.narvis.dataaccess.interfaces.IMetaDataProvider;
-import java.util.Map;
-import java.util.logging.Level;
+import java.io.File;
+import java.io.OutputStream;
+import org.simpleframework.xml.core.*;
 
 /**
  *
  * @author uwy
  */
-public class MetaDataProvider implements IMetaDataProvider {
+public class XmlSerializer {
+    private static final Persister persister = new Persister(); // Make it only once since we need a single global settings
     
-    private final ConfigurationDataProvider config;
-    private final Map<String, IDataProvider> providers;
     
-    private static final String CONF_KEYWORD = "Conf";
-    
-    public MetaDataProvider() throws Exception {
-        try {
-            this.config = new ConfigurationDataProvider();
-            this.providers = this.config.getDataProviders();
-
-        } catch (Exception ex) {
-           NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
-           throw ex;
-        }
+    public static <T> void toFile(T toSerialize, String file) throws Exception {
+        XmlSerializer.toFile(toSerialize, new File(file));
     }
     
-    @Override
-    public IDataProvider getDataProvider(String... keywords) {
-        if(CONF_KEYWORD.equals(keywords[0])) {
-            return this.config;
-        }
-        return this.providers.get(keywords[0]);
+    public static <T> void toFile(T toSerialize, File file ) throws Exception {
+        persister.write(toSerialize, file);
     }
     
+    public static <T> void toStream(T toSerialize, OutputStream stream) throws Exception {
+        persister.write(toSerialize, stream);
+    }
+    
+    public static <T> T fromFile(Class<T> type, String filePath) throws Exception {
+        return XmlSerializer.fromFile(type, new File(filePath));
+    }
+    
+    public static <T> T fromFile(Class<T> type, File file) throws Exception {
+        return persister.read(type, file);
+    }
 }

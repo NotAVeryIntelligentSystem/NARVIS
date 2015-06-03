@@ -11,7 +11,10 @@ import java.util.List;
  *
  * @author Zack
  */
-public interface IRoutesProvider extends IDataModelAccess{
-    List<IWordNode> getWords();
-    void setWords(List<IWordNode> words);
+public interface IActionNode extends INode {
+    String getProviderName();
+    List<String> getAskFor();
+    
+    void setProdiverName(String providerName);
+    void setAskFor(List<String> askFor);
 }

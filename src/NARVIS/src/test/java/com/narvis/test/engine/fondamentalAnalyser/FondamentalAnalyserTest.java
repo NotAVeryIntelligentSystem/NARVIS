@@ -1,11 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package narvis.engine.fondamentalAnalyser;
+package com.narvis.test.engine.fondamentalAnalyser;
 
 import com.narvis.engine.Action;
+import com.narvis.engine.FondamentalAnalyser;
+import com.narvis.common.generics.NarvisLogger;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,17 +11,22 @@ import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 /**
  *
- * @author Yoann
+ * @author Zack
  */
-public class NARVIS_router_test {
-
-    /**
+public class FondamentalAnalyserTest {
+     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        List<List<String>> allSentences = new LinkedList();
+List<List<String>> allSentences = new LinkedList();
         
         List<String> parsedSentence = new LinkedList();
         parsedSentence.add("give");
@@ -74,10 +76,9 @@ public class NARVIS_router_test {
             fondamentalAnalyser.saveRoutes();
         } catch (final ParserConfigurationException e) {
         } catch (SAXException ex) {
-            Logger.getLogger(NARVIS_router_test.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FondamentalAnalyserTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(NARVIS_router_test.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FondamentalAnalyserTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
 }

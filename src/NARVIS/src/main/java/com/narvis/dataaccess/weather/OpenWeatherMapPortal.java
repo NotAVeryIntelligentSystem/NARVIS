@@ -5,8 +5,10 @@
  */
 package com.narvis.dataaccess.weather;
 
-import com.narvis.dataaccess.conf.ApiKeyProvider;
+import com.narvis.common.functions.serialization.XmlSerializer;
+import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.dataaccess.interfaces.IDataProvider;
+import com.narvis.dataaccess.models.conf.ApiKeys;
 import com.narvis.dataaccess.weather.annotations.Command;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -26,14 +28,19 @@ import org.json.JSONException;
  */
 public class OpenWeatherMapPortal implements IDataProvider {
 
+    private final ApiKeys weatherApiKeys;
     private CurrentWeather _currentWeather;
     private String _answer = "";
     
     private final String KEY_FOLDER = "WeatherApi";
     private final String KEY_TAG = "OpenWeatherMap";
     
-    public OpenWeatherMapPortal() {
-        
+    public OpenWeatherMapPortal(ApiKeys api) {
+        this.weatherApiKeys = api;
+    }
+    
+    public OpenWeatherMapPortal(ModuleConfigurationDataProvider moduleConf) {
+        this.weatherApiKeys = moduleConf.getApiKeys();
         
     }
 
@@ -42,8 +49,7 @@ public class OpenWeatherMapPortal implements IDataProvider {
         
         try {
             
-            IDataProvider keyProvider = new ApiKeyProvider();
-            String key = keyProvider.getData(KEY_FOLDER, KEY_TAG);
+            String key = this.weatherApiKeys.getData(KEY_TAG);
             
             if( key == null )
                 return null;
