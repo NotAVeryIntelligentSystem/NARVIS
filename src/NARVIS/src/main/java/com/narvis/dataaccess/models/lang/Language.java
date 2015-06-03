@@ -34,7 +34,7 @@ import org.simpleframework.xml.*;
 public class Language {
     @Element(name = "Name")
     private String name;
-    
+
     @ElementList()
     private List<String> ignoreWords; 
 }

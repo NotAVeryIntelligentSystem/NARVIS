@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 puma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,47 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.conf;
+package com.narvis.dataaccess.models.layouts.weather;
 
-import com.narvis.dataaccess.interfaces.IDataProvider;
-import java.util.HashMap;
-import java.util.Map;
-import org.simpleframework.xml.*;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 /**
- *
- * @author uwy
+ * Represent the created answer attached to the command
+ * @author puma
  */
-@Root(name="ModuleConf")
-public class ModuleConf implements IDataProvider {
-    @Element(name = "ModuleClassPath")
-    private String moduleClassPath;
+@Root(name = "Sentence")
+public class WeatherAnswserSentence {
+ 
+    @Attribute
+    private String command;
     
-    @ElementMap(entry="entry", key="key", attribute=true, inline=true)
-    private final Map<String, String> entries;
-  
-    public static String MODULE_CLASS_PATH_KEYWORD = "ModuleClassPath";
-        
-    public ModuleConf() {
-        this.entries = new HashMap<>();
-    }
-    
-    public String getModuleClassPath() {
-        return this.moduleClassPath;
-    }
-    
-    public void setModuleClassPaht(String val) {
-        this.moduleClassPath = val;
-    }
-    
+    @Element
+    private String Value;
 
-    
-    @Override
-    public String getData(String... keywords) {
-        if(keywords[0].equals(MODULE_CLASS_PATH_KEYWORD)) {
-            return this.moduleClassPath;
-        }
-        return this.entries.get(keywords[0]);
+    public WeatherAnswserSentence(@Attribute(name = "command") String command, @Element(name = "Value") String Value) {
+        this.command = command;
+        this.Value = Value;
     }
-    //Todo
+    
+    
+    public String getCommand() {
+        return command;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
+    public String getSentence() {
+        return Value;
+    }
+
+    public void setSentence(String Sentence) {
+        this.Value = Sentence;
+    }
+    
+    
 }

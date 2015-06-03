@@ -21,47 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.conf;
-
-import com.narvis.dataaccess.interfaces.IDataProvider;
-import java.util.HashMap;
-import java.util.Map;
-import org.simpleframework.xml.*;
+package com.narvis;
 
 /**
  *
  * @author uwy
  */
-@Root(name="ModuleConf")
-public class ModuleConf implements IDataProvider {
-    @Element(name = "ModuleClassPath")
-    private String moduleClassPath;
-    
-    @ElementMap(entry="entry", key="key", attribute=true, inline=true)
-    private final Map<String, String> entries;
-  
-    public static String MODULE_CLASS_PATH_KEYWORD = "ModuleClassPath";
+public class App {
+    public static void main(String [] args)
+    {
         
-    public ModuleConf() {
-        this.entries = new HashMap<>();
     }
-    
-    public String getModuleClassPath() {
-        return this.moduleClassPath;
-    }
-    
-    public void setModuleClassPaht(String val) {
-        this.moduleClassPath = val;
-    }
-    
-
-    
-    @Override
-    public String getData(String... keywords) {
-        if(keywords[0].equals(MODULE_CLASS_PATH_KEYWORD)) {
-            return this.moduleClassPath;
-        }
-        return this.entries.get(keywords[0]);
-    }
-    //Todo
 }
