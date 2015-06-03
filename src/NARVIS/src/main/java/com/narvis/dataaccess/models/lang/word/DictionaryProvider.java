@@ -24,7 +24,6 @@ public class DictionaryProvider implements IDataModelProvider<Dictionary> {
     public DictionaryProvider(ModuleConfigurationDataProvider conf) throws ParserConfigurationException, SAXException, IOException, Exception{
         this.conf = conf;
         this.dictionary = XmlSerializer.fromFile(Dictionary.class, this.getRoutesDataPath());
-        
     }
     
     private String getRoutesDataPath() {

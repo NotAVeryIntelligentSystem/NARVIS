@@ -6,9 +6,9 @@
 package com.narvis.dataaccess.models.lang.word;
 
 import com.narvis.common.generics.NarvisLogger;
-import com.sun.media.jfxmedia.logging.Logger;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -41,7 +41,7 @@ public class Dictionary {
                 word = w;
                 if(word != null)
                 {
-                    NarvisLogger.getInstance().warning("Word duplication : "+w.getValue());
+                    NarvisLogger.getInstance().log(Level.WARNING, "Word duplication : {0}", w.getValue());
                 }
             }
         }
