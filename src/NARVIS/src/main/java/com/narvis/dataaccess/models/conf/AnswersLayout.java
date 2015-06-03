@@ -23,6 +23,7 @@
  */
 package com.narvis.dataaccess.models.conf;
 
+import com.narvis.dataaccess.interfaces.IDataProvider;
 import org.simpleframework.xml.Root;
 
 /**
@@ -30,6 +31,13 @@ import org.simpleframework.xml.Root;
  * @author uwy
  */
 @Root(name="AnswersLayout")
-public class AnswersLayout {
-    //Todo
+public class AnswersLayout implements IDataProvider {
+    public AnswersLayout() {
+        
+    }
+    
+    @Override
+    public String getData(String... keywords) {
+        return null; //todo
+    }
 }

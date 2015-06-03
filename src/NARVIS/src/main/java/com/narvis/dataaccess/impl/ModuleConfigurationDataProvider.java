@@ -34,15 +34,15 @@ import java.io.File;
  * @author uwy
  */
 public class ModuleConfigurationDataProvider implements IDataProvider {
-    private static final String CONF_FOLDER_NAME = "config";
+    private static final String CONF_FOLDER_NAME = "conf";
     private static final String LAYOUTS_FOLDER_NAME = "layouts";
     private static final String ANSWERS_FILE_NAME = "answers.xml";
     private static final String API_KEY_FILE_NAME = "api.key";
     private static final String MODULE_CONF_FILE_NAME = "module.conf";
     
-    private static final String API_KEYWORD = "Api";
-    private static final String CONF_KEYWORD = "Conf";
-    private static final String ANSWERS_KEYWORD = "Answer";
+    public static final String API_KEYWORD = "Api";
+    public static final String CONF_KEYWORD = "Conf";
+    public static final String ANSWERS_KEYWORD = "Answer";
     
     private final ApiKeys apiKeys;
     private final ModuleConf conf;
@@ -85,9 +85,13 @@ public class ModuleConfigurationDataProvider implements IDataProvider {
    
     @Override
     public String getData(String... keywords) {
+        String [] nextKeywords = new String[keywords.length - 1];
+        for(int i = 1 ; i < keywords.length ; i++) {
+            nextKeywords[i - 1] = keywords[i];
+        }
         switch(keywords[0]) {
             case API_KEYWORD:
-                return this.apiKeys.getData(keywords[1]);
+                return this.apiKeys.getData(nextKeywords);
             case CONF_KEYWORD:
                 return null; // nothing to do right now
                 

@@ -23,6 +23,7 @@
  */
 package com.narvis.dataaccess.models.conf;
 
+import com.narvis.dataaccess.interfaces.IDataProvider;
 import org.simpleframework.xml.Root;
 
 /**
@@ -30,6 +31,15 @@ import org.simpleframework.xml.Root;
  * @author uwy
  */
 @Root(name="NarvisConf")
-public class NarvisConf {
+public class NarvisConf implements IDataProvider {
+
+    public NarvisConf() {
+        
+    }
+    
+    @Override
+    public String getData(String... keywords) {
+        return null;
+    }
     // Nothing here yet
 }
