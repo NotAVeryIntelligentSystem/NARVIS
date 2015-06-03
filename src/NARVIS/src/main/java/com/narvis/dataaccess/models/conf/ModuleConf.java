@@ -24,6 +24,8 @@
 package com.narvis.dataaccess.models.conf;
 
 import com.narvis.dataaccess.interfaces.IDataProvider;
+import java.util.HashMap;
+import java.util.Map;
 import org.simpleframework.xml.*;
 
 /**
@@ -35,10 +37,13 @@ public class ModuleConf implements IDataProvider {
     @Element(name = "ModuleClassPath")
     private String moduleClassPath;
     
+    @ElementMap(entry="entry", key="key", attribute=true, inline=true)
+    private final Map<String, String> entries;
+  
     public static String MODULE_CLASS_PATH_KEYWORD = "ModuleClassPath";
-    
-    public ModuleConf() {
         
+    public ModuleConf() {
+        this.entries = new HashMap<>();
     }
     
     public String getModuleClassPath() {
@@ -56,7 +61,7 @@ public class ModuleConf implements IDataProvider {
         if(keywords[0].equals(MODULE_CLASS_PATH_KEYWORD)) {
             return this.moduleClassPath;
         }
-        return null;
+        return this.entries.get(keywords[0]);
     }
     //Todo
 }
