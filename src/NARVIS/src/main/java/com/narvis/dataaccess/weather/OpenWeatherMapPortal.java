@@ -9,7 +9,9 @@ import com.narvis.common.functions.serialization.XmlSerializer;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.models.conf.ApiKeys;
+import com.narvis.dataaccess.models.layouts.weather.WeatherAnswers;
 import com.narvis.dataaccess.weather.annotations.Command;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -32,6 +34,7 @@ public class OpenWeatherMapPortal implements IDataProvider {
     private CurrentWeather _currentWeather;
     private String _answer = "";
     
+    private final String ANSWER_FILE_LOCATION = "";
     private final String KEY_FOLDER = "WeatherApi";
     private final String KEY_TAG = "OpenWeatherMap";
     
@@ -51,9 +54,13 @@ public class OpenWeatherMapPortal implements IDataProvider {
             
             String key = this.weatherApiKeys.getData(KEY_TAG);
             
+            if( key == null )
+                return null;
+
+
             OpenWeatherMap owm = new OpenWeatherMap(key);
             this._currentWeather = owm.currentWeatherByCityName(keyWords[0]);
-            
+
             //For each command call the method and format the answer
             for( int i = 1; i < keyWords.length; i++ ) {
                 String result = CallMethodByCommand(keyWords[i].toLowerCase(Locale.FRENCH));
@@ -149,18 +156,22 @@ public class OpenWeatherMapPortal implements IDataProvider {
      */
     private void AppendToAnswer(String command, String result){
         
-        this._answer += " The " + command;
+        try {
+            File f = new File(this.ANSWER_FILE_LOCATION);
+            WeatherAnswers answer = XmlSerializer.fromFile(WeatherAnswers.class, f);
+            
+            
+            String finalAnswer = answer.getData(command);
+            
+            this._answer += String.format(finalAnswer, result);
+            this._answer += "\n";
+        } catch (Exception ex) {
+            
+            this._answer += "Can not get answer\n";
+        }
         
-        if( result == null )
-            this._answer += " can not be found ";
-        else
-            this._answer += " is " + result;
-      
-    }
-    
-    
-    
-    
+        
+    }    
 }
 
     

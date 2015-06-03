@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 puma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,20 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.lang;
+package com.narvis.dataaccess.models.layouts.weather;
 
-import java.util.List;
-import org.simpleframework.xml.*;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 /**
- *
- * @author uwy
+ * Represent the created answer attached to the command
+ * @author puma
  */
-@Root(name = "Language")
-public class Language {
-    @Element(name = "Name")
-    private String name;
+@Root(name = "Sentence")
+public class WeatherAnswserSentence {
+ 
+    @Attribute
+    private String command;
+    
+    @Element
+    private String Value;
 
-    @ElementList()
-    private List<String> ignoreWords; 
+    public WeatherAnswserSentence(@Attribute(name = "command") String command, @Element(name = "Value") String Value) {
+        this.command = command;
+        this.Value = Value;
+    }
+    
+    
+    public String getCommand() {
+        return command;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
+    public String getSentence() {
+        return Value;
+    }
+
+    public void setSentence(String Sentence) {
+        this.Value = Sentence;
+    }
+    
+    
 }
