@@ -21,23 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.impl;
+package com.narvis.common.extensions.filefilters;
 
-import com.narvis.dataaccess.interfaces.IDataProvider;
-import com.narvis.dataaccess.interfaces.IMetaDataProvider;
+import java.io.File;
+import java.io.FileFilter;
 
 /**
  *
  * @author uwy
  */
-public class MetaDataProvider implements IMetaDataProvider {
-    public MetaDataProvider() {
-        
+public class FolderNameFileFilter implements FileFilter {
+    private final String folderName;
+    public FolderNameFileFilter(String folderName) {
+        assert folderName != null && !folderName.isEmpty() : "Folder name given is null or empty";
+        this.folderName = folderName;
     }
-    
+
     @Override
-    public IDataProvider getDataProvider(String... keywords) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean accept(File pathname) {
+        return pathname.isDirectory() && folderName.equals(pathname.getName());
     }
     
 }

@@ -21,23 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.impl;
+package com.narvis.dataaccess.models.conf;
 
-import com.narvis.dataaccess.interfaces.IDataProvider;
-import com.narvis.dataaccess.interfaces.IMetaDataProvider;
+import com.narvis.dataaccess.interfaces.*;
+import java.util.*;
+import org.simpleframework.xml.*;
 
 /**
  *
  * @author uwy
  */
-public class MetaDataProvider implements IMetaDataProvider {
-    public MetaDataProvider() {
-        
-    }
+@Root(name="ApiKeys")
+public class ApiKeys implements IDataProvider {
+    public static final String NAME_KEYWORD = "Name";
     
+    @Element(name = "Name")
+    private String name;  
+    
+    @ElementMap(entry="ApiKey", key="Name", attribute=true, inline=true)
+    private final Map<String, String> apiKeys;
+
+    public ApiKeys() {
+        this.apiKeys = new HashMap<>();
+    }
+
+    // NAME constant to get this object name
+    // Otherwise returns the key value from the name an ApiKey is associated with
     @Override
-    public IDataProvider getDataProvider(String... keywords) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getData(String... keywords) {        
+        if(keywords.length != 1 || !this.apiKeys.containsKey(keywords[0])) {
+            throw new IllegalArgumentException("Invalid number of argument or wrong ApiKey name in keywords");
+        }
+        if(ApiKeys.NAME_KEYWORD.equals(keywords[0])) {
+            return this.name;
+        }
+        return this.apiKeys.get(keywords[0]);
     }
-    
+   
+   
 }

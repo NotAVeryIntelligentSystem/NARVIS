@@ -21,23 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.impl;
+package com.narvis.dataaccess.models.conf;
 
-import com.narvis.dataaccess.interfaces.IDataProvider;
-import com.narvis.dataaccess.interfaces.IMetaDataProvider;
+import org.simpleframework.xml.Root;
 
 /**
  *
  * @author uwy
  */
-public class MetaDataProvider implements IMetaDataProvider {
-    public MetaDataProvider() {
-        
-    }
-    
-    @Override
-    public IDataProvider getDataProvider(String... keywords) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+@Root(name="NarvisConf")
+public class NarvisConf {
+    // Nothing here yet
 }
