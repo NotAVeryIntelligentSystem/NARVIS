@@ -32,11 +32,13 @@ public class ActionNode implements IActionNode{
         return askFor;
     }
     
+    @Override
     public void setProdiverName(String providerName)
     {
         this.providerName = providerName;
     }
     
+    @Override
     public void setAskFor(List<String> askFor)
     {
         this.askFor = askFor;

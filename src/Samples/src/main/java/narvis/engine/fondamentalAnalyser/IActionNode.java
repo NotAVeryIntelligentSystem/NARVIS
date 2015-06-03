@@ -14,4 +14,7 @@ import java.util.List;
 public interface IActionNode extends INode {
     String getProviderName();
     List<String> getAskFor();
+    
+    void setProdiverName(String providerName);
+    void setAskFor(List<String> askFor);
 }

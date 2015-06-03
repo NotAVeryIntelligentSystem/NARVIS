@@ -55,6 +55,7 @@ public class WordNode implements IWordNode{
         actions.add(newAction);
     }
     
+    @Override
     public void setValue(String value){
         this.value = value;
     }
