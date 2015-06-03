@@ -28,6 +28,7 @@ package com.narvis.scripts;
  * @author uwy
  */
 public class CreateConf {
+    
     public static void main(String [] args) {
         
     }
