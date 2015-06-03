@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2015-06-02T15:00:32</date>
+  <millis>1433250032577</millis>
+  <sequence>0</sequence>
+  <logger>narvis.engine.parser.Parser</logger>
+  <level>INFO</level>
+  <class>narvis.engine.logger.TestLogger</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>Test INFORMATION</message>
+</record>
+<record>
+  <date>2015-06-02T15:00:32</date>
+  <millis>1433250032638</millis>
+  <sequence>1</sequence>
+  <logger>narvis.engine.parser.Parser</logger>
+  <level>WARNING</level>
+  <class>narvis.engine.logger.TestLogger</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>Test WARNING</message>
+</record>
+<record>
+  <date>2015-06-02T15:00:32</date>
+  <millis>1433250032639</millis>
+  <sequence>2</sequence>
+  <logger>narvis.engine.parser.Parser</logger>
+  <level>SEVERE</level>
+  <class>narvis.engine.logger.TestLogger</class>
+  <method>main</method>
+  <thread>1</thread>
+  <message>Test SEVERE</message>
+</record>

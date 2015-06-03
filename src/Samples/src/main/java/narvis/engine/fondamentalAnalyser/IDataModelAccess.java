@@ -5,13 +5,11 @@
  */
 package narvis.engine.fondamentalAnalyser;
 
-import java.util.List;
-
 /**
  *
  * @author Zack
  */
-public interface IRoutesProvider extends IDataModelAccess{
-    List<IWordNode> getWords();
-    void setWords(List<IWordNode> words);
+public interface IDataModelAccess<T> {
+    T getModel();
+    void persist();
 }

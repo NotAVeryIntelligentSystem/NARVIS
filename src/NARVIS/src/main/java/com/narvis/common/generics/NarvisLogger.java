@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package narvis.engine.logger;
+package com.narvis.common.generics;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.logging.Logger;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
-import narvis.engine.parser.Parser;
 
 /**
  *
