@@ -5,8 +5,6 @@
  */
 package com.narvis.dataaccess.models.lang;
 
-import com.narvis.dataaccess.interfaces.models.lang.IIgnoredWord;
-import com.narvis.dataaccess.interfaces.models.lang.IRootIgnoredWords;
 import java.util.LinkedList;
 import java.util.List;
 import org.simpleframework.xml.ElementList;
@@ -17,22 +15,17 @@ import org.simpleframework.xml.Root;
  * @author Zack
  */
 @Root(name="RootIgnoredWords")
-public class RootIgnoredWords implements IRootIgnoredWords {
+public class RootIgnoredWords {
+    
     @ElementList(name="IgnoredWords", type = IgnoredWord.class)
-    public List<IIgnoredWord> ignoredWords;
+    public List<IgnoredWord> ignoredWords;
     
     public RootIgnoredWords()
     {
         ignoredWords = new LinkedList<>();
     }
     
-    public RootIgnoredWords(@ElementList(name="IgnoredWords") List<IIgnoredWord> ignoredWords)
-    {
-        this.ignoredWords = ignoredWords;
-    }
-    
-    @Override
-    public List<IIgnoredWord> getIgnoredWords() {
+    public List<IgnoredWord> getIgnoredWords() {
         return ignoredWords;
     }    
 }

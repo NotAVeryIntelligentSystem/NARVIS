@@ -5,10 +5,6 @@
  */
 package com.narvis.dataaccess.models.lang;
 
-import com.narvis.dataaccess.interfaces.models.lang.IIgnoredWord;
-import com.narvis.dataaccess.interfaces.models.lang.IIgnoredWordsProvider;
-import com.narvis.dataaccess.interfaces.models.lang.IRootIgnoredWords;
-import com.narvis.dataaccess.models.route.RouteNode;
 import com.narvis.dataaccess.models.route.RoutesProvider;
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +20,7 @@ import org.xml.sax.SAXException;
  *
  * @author Zack
  */
-public class IgnoredWordsProvider implements IIgnoredWordsProvider {
+public class IgnoredWordsProvider {
     private final static String ROUTESPATH = "src\\test\\java\\com\\narvis\\test\\dataaccess\\models\\lang\\ignoredwords.xml"; // Le chemin d'accès au fichier XML contenant les routes
 
     Persister persister;
@@ -35,12 +31,11 @@ public class IgnoredWordsProvider implements IIgnoredWordsProvider {
         file = new File(ROUTESPATH);
     }
     
-    @Override
-    public List<IIgnoredWord> getIgnoredWords() {
-        List<IIgnoredWord> ignoredWords = new LinkedList<>();
+    public List<IgnoredWord> getIgnoredWords() {
+        List<IgnoredWord> ignoredWords = new LinkedList<>();
                 
         try {
-            IRootIgnoredWords rootIgnoredWords = persister.read(RootIgnoredWords.class, file);
+            RootIgnoredWords rootIgnoredWords = persister.read(RootIgnoredWords.class, file);
             ignoredWords = rootIgnoredWords.getIgnoredWords();
         } catch (Exception ex) {
             Logger.getLogger(RoutesProvider.class.getName()).log(Level.SEVERE, null, ex);
@@ -49,7 +44,6 @@ public class IgnoredWordsProvider implements IIgnoredWordsProvider {
         return ignoredWords;
     }
 
-    @Override
     public String getData(String... keywords) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

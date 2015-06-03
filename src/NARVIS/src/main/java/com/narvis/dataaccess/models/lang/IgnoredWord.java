@@ -5,7 +5,6 @@
  */
 package com.narvis.dataaccess.models.lang;
 
-import com.narvis.dataaccess.interfaces.models.lang.IIgnoredWord;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -14,7 +13,7 @@ import org.simpleframework.xml.Root;
  * @author Zack
  */
 @Root(name="IgnoredWord")
-public class IgnoredWord implements IIgnoredWord {
+public class IgnoredWord{
     @Element(name="Value", type = String.class)
     public String value;
     
@@ -28,7 +27,6 @@ public class IgnoredWord implements IIgnoredWord {
         this.value = value;
     }
     
-    @Override
     public String getValue() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
