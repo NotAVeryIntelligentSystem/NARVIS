@@ -3,16 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package narvis.engine.fondamentalAnalyser;
+package com.narvis.engine;
 
-import com.narvis.engine.Action;
 import com.narvis.dataaccess.models.route.ActionNode;
 import com.narvis.dataaccess.models.route.WordNode;
 import com.narvis.dataaccess.models.route.RoutesProvider;
 import java.io.*;
 import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
-import narvis.engine.logger.NarvisLogger;
+import com.narvis.common.generics.NarvisLogger;
+import com.narvis.dataaccess.interfaces.models.route.IActionNode;
+import com.narvis.dataaccess.interfaces.models.route.IRouteNode;
+import com.narvis.dataaccess.interfaces.models.route.IRoutesProvider;
+import com.narvis.dataaccess.interfaces.models.route.IWordNode;
 import org.xml.sax.SAXException;
 
 /**
@@ -38,20 +41,20 @@ public class FondamentalAnalyser {
     public Action findAction(List<String> pParsedSentence){
         //Action action = null;
         details = pParsedSentence;
-        List<IWordNode> rootWords = routesProvider.getWords();
+        List<IWordNode> rootWords = routesProvider.getRouteNode().getWords();
         IActionNode action = null;
         Action implAction = null;
         
         for(IWordNode word : rootWords)
         {
             final String currentSentenceWord = details.get(0);
-            if(word.getValue().isEmpty() || word.getValue().equals(currentSentenceWord))
+            if(word.getValue() == null || word.getValue().isEmpty() || word.getValue().equals(currentSentenceWord))
             {
                 action = searchPath(word, 1);
 
                 if(action != null)
                 {
-                    if(!word.getValue().isEmpty())
+                    if(word.getValue() != null || !word.getValue().isEmpty())
                     {
                         details.remove(0);
                     }
@@ -105,7 +108,8 @@ public class FondamentalAnalyser {
         pParsedSentences.remove(indexOfKnownSentence);
 
         /* On récupère l'arbre des routes */
-        List<IWordNode> words = routesProvider.getWords();
+        IRouteNode route = routesProvider.getRouteNode();
+        List<IWordNode> words = route.getWords();
         
         /* Pour chaque phrase, on créé une route avec comme finalitée l'action connue */
         for(List<String> parsedSentence : pParsedSentences){
@@ -118,7 +122,7 @@ public class FondamentalAnalyser {
                 
                 for (IWordNode routesWord : words) {
 
-                    if(routesWord.getValue().isEmpty() || routesWord.getValue().equals(currentSentenceWord)){
+                    if(routesWord.getValue() == null || routesWord.getValue().isEmpty() || routesWord.getValue().equals(currentSentenceWord)){
                         createPath(routesWord, parsedSentence, findedAction);
                         isFound = true;
                         break;
@@ -135,7 +139,7 @@ public class FondamentalAnalyser {
                         newWordNode = new WordNode(null);
                     }
 
-                    words.add(newWordNode);
+                    route.addWord(newWordNode);
 
                     createPath(newWordNode, parsedSentence, findedAction);
                 }
@@ -143,7 +147,7 @@ public class FondamentalAnalyser {
         }
         
         /* On remplace avec le nouvel arbre des routes */
-        routesProvider.setWords(words);
+        routesProvider.setRouteNode(route);
     }
     
      /**
@@ -170,7 +174,7 @@ public class FondamentalAnalyser {
         if(iWord < details.size()){
             final String currentSentenceWord = details.get(iWord);
             for (IWordNode currentWordNode : words) {
-                if(currentWordNode.getValue().isEmpty()){
+                if(currentWordNode.getValue() == null || currentWordNode.getValue().isEmpty()){
                     action = searchPath(currentWordNode, iWord+1);
                     break;
                     
@@ -201,7 +205,8 @@ public class FondamentalAnalyser {
      * @param pParsedSentence : La phrase préalablement parsée
      * @param pAction : L'action correspondante
      */
-    private void createPath(IWordNode pWordNode, List<String> pParsedSentence, Action pAction){
+    private void createPath(IWordNode pWordNode, List<String> pParsedSentence, Action pAction)
+    {
         final List<IWordNode> routesWords = pWordNode.getWords();
         boolean isFound = false;
         
@@ -211,7 +216,7 @@ public class FondamentalAnalyser {
             
             for (IWordNode routesWord : routesWords) {
                 
-                if(routesWord.getValue().isEmpty() || routesWord.getValue().equals(currentSentenceWord)){
+                if(routesWord.getValue() == null || routesWord.getValue().isEmpty() || routesWord.getValue().equals(currentSentenceWord)){
                     createPath(routesWord, pParsedSentence, pAction);
                     isFound = true;
                     break;
