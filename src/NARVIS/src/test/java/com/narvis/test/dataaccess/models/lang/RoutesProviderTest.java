@@ -1,11 +1,9 @@
-package com.narvis.test.dataaccess.models.route;
+package com.narvis.test.dataaccess.models.lang;
 
-import com.narvis.dataaccess.interfaces.models.route.IRouteNode;
-import com.narvis.dataaccess.interfaces.models.route.IRoutesProvider;
-import com.narvis.dataaccess.interfaces.models.route.IWordNode;
-import com.narvis.dataaccess.models.route.RoutesProvider;
-import com.narvis.dataaccess.models.route.WordNode;
+import com.narvis.dataaccess.models.lang.IgnoredWord;
+import com.narvis.dataaccess.models.lang.IgnoredWordsProvider;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
@@ -27,13 +25,8 @@ public class RoutesProviderTest {
      */
     public static void main(String[] args) {
         try {
-            IRoutesProvider myRoutesProvider = new RoutesProvider();
-            IRouteNode route = myRoutesProvider.getRouteNode();
-            
-            IWordNode newWord = new WordNode("New");
-            route.addWord(newWord);
-            myRoutesProvider.setRouteNode(route);
-            myRoutesProvider.persist();
+            IgnoredWordsProvider myIgnoredWordsProvider = new IgnoredWordsProvider();
+            List<IgnoredWord> ignoredWords = myIgnoredWordsProvider.getIgnoredWords();
             
         } catch (ParserConfigurationException ex) {
             Logger.getLogger(RoutesProviderTest.class.getName()).log(Level.SEVERE, null, ex);

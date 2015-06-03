@@ -5,71 +5,53 @@
  */
 package com.narvis.dataaccess.models.route;
 
-import com.narvis.dataaccess.interfaces.models.route.IRouteNode;
-import java.io.File;
+import com.narvis.common.functions.serialization.XmlSerializer;
+import com.narvis.common.generics.NarvisLogger;
+import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
+import com.narvis.dataaccess.interfaces.IDataModelProvider;
 import java.io.IOException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
-import com.narvis.dataaccess.interfaces.models.route.IRoutesProvider;
-import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.Root;
 import org.xml.sax.SAXException;
 
 /**
  *
  * @author Zack
  */
-public class RoutesProvider implements IRoutesProvider {
-    private final static String ROUTESPATH = "src\\test\\java\\com\\narvis\\test\\dataaccess\\models\\route\\routes.xml"; // Le chemin d'accès au fichier XML contenant les routes
-
-    Persister persister;
-    File file;
+@Root(name = "RoutesProvider")
+public class RoutesProvider implements IDataModelProvider<RouteNode> {
+    //private final static String ROUTESPATH = "src\\test\\java\\com\\narvis\\test\\dataaccess\\models\\route\\routes.xml"; // Le chemin d'accès au fichier XML contenant les routes
+    private final RouteNode routes;
+    private final ModuleConfigurationDataProvider conf;
     
-    private IRouteNode route;
-    
-    public RoutesProvider() throws ParserConfigurationException, SAXException, IOException{
-        persister = new Persister();
-        file = new File(ROUTESPATH);
+    public RoutesProvider(ModuleConfigurationDataProvider conf) throws ParserConfigurationException, SAXException, IOException, Exception{
+        this.conf = conf;
+        this.routes = XmlSerializer.fromFile(RouteNode.class, this.getRoutesDataPath());
         
-        route = new RouteNode();
     }
     
-    @Override
-    public IRouteNode getRouteNode() {
-        try {
-            RouteNode routeNode = persister.read(RouteNode.class, file);
-            
-            route = routeNode;
-        } catch (Exception ex) {
-            Logger.getLogger(RoutesProvider.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return route;
-    }
-    
-    @Override
-    public void setRouteNode(IRouteNode route)
-    {
-        this.route = route;
+    private String getRoutesDataPath() {
+        return this.conf.getData("RoutesDataPath");
     }
 
     @Override
     public void persist() {
         try {
-            persister.write(route, file);
+            XmlSerializer.toFile(this.routes, this.getRoutesDataPath());
         } catch (Exception ex) {
-            Logger.getLogger(RoutesProvider.class.getName()).log(Level.SEVERE, null, ex);
+            NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
         }
     }
 
     @Override
-    public Object getModel(String... keywords) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getData(String... keywords) {
+        return this.routes.toString();
     }
 
     @Override
-    public String getData(String... keywords) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public RouteNode getModel(String... keywords) {
+        return this.routes;
     }
 
 }

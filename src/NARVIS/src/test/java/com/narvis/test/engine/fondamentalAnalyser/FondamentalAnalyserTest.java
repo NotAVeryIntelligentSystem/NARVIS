@@ -2,7 +2,6 @@ package com.narvis.test.engine.fondamentalAnalyser;
 
 import com.narvis.engine.Action;
 import com.narvis.engine.FondamentalAnalyser;
-import com.narvis.common.generics.NarvisLogger;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class FondamentalAnalyserTest {
      /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 List<List<String>> allSentences = new LinkedList();
         
         List<String> parsedSentence = new LinkedList();
