@@ -27,6 +27,9 @@ public class Word {
     @ElementList (name="InformationTypes", type = String.class)
     List<String> informationTypes;
     
+    @ElementList (name="Hint", type = String.class)
+    List<String> hints;
+    
     public Word()
     {
         informationTypes = new LinkedList<>();
@@ -45,6 +48,11 @@ public class Word {
     public List<String> getInformationTypes()
     {
         return this.informationTypes;
+    }
+    
+    public List<String> getHints()
+    {
+        return this.hints;
     }
     
     public boolean containInformationType(String informationType)

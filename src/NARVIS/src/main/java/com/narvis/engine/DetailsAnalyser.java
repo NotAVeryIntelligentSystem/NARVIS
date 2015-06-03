@@ -34,6 +34,7 @@ public final class DetailsAnalyser {
             } else {
                 this.isALocation(currentWord);
             }
+            
             if(nextIsLocation){
                 wordsAssociations.put(currentWord.getValue(),"location");
                 nextIsLocation = false;
