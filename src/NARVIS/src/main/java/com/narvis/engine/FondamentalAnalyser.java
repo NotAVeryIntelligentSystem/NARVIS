@@ -5,17 +5,17 @@
  */
 package com.narvis.engine;
 
+import com.narvis.common.generics.NarvisLogger;
+import com.narvis.dataaccess.DataAccessFactory;
+import com.narvis.dataaccess.interfaces.IDataModelProvider;
 import com.narvis.dataaccess.models.route.ActionNode;
+import com.narvis.dataaccess.models.route.RouteNode;
 import com.narvis.dataaccess.models.route.WordNode;
-import com.narvis.dataaccess.models.route.RoutesProvider;
 import java.io.*;
 import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
-import com.narvis.common.generics.NarvisLogger;
-import com.narvis.dataaccess.interfaces.models.route.IActionNode;
-import com.narvis.dataaccess.interfaces.models.route.IRouteNode;
-import com.narvis.dataaccess.interfaces.models.route.IRoutesProvider;
-import com.narvis.dataaccess.interfaces.models.route.IWordNode;
+
+
 import org.xml.sax.SAXException;
 
 /**
@@ -23,14 +23,14 @@ import org.xml.sax.SAXException;
  * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class FondamentalAnalyser {
-    private final IRoutesProvider routesProvider;
+    private final IDataModelProvider<RouteNode> routesProvider;
     
     private String providerName = "";
     private List<String> askFor = null;
     private List<String> details = null; // La phrase parsée à partir de laquelle l'arbre est parcouru. Elle devient par la suite la liste des détails de la phrase.
     
-    public FondamentalAnalyser() throws ParserConfigurationException, SAXException, IOException{        
-        routesProvider = new RoutesProvider();
+    public FondamentalAnalyser() throws ParserConfigurationException, SAXException, IOException, Exception{        
+        this.routesProvider = (IDataModelProvider<RouteNode>) DataAccessFactory.getMetaDataProvider().getDataProvider("Routes");
     }
     
     /**
@@ -41,11 +41,11 @@ public class FondamentalAnalyser {
     public Action findAction(List<String> pParsedSentence){
         //Action action = null;
         details = pParsedSentence;
-        List<IWordNode> rootWords = routesProvider.getRouteNode().getWords();
-        IActionNode action = null;
+        List<WordNode> rootWords = routesProvider.getModel().getWords();
+        ActionNode action = null;
         Action implAction = null;
         
-        for(IWordNode word : rootWords)
+        for(WordNode word : rootWords)
         {
             final String currentSentenceWord = details.get(0);
             if(word.getValue() == null || word.getValue().isEmpty() || word.getValue().equals(currentSentenceWord))
@@ -108,8 +108,8 @@ public class FondamentalAnalyser {
         pParsedSentences.remove(indexOfKnownSentence);
 
         /* On récupère l'arbre des routes */
-        IRouteNode route = routesProvider.getRouteNode();
-        List<IWordNode> words = route.getWords();
+        RouteNode route = routesProvider.getModel();
+        List<WordNode> words = route.getWords();
         
         /* Pour chaque phrase, on créé une route avec comme finalitée l'action connue */
         for(List<String> parsedSentence : pParsedSentences){
@@ -120,7 +120,7 @@ public class FondamentalAnalyser {
                 final String currentSentenceWord = parsedSentence.get(0);
                 parsedSentence.remove(0);
                 
-                for (IWordNode routesWord : words) {
+                for (WordNode routesWord : words) {
 
                     if(routesWord.getValue() == null || routesWord.getValue().isEmpty() || routesWord.getValue().equals(currentSentenceWord)){
                         createPath(routesWord, parsedSentence, findedAction);
@@ -131,7 +131,7 @@ public class FondamentalAnalyser {
 
                 /* Si aucun noeud enfant ne correspond au mot, on créé un nouveau noeud */
                 if(!isFound){
-                    IWordNode newWordNode;
+                    WordNode newWordNode;
 
                     if(!currentSentenceWord.equals("something") && !currentSentenceWord.equals("someone")){
                         newWordNode = new WordNode(currentSentenceWord);
@@ -147,7 +147,7 @@ public class FondamentalAnalyser {
         }
         
         /* On remplace avec le nouvel arbre des routes */
-        routesProvider.setRouteNode(route);
+        routesProvider.persist();
     }
     
      /**
@@ -165,15 +165,15 @@ public class FondamentalAnalyser {
      * @param iWord : L'indice du mot courrant
      * @return Un noeud de l'arbre correspondant à une action, ou NULL si aucune action n'est trouvée.
      */
-    private IActionNode searchPath(IWordNode pWord, int iWord){
+    private ActionNode searchPath(WordNode pWord, int iWord){
         
-        final List<IWordNode> words = pWord.getWords();
+        final List<WordNode> words = pWord.getWords();
 
-        IActionNode action = null;
+        ActionNode action = null;
 
         if(iWord < details.size()){
             final String currentSentenceWord = details.get(iWord);
-            for (IWordNode currentWordNode : words) {
+            for (WordNode currentWordNode : words) {
                 if(currentWordNode.getValue() == null || currentWordNode.getValue().isEmpty()){
                     action = searchPath(currentWordNode, iWord+1);
                     break;
@@ -188,7 +188,7 @@ public class FondamentalAnalyser {
         }
         
         if(action == null){
-            final List<IActionNode> actions = pWord.getActions();
+            final List<ActionNode> actions = pWord.getActions();
             
             if(actions.size() > 0)
             {
@@ -205,16 +205,16 @@ public class FondamentalAnalyser {
      * @param pParsedSentence : La phrase préalablement parsée
      * @param pAction : L'action correspondante
      */
-    private void createPath(IWordNode pWordNode, List<String> pParsedSentence, Action pAction)
+    private void createPath(WordNode pWordNode, List<String> pParsedSentence, Action pAction)
     {
-        final List<IWordNode> routesWords = pWordNode.getWords();
+        final List<WordNode> routesWords = pWordNode.getWords();
         boolean isFound = false;
         
         if(pParsedSentence.size() > 0){
             final String currentSentenceWord = pParsedSentence.get(0);
             pParsedSentence.remove(0);
             
-            for (IWordNode routesWord : routesWords) {
+            for (WordNode routesWord : routesWords) {
                 
                 if(routesWord.getValue() == null || routesWord.getValue().isEmpty() || routesWord.getValue().equals(currentSentenceWord)){
                     createPath(routesWord, pParsedSentence, pAction);
@@ -225,7 +225,7 @@ public class FondamentalAnalyser {
             
             /* Si aucun noeud enfant ne correspond au mot, on créé un nouveau noeud */
             if(!isFound){
-                IWordNode newWordNode;
+                WordNode newWordNode;
              
                 if(!currentSentenceWord.equals("something") && !currentSentenceWord.equals("someone")){
                     newWordNode = new WordNode(currentSentenceWord);
