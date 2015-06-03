@@ -7,7 +7,7 @@ package com.narvis.frontend.console.input;
 
 import com.narvis.engine.Narvis;
 import com.narvis.frontend.MessageInOut;
-import com.narvis.frontend.interfaces.Iinput;
+import com.narvis.frontend.interfaces.IInput;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,7 +15,7 @@ import java.util.Scanner;
  *
  * @author Nakou
  */
-public class ConsoleInput implements Iinput {
+public class ConsoleInput implements IInput {
 
     private MessageInOut getMessage(String s){
         return new MessageInOut("Console",s,"localhost");

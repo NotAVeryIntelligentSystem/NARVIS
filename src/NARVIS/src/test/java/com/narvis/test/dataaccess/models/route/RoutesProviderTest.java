@@ -35,11 +35,7 @@ public class RoutesProviderTest {
             myRoutesProvider.setRouteNode(route);
             myRoutesProvider.persist();
             
-        } catch (ParserConfigurationException ex) {
-            Logger.getLogger(RoutesProviderTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SAXException ex) {
-            Logger.getLogger(RoutesProviderTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
             Logger.getLogger(RoutesProviderTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

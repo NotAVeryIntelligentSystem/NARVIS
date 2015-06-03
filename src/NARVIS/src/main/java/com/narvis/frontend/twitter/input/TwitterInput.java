@@ -7,7 +7,7 @@ package com.narvis.frontend.twitter.input;
 
 import com.narvis.engine.Narvis;
 import com.narvis.frontend.MessageInOut;
-import com.narvis.frontend.interfaces.Iinput;
+import com.narvis.frontend.interfaces.IInput;
 import static java.lang.Thread.sleep;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import twitter4j.TwitterException;
  *
  * @author Alban
  */
-public class TwitterInput implements Iinput, Runnable{
+public class TwitterInput implements IInput, Runnable{
     public String nameAPI = "Twitter";
     public String internalName = "nakJarvis";
     private Twitter twitterLink;

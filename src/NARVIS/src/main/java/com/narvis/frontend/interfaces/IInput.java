@@ -5,13 +5,11 @@
  */
 package com.narvis.frontend.interfaces;
 
-import java.util.List;
-
 /**
  *
  * @author Alban
  */
-public interface Iinput {
+public interface IInput {
 
     public void start();
 }

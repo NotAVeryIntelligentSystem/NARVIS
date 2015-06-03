@@ -23,7 +23,6 @@
  */
 package com.narvis.dataaccess.models.conf;
 
-import com.narvis.common.tools.reflection.Factory;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import org.simpleframework.xml.*;
 
