@@ -23,6 +23,7 @@
  */
 package com.narvis.dataaccess.models.lang;
 
+import java.util.List;
 import org.simpleframework.xml.*;
 
 /**
@@ -34,6 +35,6 @@ public class Language {
     @Element(name = "Name")
     private String name;
     
-    
-    //private List<String> ignoreWords; 
+    @ElementList()
+    private List<String> ignoreWords; 
 }

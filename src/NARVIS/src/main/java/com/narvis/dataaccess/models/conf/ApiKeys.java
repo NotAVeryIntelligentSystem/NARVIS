@@ -21,42 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.impl;
+package com.narvis.dataaccess.models.conf;
 
-import com.narvis.common.generics.NarvisLogger;
-import com.narvis.dataaccess.interfaces.IDataProvider;
-import com.narvis.dataaccess.interfaces.IMetaDataProvider;
-import java.util.Map;
-import java.util.logging.Level;
+import com.narvis.dataaccess.interfaces.*;
+import java.util.*;
+import org.simpleframework.xml.*;
 
 /**
  *
  * @author uwy
  */
-public class MetaDataProvider implements IMetaDataProvider {
+@Root(name="ApiKeys")
+public class ApiKeys implements IDataProvider {
+    public static final String NAME_KEYWORD = "Name";
     
-    private final ConfigurationDataProvider config;
-    private final Map<String, IDataProvider> providers;
+    @Element(name = "Name")
+    private String name;  
     
-    private static final String CONF_KEYWORD = "Conf";
-    
-    public MetaDataProvider() throws Exception {
-        try {
-            this.config = new ConfigurationDataProvider();
-            this.providers = this.config.getDataProviders();
+    @ElementMap(entry="ApiKey", key="Name", attribute=true, inline=true)
+    private final Map<String, String> apiKeys;
 
-        } catch (Exception ex) {
-           NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
-           throw ex;
-        }
+    public ApiKeys() {
+        this.apiKeys = new HashMap<>();
     }
-    
+
+    // NAME constant to get this object name
+    // Otherwise returns the key value from the name an ApiKey is associated with
     @Override
-    public IDataProvider getDataProvider(String... keywords) {
-        if(CONF_KEYWORD.equals(keywords[0])) {
-            return this.config;
+    public String getData(String... keywords) {        
+        if(keywords.length != 1 || !this.apiKeys.containsKey(keywords[0])) {
+            throw new IllegalArgumentException("Invalid number of argument or wrong ApiKey name in keywords");
         }
-        return this.providers.get(keywords[0]);
+        if(ApiKeys.NAME_KEYWORD.equals(keywords[0])) {
+            return this.name;
+        }
+        return this.apiKeys.get(keywords[0]);
     }
-    
+   
+   
 }

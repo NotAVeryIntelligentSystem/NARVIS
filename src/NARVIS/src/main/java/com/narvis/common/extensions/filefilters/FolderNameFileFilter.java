@@ -21,42 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.impl;
+package com.narvis.common.extensions.filefilters;
 
-import com.narvis.common.generics.NarvisLogger;
-import com.narvis.dataaccess.interfaces.IDataProvider;
-import com.narvis.dataaccess.interfaces.IMetaDataProvider;
-import java.util.Map;
-import java.util.logging.Level;
+import java.io.File;
+import java.io.FileFilter;
 
 /**
  *
  * @author uwy
  */
-public class MetaDataProvider implements IMetaDataProvider {
-    
-    private final ConfigurationDataProvider config;
-    private final Map<String, IDataProvider> providers;
-    
-    private static final String CONF_KEYWORD = "Conf";
-    
-    public MetaDataProvider() throws Exception {
-        try {
-            this.config = new ConfigurationDataProvider();
-            this.providers = this.config.getDataProviders();
-
-        } catch (Exception ex) {
-           NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
-           throw ex;
-        }
+public class FolderNameFileFilter implements FileFilter {
+    private final String folderName;
+    public FolderNameFileFilter(String folderName) {
+        assert folderName != null && !folderName.isEmpty() : "Folder name given is null or empty";
+        this.folderName = folderName;
     }
-    
+
     @Override
-    public IDataProvider getDataProvider(String... keywords) {
-        if(CONF_KEYWORD.equals(keywords[0])) {
-            return this.config;
-        }
-        return this.providers.get(keywords[0]);
+    public boolean accept(File pathname) {
+        return pathname.isDirectory() && folderName.equals(pathname.getName());
     }
     
 }

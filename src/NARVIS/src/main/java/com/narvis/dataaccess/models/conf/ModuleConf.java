@@ -21,42 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.impl;
+package com.narvis.dataaccess.models.conf;
 
-import com.narvis.common.generics.NarvisLogger;
 import com.narvis.dataaccess.interfaces.IDataProvider;
-import com.narvis.dataaccess.interfaces.IMetaDataProvider;
-import java.util.Map;
-import java.util.logging.Level;
+import org.simpleframework.xml.*;
 
 /**
  *
  * @author uwy
  */
-public class MetaDataProvider implements IMetaDataProvider {
+@Root(name="ModuleConf")
+public class ModuleConf implements IDataProvider {
+    @Element(name = "ModuleClassPath")
+    private String moduleClassPath;
     
-    private final ConfigurationDataProvider config;
-    private final Map<String, IDataProvider> providers;
+    public static String MODULE_CLASS_PATH_KEYWORD = "ModuleClassPath";
     
-    private static final String CONF_KEYWORD = "Conf";
+    public ModuleConf() {
+        
+    }
     
-    public MetaDataProvider() throws Exception {
-        try {
-            this.config = new ConfigurationDataProvider();
-            this.providers = this.config.getDataProviders();
-
-        } catch (Exception ex) {
-           NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
-           throw ex;
-        }
+    public String getModuleClassPath() {
+        return this.moduleClassPath;
+    }
+    
+    public void setModuleClassPaht(String val) {
+        this.moduleClassPath = val;
     }
     
     @Override
-    public IDataProvider getDataProvider(String... keywords) {
-        if(CONF_KEYWORD.equals(keywords[0])) {
-            return this.config;
+    public String getData(String... keywords) {
+        if(keywords[0].equals(MODULE_CLASS_PATH_KEYWORD)) {
+            return this.moduleClassPath;
         }
-        return this.providers.get(keywords[0]);
+        return null;
     }
-    
+    //Todo
 }

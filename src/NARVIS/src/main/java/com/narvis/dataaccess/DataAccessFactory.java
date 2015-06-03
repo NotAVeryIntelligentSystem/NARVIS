@@ -33,20 +33,16 @@ import com.narvis.dataaccess.interfaces.IMetaDataProvider;
 public class DataAccessFactory {
     private final IMetaDataProvider metaDataProvider;
     
-    
-    private DataAccessFactory() {
+    private DataAccessFactory() throws Exception {
         this.metaDataProvider = new MetaDataProvider();
     }
     
     private static DataAccessFactory instance = null;
-    private static final Object locker = new Object();
     
-    public static IMetaDataProvider getMetaDataProvider(){
-        synchronized(DataAccessFactory.locker) {
-            if(DataAccessFactory.instance == null) {
-                DataAccessFactory.instance = new DataAccessFactory();
-            }
-            return DataAccessFactory.instance.metaDataProvider;
+    public static synchronized IMetaDataProvider getMetaDataProvider() throws Exception{
+        if(DataAccessFactory.instance == null) {
+            DataAccessFactory.instance = new DataAccessFactory();
         }
+        return DataAccessFactory.instance.metaDataProvider;
     }
 }

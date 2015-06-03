@@ -28,14 +28,6 @@ package com.narvis.dataaccess.interfaces;
  * @author uwy
  */
 public interface IMetaDataProvider {
-    public IDataProvider getDataProvider(ProviderType type, String... keywords);
+    public IDataProvider getDataProvider(String... keywords);
     
-    
-    public enum ProviderType {
-        Lang,
-        Location,
-        Weather,
-        News,
-        
-    }
 }
