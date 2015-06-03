@@ -47,6 +47,10 @@ public class XmlSerializer {
         persister.write(toSerialize, stream);
     }
     
+    public static <T> T fromFile(Class<T> type, String filePath) throws Exception {
+        return XmlSerializer.fromFile(type, new File(filePath));
+    }
+    
     public static <T> T fromFile(Class<T> type, File file) throws Exception {
         return persister.read(type, file);
     }

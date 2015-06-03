@@ -82,6 +82,18 @@ public class ModuleConfigurationDataProvider implements IDataProvider {
         this.conf = confFile == null ? null : XmlSerializer.fromFile(ModuleConf.class, confFile);
         this.answersLayout = answerFile == null ? null : XmlSerializer.fromFile(AnswersLayout.class, answerFile);
     }
+    
+    public ApiKeys getApiKeys() {
+        return this.apiKeys;
+    }
+    
+    public ModuleConf getConf() {
+        return this.conf;
+    }
+    
+    public AnswersLayout getAnswersLayout() {
+        return this.answersLayout;
+    }
    
     @Override
     public String getData(String... keywords) {
