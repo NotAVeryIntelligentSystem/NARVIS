@@ -36,9 +36,9 @@ import static org.junit.Assert.*;
  *
  * @author puma
  */
-public class AnswerBuilderTest {
+public class TestAnswerBuilder {
     
-    public AnswerBuilderTest() {
+    public TestAnswerBuilder() {
     }
 
     
