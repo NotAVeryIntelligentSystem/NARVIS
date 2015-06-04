@@ -26,6 +26,7 @@ package com.narvis.engine;
 import com.narvis.common.generics.NarvisLogger;
 import com.narvis.dataaccess.DataAccessFactory;
 import com.narvis.dataaccess.interfaces.IDataModelProvider;
+import com.narvis.dataaccess.interfaces.IMetaDataProvider;
 import com.narvis.dataaccess.models.route.ActionNode;
 import com.narvis.dataaccess.models.route.RouteNode;
 import com.narvis.dataaccess.models.route.WordNode;
@@ -57,7 +58,8 @@ public class FondamentalAnalyser {
     public FondamentalAnalyser() throws ParserConfigurationException, SAXException, IOException, Exception
     {
         // Récupération du RoutesProvider
-        this.routesProvider = (IDataModelProvider<RouteNode>) DataAccessFactory.getMetaDataProvider().getDataProvider("Routes");
+        IMetaDataProvider metaDataProvider = DataAccessFactory.getMetaDataProvider();
+        this.routesProvider = (IDataModelProvider<RouteNode>) metaDataProvider.getDataProvider("Routes");
     }
     
     /**

@@ -42,9 +42,9 @@ import org.xml.sax.SAXException;
  *
  * @author Zack
  */
-public class FondamentalAnalyserTest {
+public class TestFondamentalAnalyser {
     
-    public FondamentalAnalyserTest() {
+    public TestFondamentalAnalyser() {
     }
     
     @BeforeClass

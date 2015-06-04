@@ -39,9 +39,9 @@ import static org.junit.Assert.*;
  *
  * @author Zack
  */
-public class ParserTest {
+public class TestParser {
     
-    public ParserTest() {
+    public TestParser() {
     }
     
     @BeforeClass
