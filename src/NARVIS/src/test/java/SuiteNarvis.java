@@ -22,13 +22,12 @@
  * THE SOFTWARE.
  */
 
+import com.narvis.test.dataaccess.*;
 import com.narvis.test.engine.*;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -38,7 +37,7 @@ import org.junit.runners.Suite.SuiteClasses;
  * @author Zack
  */
 @RunWith(Suite.class)
-@SuiteClasses({ SuiteEngine.class })
+@SuiteClasses({ SuiteEngine.class, SuiteDataAccess.class })
 public class SuiteNarvis {
     
     public SuiteNarvis() {
