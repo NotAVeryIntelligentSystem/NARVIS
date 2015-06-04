@@ -24,8 +24,8 @@
 package com.narvis.test.dataaccess;
 
 import com.narvis.test.dataaccess.conf.ApiKeyProviderTest;
-import com.narvis.test.models.dataaccess.answerbuilder.TestAnswerBuilder;
-import com.narvis.test.models.dataaccess.weather.TestWeatherProvider;
+import com.narvis.test.dataaccess.models.answerbuilder.TestAnswerBuilder;
+import com.narvis.test.dataaccess.models.weather.TestWeatherProvider;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
