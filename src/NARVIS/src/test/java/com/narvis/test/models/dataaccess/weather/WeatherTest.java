@@ -42,7 +42,7 @@ public class WeatherTest {
         
         
         //Change this
-        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../modules/Weather/"));
+        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../tests/weather"));
         OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(conf);
         
         Map<String,String> details = new HashMap<>();

@@ -1,7 +1,17 @@
 <Answers>
 	<Sentences>
 		<Sentence command="temperature">
-			<Value>The temperature is %s</Value>
+			<Value>The temperature is [temperature]°C</Value>
 		</Sentence>
+
+		<Sentence command="error">
+			<Value>Sorry guy I can't help you</Value>
+		<Sentence>
+
+
+		<Sentence command="weather">
+			<Value>The temperature in [city] is [temperature]°C and the cloud percentage is [cloud]%</Value>
+		<Sentence>
+
 	</Sentences>
 </Answers>
