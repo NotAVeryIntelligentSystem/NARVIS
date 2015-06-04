@@ -60,6 +60,7 @@ public class Parser {
     public List<String> Parse(String sentence)
     {
         ArrayList<String> parsedMessage = new ArrayList<>();
+        sentence.toLowerCase();
         parsedMessage.addAll(Arrays.asList(sentence.split(" ")));
 
         transformSpaceInQuoteWithUnderscore(sentence);        
