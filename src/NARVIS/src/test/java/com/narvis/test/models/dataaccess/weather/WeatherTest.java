@@ -26,22 +26,10 @@ public class WeatherTest {
     @Test
     public void GetInfoMeteo() throws Exception
     {
-        try {
-            String apiKeysFilePath = "../../conf/modules/Weather/conf/api.key";
+        String apiKeysFilePath = "../../tests/weather/api_weather.key";
 
-            File f = new File(apiKeysFilePath);
-            ApiKeys api = XmlFileAccess.fromFile(ApiKeys.class, f);
-
-            OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(api);
-            String resString1 = weatherPortal.getData("Nimes", "temperature", "cloud");
-            
-            
-        }catch (Exception e ) {
-            
-            System.out.println(e);
-            
-        }
-        
+        File f = new File(apiKeysFilePath).getAbsoluteFile();
+        ApiKeys api = XmlFileAccess.fromFile(ApiKeys.class, f);
 
     }
 
