@@ -21,10 +21,10 @@ import twitter4j.TwitterException;
 public class Output  implements IOutput{
     public String nameAPI = "Twitter";
     public String internalName = "nakJarvis";
-    private Twitter twitterLink;
+    private final Twitter twitterLink;
     
-    public Output(){
-        this.twitterLink = AccessTwitter.loadAccessTwitter();
+    public Output(Twitter twitter){
+        this.twitterLink = twitter;
     }
     
     @Override

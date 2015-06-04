@@ -23,7 +23,7 @@
  */
 package com.narvis.engine;
 
-import com.narvis.common.generics.NarvisLogger;
+import com.narvis.common.debug.NarvisLogger;
 import com.narvis.dataaccess.DataAccessFactory;
 import com.narvis.dataaccess.interfaces.IDataModelProvider;
 import com.narvis.dataaccess.interfaces.IMetaDataProvider;

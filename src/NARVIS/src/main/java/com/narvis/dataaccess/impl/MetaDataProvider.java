@@ -23,9 +23,10 @@
  */
 package com.narvis.dataaccess.impl;
 
-import com.narvis.common.generics.NarvisLogger;
+import com.narvis.common.debug.NarvisLogger;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.interfaces.IMetaDataProvider;
+import com.narvis.frontend.interfaces.IFrontEnd;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -37,17 +38,14 @@ public class MetaDataProvider implements IMetaDataProvider {
     
     private final ConfigurationDataProvider config;
     private final Map<String, IDataProvider> providers;
-    
+    private final Map<String, IFrontEnd> frontEnds;
     public static final String CONF_KEYWORD = "Conf";
-    
+    public static final String FRONTEND_KEYWORD = "FrontEnd";
+
     public MetaDataProvider() throws Exception {
-        try {
-            this.config = new ConfigurationDataProvider();
-            this.providers = this.config.getDataProviders();
-        } catch (Exception ex) {
-           NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
-           throw ex;
-        }
+        this.config = new ConfigurationDataProvider();
+        this.providers = this.config.createDataProviders();
+        this.frontEnds = this.config.createFrontEnds();
     }
     
     @Override
@@ -56,6 +54,11 @@ public class MetaDataProvider implements IMetaDataProvider {
             return this.config;
         }
         return this.providers.get(keywords[0]);
+    }
+
+    @Override
+    public IFrontEnd getFrontEnd(String... keywords) {
+        return this.frontEnds.get(keywords[0]);
     }
     
 }

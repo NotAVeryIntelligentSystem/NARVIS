@@ -37,20 +37,21 @@ import org.simpleframework.xml.Root;
 @Root(name="Word")
 public class Word {
     @Attribute(name="IsIgnored", required = false, empty = "false")
-    boolean isIgnored;    
+    private boolean isIgnored;    
     
     @Element(name="Value", type = String.class)
-    String value;
+    private String value;
     
-    @ElementList (name="InformationTypes", type = String.class)
-    List<String> informationTypes;
+    @ElementList (name="InformationTypes", type = String.class, required = false)
+    private List<String> informationTypes;
     
-    @ElementList (name="Hint", type = String.class)
-    List<String> hints;
+    @ElementList (name="Hint", type = String.class, required = false)
+    private List<String> hints;
     
     public Word()
     {
         informationTypes = new LinkedList<>();
+        hints = new LinkedList<>();
     }
     
     public boolean isIgnored()
@@ -77,5 +78,20 @@ public class Word {
     {
         informationType.toLowerCase();
         return informationTypes.contains(informationType);
+    }
+    
+    public void setValue(String value)
+    {
+        this.value = value;        
+    }
+    
+    public void addInformationType(String informationType)
+    {
+        this.informationTypes.add(informationType);
+    }
+    
+    public void addHint(String hint)
+    {
+        this.hints.add(hint);
     }
 }

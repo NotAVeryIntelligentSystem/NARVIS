@@ -23,11 +23,13 @@
  */
 package com.narvis.dataaccess.interfaces;
 
+import com.narvis.frontend.interfaces.IFrontEnd;
+
 /**
  *
  * @author uwy
  */
 public interface IMetaDataProvider {
     public IDataProvider getDataProvider(String... keywords);
-    
+    public IFrontEnd getFrontEnd(String... keywords);
 }

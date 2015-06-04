@@ -33,7 +33,7 @@ import org.simpleframework.xml.*;
  */
 @Root(name="NarvisConf")
 public class NarvisConf implements IDataProvider {
-    @ElementMap(entry="entry", key="key", attribute=true, inline=true)
+    @ElementMap(entry="entry", key="key", attribute=true, inline=true, required = false)
     @SuppressWarnings("FieldMayBeFinal")
     private Map<String, String> entries;
     

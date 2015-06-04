@@ -23,6 +23,7 @@
  */
 package com.narvis.test.engine;
 
+import com.narvis.common.debug.NarvisLogger;
 import com.narvis.engine.Parser;
 import java.util.LinkedList;
 import java.util.List;
@@ -67,22 +68,25 @@ public class TestParser {
     // public void hello() {}
     
     @Test
-    public void TestConstructor()
+    public void TestConstructor() throws Exception
     {
         try {
             Parser myParser = new Parser();
         } catch (Exception ex) {
             fail(ex.getMessage());
+            NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
+            
+            throw ex;
         }
     }
     
     @Test
-    public void TestParser()
+    public void TestParser() throws Exception
     {
         /* Input values */
         String sentence = "Give me the weather in London";
         /**/
-        
+            
         /* Expected results */
         List<String> expectedParsedSentence = new LinkedList<>();
         expectedParsedSentence.add("give");
@@ -91,15 +95,18 @@ public class TestParser {
         expectedParsedSentence.add("in");
         expectedParsedSentence.add("london");
         /**/
-        
+            
         try {
             Parser myParser = new Parser();
             List<String> parsedSentence = myParser.Parse(sentence);
             
             assertArrayEquals(parsedSentence.toArray(), expectedParsedSentence.toArray());
-            
         } catch (Exception ex) {
             fail(ex.getMessage());
+            NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
+            
+            throw ex;
         }
+
     }
 }

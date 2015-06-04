@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 Zack.
+ * Copyright 2015 uwy.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,45 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.test.common.generics;
-
-import com.narvis.common.debug.NarvisLogger;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+package com.narvis.common.tools.serialization;
 
 /**
  *
- * @author Zack
+ * @author uwy
  */
-public class TestNarvisLogger {
-    
-    public TestNarvisLogger() {
+public class XmlFileAccessException extends Exception {
+
+    /**
+     * Creates a new instance of <code>XmlFileAccessException</code> without
+     * detail message.
+     */
+    public XmlFileAccessException() {
     }
     
-    @BeforeClass
-    public static void setUpClass() {
+    public XmlFileAccessException(Exception ex) {
+        super(ex);
     }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-    
-    @Test
-    public void TestGetInstance()
-    {
-        NarvisLogger instance = NarvisLogger.getInstance();
-        
-        instance.info("TestGetInstance");
+
+    /**
+     * Constructs an instance of <code>XmlFileAccessException</code> with the
+     * specified detail message.
+     *
+     * @param msg the detail message.
+     */
+    public XmlFileAccessException(String msg) {
+        super(msg);
     }
 }

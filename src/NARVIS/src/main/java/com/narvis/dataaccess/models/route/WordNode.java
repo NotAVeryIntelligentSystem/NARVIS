@@ -19,10 +19,12 @@ import org.simpleframework.xml.Root;
 public class WordNode {
     @Element(name="Value", type = String.class, required = false)
     private String value;
-    @ElementList(name="Words", type = WordNode.class)
-    private final List<WordNode> words;
-    @ElementList(name="Actions", type = ActionNode.class)
-    private final List<ActionNode> actions;
+    @ElementList(name="Words", type = WordNode.class, required = false)
+    @SuppressWarnings("FieldMayBeFinal")
+    private List<WordNode> words;
+    @ElementList(name="Actions", type = ActionNode.class, required = false)
+    @SuppressWarnings("FieldMayBeFinal")
+    private List<ActionNode> actions;
     
     public WordNode()
     {

@@ -23,7 +23,7 @@
  */
 package com.narvis.dataaccess.models.lang.word;
 
-import com.narvis.common.generics.NarvisLogger;
+import com.narvis.common.debug.NarvisLogger;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -36,8 +36,8 @@ import org.simpleframework.xml.Root;
  */
 @Root(name="Dictionary")
 public class Dictionary {
-    @ElementList(name="Words")
-    List<Word> words;
+    @ElementList(name="Words", required = false)
+    private List<Word> words;
     
     public Dictionary()
     {
@@ -98,5 +98,10 @@ public class Dictionary {
         }
         
         return returnWord;
+    }
+    
+    public void addWord(Word word)
+    {
+        words.add(word);
     }
 }

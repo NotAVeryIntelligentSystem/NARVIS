@@ -50,6 +50,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
 
     private final String KEY_TAG = "key";
     
+    //tests purpose only
     public OpenWeatherMapPortal(ApiKeys api) {
         this.weatherApiKeys = api;
     }
