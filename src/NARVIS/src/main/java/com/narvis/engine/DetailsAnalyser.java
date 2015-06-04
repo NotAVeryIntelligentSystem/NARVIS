@@ -23,8 +23,11 @@ public final class DetailsAnalyser {
     private final IDataModelProvider<Dictionary> dictionary; 
     Map<String, String> wordsAssociations = new HashMap<>();
     
-    public DetailsAnalyser(List<String> details) throws Exception{
+    public DetailsAnalyser() throws Exception{
         this.dictionary = (IDataModelProvider<Dictionary>) DataAccessFactory.getMetaDataProvider().getDataProvider("Dictionary");
+    }
+    
+    public Map<String, String> getDetailsTypes(List<String> details){
         List<String> hintList = new ArrayList<>();
         boolean isTypeFinded = false;
         for(String detail : details){
@@ -50,7 +53,6 @@ public final class DetailsAnalyser {
                 hintList.clear();
             }
         }
-        
-        
+        return this.wordsAssociations;
     }
 }

@@ -7,6 +7,8 @@ package com.narvis.engine;
 
 import com.narvis.frontend.IOManager;
 import com.narvis.frontend.MessageInOut;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -14,12 +16,20 @@ import com.narvis.frontend.MessageInOut;
  */
 public class NarvisEngine {
 
-    private static NarvisEngine narvis;
     private static String IOname = "console"; // TODO : Change by load from conf files
     private IOManager inputs;
-    private NarvisEngine(){}
+    private static NarvisEngine narvis;
     
-    public static NarvisEngine getInstance(){
+    private Parser parser;
+    private FondamentalAnalyser fondamental;
+    private DetailsAnalyser detailAnalyser;
+    
+    private NarvisEngine() throws Exception{
+        parser = new Parser();
+        fondamental = new FondamentalAnalyser();
+    }
+    
+    public static NarvisEngine getInstance() throws Exception{
         if(narvis != null){
             return narvis;
         } else {
@@ -32,9 +42,18 @@ public class NarvisEngine {
         inputs = new IOManager(NarvisEngine.IOname);
     }
     
-    public static void getMessage(MessageInOut lastMessage) {
-        // GO TO PARSER AND STUFF
-        // Xxoo - Nakou
+    public void getMessage(MessageInOut lastMessage){
+        this.brainProcess(lastMessage.getContent());
+        
+        
+    }
+    
+    private void brainProcess(String message){
+        List<String> parsedSentence = parser.Parse(message);
+        Action action = fondamental.findAction(parsedSentence);
+        Map<String,String> detailsTypes = detailAnalyser.getDetailsTypes(action.getDetails());
+        
+        // AnswerBuilder;
     }
     
 }

@@ -109,7 +109,11 @@ public class Input implements IInput, Runnable{
         while(!Thread.currentThread().isInterrupted()){
             lastMessage = this.getInput();
             if(lastMessage != null){
-                NarvisEngine.getMessage(lastMessage);
+                try {
+                    NarvisEngine.getInstance().getMessage(lastMessage);
+                } catch (Exception ex) {
+                    Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             try {
                 sleep(60000);

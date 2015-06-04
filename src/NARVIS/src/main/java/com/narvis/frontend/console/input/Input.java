@@ -10,6 +10,8 @@ import com.narvis.frontend.MessageInOut;
 import com.narvis.frontend.interfaces.IInput;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,7 +28,11 @@ public class Input implements IInput {
         Scanner sc = new Scanner(System.in);
         System.out.println("NARVIS/READY/>");
         String s = sc.nextLine();
-        NarvisEngine.getMessage(this.getMessage(s));
+        try {
+            NarvisEngine.getInstance().getMessage(this.getMessage(s));
+        } catch (Exception ex) {
+            Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }
