@@ -5,6 +5,9 @@
  */
 package com.narvis.engine;
 
+import com.narvis.dataaccess.impl.MetaDataProvider;
+import com.narvis.dataaccess.interfaces.IDataProvider;
+import com.narvis.dataaccess.interfaces.IDataProviderDetails;
 import com.narvis.frontend.IOManager;
 import com.narvis.frontend.MessageInOut;
 import java.util.List;
@@ -23,10 +26,13 @@ public class NarvisEngine {
     private Parser parser;
     private FondamentalAnalyser fondamental;
     private DetailsAnalyser detailAnalyser;
+    private MetaDataProvider metaDataProvider;
     
     private NarvisEngine() throws Exception{
         parser = new Parser();
         fondamental = new FondamentalAnalyser();
+        detailAnalyser = new DetailsAnalyser();
+        metaDataProvider = new MetaDataProvider();
     }
     
     public static NarvisEngine getInstance() throws Exception{
@@ -44,16 +50,20 @@ public class NarvisEngine {
     
     public void getMessage(MessageInOut lastMessage){
         this.brainProcess(lastMessage.getContent());
-        
-        
     }
     
     private void brainProcess(String message){
         List<String> parsedSentence = parser.Parse(message);
         Action action = fondamental.findAction(parsedSentence);
         Map<String,String> detailsTypes = detailAnalyser.getDetailsTypes(action.getDetails());
-        
+        IDataProvider provider = this.metaDataProvider.getDataProvider(action.getProviderName());
+        if(provider instanceof IDataProviderDetails){
+            String protoAnswer = ((IDataProviderDetails)provider).getDataDetails(detailsTypes, (String[]) action.getPrecisions().toArray());
+        } else {
+            String protoAnswer = ((IDataProvider)provider).getData((String[]) action.getPrecisions().toArray());
+        }
         // AnswerBuilder;
+        
     }
     
 }
