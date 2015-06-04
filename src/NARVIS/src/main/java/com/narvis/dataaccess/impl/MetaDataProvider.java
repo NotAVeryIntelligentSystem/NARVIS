@@ -38,7 +38,7 @@ public class MetaDataProvider implements IMetaDataProvider {
     private final ConfigurationDataProvider config;
     private final Map<String, IDataProvider> providers;
     
-    private static final String CONF_KEYWORD = "Conf";
+    public static final String CONF_KEYWORD = "Conf";
     
     public MetaDataProvider() throws Exception {
         try {

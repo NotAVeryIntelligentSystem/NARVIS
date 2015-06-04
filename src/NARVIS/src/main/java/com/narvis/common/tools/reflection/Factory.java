@@ -23,14 +23,18 @@
  */
 package com.narvis.common.tools.reflection;
 
+import com.narvis.frontend.interfaces.IOutput;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author uwy
  */
 public class Factory {
+
     private Factory() {
         
     }
@@ -44,5 +48,15 @@ public class Factory {
             throw new FactoryException(ex);
         }
         
+    }
+
+    public static <T, U> T fromName(String string) throws FactoryException {
+        try {
+            Class<?> clazz = Class.forName(string);
+            Constructor<?> constructor = clazz.getConstructor();
+            return (T) constructor.newInstance();
+        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            throw new FactoryException(ex);
+        }
     }
 }

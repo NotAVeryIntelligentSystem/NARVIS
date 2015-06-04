@@ -48,7 +48,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
     private final String DEFAULT_ANSWER = "weather";
     private final String ERROR_ANSWER = "error";
 
-    private final String KEY_TAG = "OpenWeatherMap";
+    private final String KEY_TAG = "key";
     
     public OpenWeatherMapPortal(ApiKeys api) {
         this.weatherApiKeys = api;
@@ -179,9 +179,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
             //Because it failed we return the default error message
             //The builder don't throw any exception
             AnswerBuilder builder = new AnswerBuilder();
-            String errorMessage = builder.buildAnswer(new HashMap<String, String>(), ERROR_ANSWER);
-            
-            return errorMessage;
+            return builder.readAnswerForCommand(_confProvider, ERROR_ANSWER);    
             
         } 
 
@@ -201,7 +199,6 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
             //Make sur we don't already have the value of the params
             if( !paramsToValue.containsKey( param ) ) {
                 
-                param = removeBracketFromParam(param);
                 String value = CallMethodByCommand(param);
                 if( value == null ) {
                     //We don't have the answer whatever the reason we use the default answer
@@ -225,18 +222,6 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
         throw new UnsupportedOperationException("Not supported"); 
     }
     
-    /**
-     * Remove the bracket from the param if it exist
-     * @param paramName the name of the param
-     * @return return the param name without bracket
-     */
-    private String removeBracketFromParam(String paramName) {
-        
-        paramName = paramName.replace("[", "");
-        paramName = paramName.replace("]", "");
-        
-        return paramName;
-    }
 
  
 }

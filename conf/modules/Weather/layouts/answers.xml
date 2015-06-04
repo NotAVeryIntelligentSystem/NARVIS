@@ -1,0 +1,5 @@
+<Answers>
+	<Sentence command="temperature">Sentence</Sentence>
+	<Sentence command="weather">The temperature in [city] is [temperature]°C and the cloud percentage is [cloud]%</Sentence>
+	<Sentence command="error">Sorry guy I can't help you</Sentence>
+</Answers>

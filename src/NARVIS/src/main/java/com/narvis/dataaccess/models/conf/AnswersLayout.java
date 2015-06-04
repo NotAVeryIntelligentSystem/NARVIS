@@ -24,7 +24,6 @@
 package com.narvis.dataaccess.models.conf;
 
 import com.narvis.dataaccess.interfaces.IDataProvider;
-import java.util.Map;
 import org.simpleframework.xml.Root;
 
 /**

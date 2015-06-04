@@ -40,6 +40,11 @@ public class XmlFileAccess {
     }
     
     public static <T> void toFile(T toSerialize, File file ) throws Exception {
+        if(!file.exists()) {
+            if(!file.createNewFile()) {
+                throw new IllegalArgumentException("Can't write file" + file.getAbsolutePath() + ", check your permissions !");
+            }
+        }
         if(!file.canWrite()) {
             throw new IllegalArgumentException("Can't write file" + file.getAbsolutePath() + ", check your permissions !");
         }

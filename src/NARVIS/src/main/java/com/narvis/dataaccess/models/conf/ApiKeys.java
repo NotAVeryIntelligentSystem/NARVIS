@@ -39,7 +39,8 @@ public class ApiKeys implements IDataProvider {
     private String name;  
 
     @ElementMap(entry="ApiKey", key="Name", attribute=true, inline=true)
-    private final Map<String, String> apiKeys;
+    @SuppressWarnings("FieldMayBeFinal")
+    private Map<String, String> apiKeys;
 
     public Map<String, String> getApiKeys() {
         return this.apiKeys;

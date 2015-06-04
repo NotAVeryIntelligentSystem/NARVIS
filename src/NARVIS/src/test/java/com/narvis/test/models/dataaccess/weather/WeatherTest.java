@@ -12,6 +12,8 @@ import com.narvis.dataaccess.weather.OpenWeatherMapPortal;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
+import org.junit.Assert;
 
 
 import org.junit.Test;
@@ -38,21 +40,57 @@ public class WeatherTest {
 
     
     @Test 
-    public void testGetData() throws Exception {
+    public void testGetDataWithShittyData() throws Exception {
         
-        
-        //Change this
-        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../tests/weather"));
+    
+        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../conf/modules/Weather/"));
         OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(conf);
         
         Map<String,String> details = new HashMap<>();
         
-        details.put("city", "nimes");
+        details.put("city", "fdhdfhgf");
         
-        String result = weatherPortal.getDataDetails(details, "weather");
+        String result = weatherPortal.getDataDetails(details, "");
         
+        Assert.assertEquals("Sorry guy I can't help you", result);
         
     }
+    @Test 
+    public void testGetDataWithDefaultCommand() throws Exception {
+        
+        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../conf/modules/Weather/"));
+        OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(conf);
+        
+        Map<String,String> details = new HashMap<>();
+        details.put("city", "nimes");
+        
+        String result = weatherPortal.getDataDetails(details, "");
+        
+        Pattern p = Pattern.compile("The temperature in (([A-Z]*)|([a-z]*))* is ([0-9]*\\.[0-9])°C and the cloud percentage is ([0-9]*\\.[0-9])%");
+        
+        Assert.assertTrue(result.matches(p.pattern()));
+        
+    }
+    
+    
+    @Test
+    public void testGetDataWithTemperatureCommand() throws Exception {
+        
+        
+        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../tests/weather"));
+        OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(conf);
+        
+        Map<String,String> details = new HashMap<>();
+        details.put("city", "nimes");
+        
+        String result = weatherPortal.getDataDetails(details, "temperature");
+        
+        Pattern p = Pattern.compile("The temperature is ([0-9]*\\.[0-9])°C");
+        
+        Assert.assertTrue(result.matches(p.pattern()));
+    }
+    
+    
     
 
 }

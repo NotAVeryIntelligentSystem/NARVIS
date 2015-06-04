@@ -12,7 +12,7 @@ import com.narvis.frontend.interfaces.IOutput;
  *
  * @author Nakou
  */
-public class ConsoleOutput implements IOutput{
+public class Output implements IOutput{
 
     @Override
     public void setOuput(MessageInOut m) {

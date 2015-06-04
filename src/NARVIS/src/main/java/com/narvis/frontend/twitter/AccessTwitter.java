@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.minesales.infres6.narvisAPITwiterConsole.communications.twitter;
+package com.narvis.frontend.twitter;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
