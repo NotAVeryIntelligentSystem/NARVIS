@@ -70,8 +70,7 @@ public class CreateConf {
                 createWordNode("bring", 
                         createWordNode(null, 
                                 createWordNode("weather",new ActionNode("weather")))));
-        return retVal;
-        
+        return retVal;    
     }
     
     public static WordNode createWordNode(String name, ActionNode... actions) {

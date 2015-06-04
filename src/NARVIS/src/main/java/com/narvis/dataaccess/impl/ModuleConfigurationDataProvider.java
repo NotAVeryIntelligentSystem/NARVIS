@@ -113,10 +113,10 @@ public class ModuleConfigurationDataProvider implements IDataProvider {
             case API_KEYWORD:
                 return this.apiKeys.getData(nextKeywords);
             case CONF_KEYWORD:
-                return null; // nothing to do right now
+                return this.conf.getData(nextKeywords);
                 
             case ANSWERS_KEYWORD:
-                return null; // To fucking do
+                return this.answersLayout.getData(nextKeywords);
         }
         return null; // todo : Handle error maybe ?
     }
