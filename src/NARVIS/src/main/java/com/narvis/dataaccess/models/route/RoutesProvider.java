@@ -10,6 +10,7 @@ import com.narvis.common.generics.NarvisLogger;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.dataaccess.interfaces.IDataModelProvider;
 import java.io.IOException;
+import java.util.Map;
 import java.util.logging.Level;
 import javax.xml.parsers.ParserConfigurationException;
 import org.simpleframework.xml.Root;
@@ -52,6 +53,11 @@ public class RoutesProvider implements IDataModelProvider<RouteNode> {
     @Override
     public RouteNode getModel(String... keywords) {
         return this.routes;
+    }
+
+    @Override
+    public String getData(Map<String, String> details, String... keywords) {
+        throw new UnsupportedOperationException("Not supported by this class"); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

@@ -57,6 +57,11 @@ public class ApiKeys implements IDataProvider {
         }
         return this.apiKeys.get(keywords[0]);
     }
+
+    @Override
+    public String getData(Map<String, String> details, String... keywords) {
+        throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
+    }
    
    
 }

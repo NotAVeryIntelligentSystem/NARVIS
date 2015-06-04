@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 puma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,31 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.conf;
+package com.narvis.dataaccess.impl;
 
-import com.narvis.dataaccess.interfaces.IDataProvider;
+import com.narvis.dataaccess.interfaces.IAnswserBuilder;
+import java.util.List;
 import java.util.Map;
-import org.simpleframework.xml.Root;
 
 /**
  *
- * @author uwy
+ * @author puma
  */
-@Root(name="NarvisConf")
-public class NarvisConf implements IDataProvider {
+public class AnswerBuilder implements IAnswserBuilder {
 
-    public NarvisConf() {
-        
-    }
+
     
-    @Override
-    public String getData(String... keywords) {
-        return null;
-    }
-    // Nothing here yet
-
-    @Override
-    public String getData(Map<String, String> details, String... keywords) {
-        throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
-    }
 }

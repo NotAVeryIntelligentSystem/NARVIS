@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 puma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,31 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.conf;
+package com.narvis.dataaccess.interfaces;
 
-import com.narvis.dataaccess.interfaces.IDataProvider;
+import java.util.List;
 import java.util.Map;
-import org.simpleframework.xml.Root;
 
 /**
  *
- * @author uwy
+ * @author puma
  */
-@Root(name="NarvisConf")
-public class NarvisConf implements IDataProvider {
-
-    public NarvisConf() {
-        
-    }
+public interface IAnswserBuilder {
     
-    @Override
-    public String getData(String... keywords) {
-        return null;
-    }
-    // Nothing here yet
-
-    @Override
-    public String getData(Map<String, String> details, String... keywords) {
-        throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
-    }
+    /**
+     * Read the XML answer file to retrieve the answer attached to the given command
+     * @param provider The name of the calling provider
+     * @param command the command 
+     * @return The Answer from the XML file 
+     */
+    String readAnswerForCommand(String provider, String command);
+    
+    /**
+     * Retrieve all the params needed to fulfill the answer
+     * @param answerFromXml The answer returned by readAnswerForCommand method
+     * @return A list containing all the params
+     */
+    List<String> getListOfRequiredParams(String answerFromXml);
+    
+    /**
+     * Finally build the answer by replacing all the occurence of a param with its value from the map
+     * @param paramsToValue the map which link each param with its value
+     * @param answerFromXml the answer from the XML file
+     * @return the final answer
+     */
+    String buildAnswer(Map<String, String> paramsToValue, String answerFromXml);
+    
 }

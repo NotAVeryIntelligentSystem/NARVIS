@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 puma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,31 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.conf;
+package com.narvis.dataaccess.models.layouts;
 
-import com.narvis.dataaccess.interfaces.IDataProvider;
-import java.util.Map;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 /**
- *
- * @author uwy
+ * Represent the created answer attached to the command
+ * @author puma
  */
-@Root(name="NarvisConf")
-public class NarvisConf implements IDataProvider {
+@Root(name = "Sentence")
+public class AnswserSentence {
+ 
+    @Attribute
+    private String command;
+    
+    @Element
+    private String Value;
 
-    public NarvisConf() {
-        
+    public AnswserSentence(@Attribute(name = "command") String command, @Element(name = "Value") String Value) {
+        this.command = command;
+        this.Value = Value;
     }
     
-    @Override
-    public String getData(String... keywords) {
-        return null;
+    
+    public String getCommand() {
+        return command;
     }
-    // Nothing here yet
 
-    @Override
-    public String getData(Map<String, String> details, String... keywords) {
-        throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
+    public void setCommand(String command) {
+        this.command = command;
     }
+
+    public String getSentence() {
+        return Value;
+    }
+
+    public void setSentence(String Sentence) {
+        this.Value = Sentence;
+    }
+    
+    
 }

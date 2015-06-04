@@ -28,6 +28,7 @@ import com.narvis.common.functions.serialization.XmlSerializer;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.models.conf.*;
 import java.io.File;
+import java.util.Map;
 
 /**
  *
@@ -111,6 +112,11 @@ public class ModuleConfigurationDataProvider implements IDataProvider {
                 return null; // To fucking do
         }
         return null; // todo : Handle error maybe ?
+    }
+
+    @Override
+    public String getData(Map<String, String> details, String... keywords) {
+        throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

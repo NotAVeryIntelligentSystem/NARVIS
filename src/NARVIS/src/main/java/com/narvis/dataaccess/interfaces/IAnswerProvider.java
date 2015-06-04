@@ -21,46 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.layouts.weather;
+package com.narvis.dataaccess.interfaces;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Represent the created answer attached to the command
+ *
  * @author puma
  */
-@Root(name = "Sentence")
-public class WeatherAnswserSentence {
- 
-    @Attribute
-    private String command;
+public interface IAnswerProvider {
     
-    @Element
-    private String Value;
-
-    public WeatherAnswserSentence(@Attribute(name = "command") String command, @Element(name = "Value") String Value) {
-        this.command = command;
-        this.Value = Value;
-    }
-    
-    
-    public String getCommand() {
-        return command;
-    }
-
-    public void setCommand(String command) {
-        this.command = command;
-    }
-
-    public String getSentence() {
-        return Value;
-    }
-
-    public void setSentence(String Sentence) {
-        this.Value = Sentence;
-    }
-    
+    /**
+     * Build a map which link each param with its value
+     * @param listOfParams the list of param needed to fulfill the answer
+     * @return A Map containing the params and their values
+     */
+    Map<String, String> buildParamsToValueMap(List<String> listOfParams);
     
 }

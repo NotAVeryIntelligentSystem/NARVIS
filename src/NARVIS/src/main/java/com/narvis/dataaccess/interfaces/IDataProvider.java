@@ -25,10 +25,22 @@
 
 package com.narvis.dataaccess.interfaces;
 
+import java.util.Map;
+
 /*
  * @author uwy
  */
 public interface IDataProvider {
+    
+    
     public String getData(String... keywords);
+    
+    /**
+     * 
+     * @param details
+     * @param kaywords
+     * @return 
+     */
+    public String getData(Map<String, String> details, String... keywords);
     
 }

@@ -62,4 +62,9 @@ public class ModuleConf implements IDataProvider {
         return this.entries.get(keywords[0]);
     }
     //Todo
+
+    @Override
+    public String getData(Map<String, String> details, String... keywords) {
+        throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
+    }
 }

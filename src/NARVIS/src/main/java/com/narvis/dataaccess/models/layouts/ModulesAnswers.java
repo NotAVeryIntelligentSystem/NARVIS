@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.layouts.weather;
+package com.narvis.dataaccess.models.layouts;
 
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import java.util.HashMap;
@@ -35,14 +35,14 @@ import org.simpleframework.xml.core.Commit;
  * Represent the XML file wich contains the answers for each command
  * @author puma
  */
-@Root(name = "Weather")
-public class WeatherAnswers implements IDataProvider{
+@Root(name = "Answers")
+public class ModulesAnswers implements IDataProvider{
     
      
      private Map<String, String> CommandToAnswer = new HashMap<>();
     
     @ElementList
-    private List<WeatherAnswserSentence> Answer;
+    private List<AnswserSentence> Answer;
 
     public Map<String, String> getMap() {
         return CommandToAnswer;
@@ -52,18 +52,18 @@ public class WeatherAnswers implements IDataProvider{
         this.CommandToAnswer = map;
     }
     
-    public List<WeatherAnswserSentence> getSentences() {
+    public List<AnswserSentence> getSentences() {
         return Answer;
     }
 
-    public void setSentences(List<WeatherAnswserSentence> Sentences) {
+    public void setSentences(List<AnswserSentence> Sentences) {
         this.Answer = Sentences;
     }
  
     @Commit
     public void build()
     {
-        for( WeatherAnswserSentence sentence : Answer )
+        for( AnswserSentence sentence : Answer )
         {
             if( !CommandToAnswer.containsKey(sentence.getCommand()) )
                 CommandToAnswer.put(sentence.getCommand(), sentence.getSentence());
@@ -79,8 +79,8 @@ public class WeatherAnswers implements IDataProvider{
 
     
     /**
-     * Use it to get the answer attached to the command, only one command at time is supported
-     * @param keywords : The weather command could be temperature, cloud or every command defined in the XML file in Weather/Layouts
+     * Use it to get the answer attached to the command, Only one command at a time is supported
+     * @param keywords : This command represent the command Attribute in the XML file
      * @return The answer or null if the given command has no attached answer
      */
     @Override
@@ -94,4 +94,17 @@ public class WeatherAnswers implements IDataProvider{
         return null;
         
     }
+
+    /**
+     * This version of getData is not supported by this class
+     * @param details
+     * @param keywords
+     * @return 
+     */
+    @Override
+    public String getData(Map<String, String> details, String... keywords) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+
 }

@@ -8,6 +8,7 @@ package com.narvis.dataaccess.conf;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -57,6 +58,11 @@ public class ApiKeyProvider implements IDataProvider{
         } catch ( SAXException | IOException | ParserConfigurationException ex) {
             return null;
         }
+    }
+
+    @Override
+    public String getData(Map<String, String> details, String... keywords) {
+        throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
     }
     
   

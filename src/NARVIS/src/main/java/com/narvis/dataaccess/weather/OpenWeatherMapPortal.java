@@ -5,17 +5,16 @@
  */
 package com.narvis.dataaccess.weather;
 
-import com.narvis.common.functions.serialization.XmlSerializer;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
+import com.narvis.dataaccess.interfaces.IAnswserBuilder;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.models.conf.ApiKeys;
-import com.narvis.dataaccess.models.layouts.weather.WeatherAnswers;
+import com.narvis.dataaccess.models.layouts.ModulesAnswers;
 import com.narvis.dataaccess.weather.annotations.Command;
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Locale;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import net.aksingh.owmjapis.CurrentWeather;
 import net.aksingh.owmjapis.OpenWeatherMap;
@@ -25,17 +24,22 @@ import org.json.JSONException;
 /**
  *
  * Get Data implementation for the OpenWeatherMapPortal
- * The first Parameter must be the name of the city the other parameters could be (Not case sensitive)
+ * The first Parameter must be the name of the city the other parameters could be (Not case sensitive)*
+ * The supported command are :
+ * Empty string : Return Temperature and cloud percentage
+ * Temperature : Return temperature in celsius
+ * Cloud : return cloud percentage
+ * 
+ * 
+ * 
  * @author puma
  */
 public class OpenWeatherMapPortal implements IDataProvider {
 
     private final ApiKeys weatherApiKeys;
     private CurrentWeather _currentWeather;
-    private String _answer = "";
-    
+
     private final String ANSWER_FILE_LOCATION = "";
-    private final String KEY_FOLDER = "WeatherApi";
     private final String KEY_TAG = "OpenWeatherMap";
     
     public OpenWeatherMapPortal(ApiKeys api) {
@@ -49,8 +53,24 @@ public class OpenWeatherMapPortal implements IDataProvider {
 
     @Override
     public String getData(String... keyWords) {
-        
+        throw new UnsupportedOperationException("Not supported");
+    }
+    
+    
+    /**
+     * Get weather data
+     * @param details The details : City, Date...
+     * @param keywords the command which represent the data asked, Only the first parameters will be used
+     * @return 
+     */
+    @Override
+    public String getData(Map<String, String> details, String... keywords) {
+    
         try {
+            
+            //Not enough command we quit, or not enough details
+            if( keywords.length < 1 || !details.containsKey("city") )
+                return null;
             
             String key = this.weatherApiKeys.getData(KEY_TAG);
             
@@ -59,13 +79,11 @@ public class OpenWeatherMapPortal implements IDataProvider {
 
 
             OpenWeatherMap owm = new OpenWeatherMap(key);
-            this._currentWeather = owm.currentWeatherByCityName(keyWords[0]);
+            this._currentWeather = owm.currentWeatherByCityName(details.get("city"));
+            
+            IAnswserBuilder answerBuilder = new WeatherAnswerBuilder();
+            answerBuilder.buildResponse();
 
-            //For each command call the method and format the answer
-            for( int i = 1; i < keyWords.length; i++ ) {
-                String result = CallMethodByCommand(keyWords[i].toLowerCase(Locale.FRENCH));
-                AppendToAnswer(keyWords[i], result);
-            }
             
             return this._answer;
             
@@ -79,6 +97,9 @@ public class OpenWeatherMapPortal implements IDataProvider {
         
         
     }
+    
+    
+    
     
     /**
      * Return the temperature in the city in celsius 
@@ -151,27 +172,7 @@ public class OpenWeatherMapPortal implements IDataProvider {
         
     }
     
-    /**
-     * The answer builder, add to the answer the result to the command
-     */
-    private void AppendToAnswer(String command, String result){
-        
-        try {
-            File f = new File(this.ANSWER_FILE_LOCATION);
-            WeatherAnswers answer = XmlSerializer.fromFile(WeatherAnswers.class, f);
-            
-            
-            String finalAnswer = answer.getData(command);
-            
-            this._answer += String.format(finalAnswer, result);
-            this._answer += "\n";
-        } catch (Exception ex) {
-            
-            this._answer += "Can not get answer\n";
-        }
-        
-        
-    }    
+ 
 }
 
     
