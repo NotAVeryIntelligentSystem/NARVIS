@@ -7,9 +7,9 @@ package com.narvis.frontend.twitter.output;
 
 import com.narvis.frontend.MessageInOut;
 import com.narvis.frontend.interfaces.IOutput;
+import com.narvis.frontend.twitter.AccessTwitter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.minesales.infres6.narvisAPITwiterConsole.communications.twitter.AccessTwitter;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
