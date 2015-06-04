@@ -140,8 +140,8 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
 
         try {
             
-            //Not enough command we quit, or not enough details
-            if( keywords.length < 1 || !detailsToValue.containsKey("city") )
+            //Problem we quit
+            if( keywords.length < 1 || !detailsToValue.containsKey("city") || this._confProvider == null )
                 return null;
             
             String key = this.weatherApiKeys.getData(KEY_TAG);
