@@ -48,11 +48,11 @@ public class NarvisEngine {
     
     public void start(){
         this.executer.start();
-        this.metaDataProvider.getFrontEnd("Twitter").start();
+        this.metaDataProvider.getFrontEnd("Console").start();
     }
     
     public void close() throws Exception {
-        this.metaDataProvider.getFrontEnd("Twitter").close();
+        this.metaDataProvider.getFrontEnd("Console").close();
         this.executer.close();
     }
     

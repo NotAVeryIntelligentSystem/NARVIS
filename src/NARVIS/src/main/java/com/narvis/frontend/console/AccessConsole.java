@@ -30,6 +30,7 @@ public class AccessConsole implements IFrontEnd{
     public void start() {
         this.input = new Input();
         this.output = new Output();
+        this.input.start();
     }
 
     @Override
