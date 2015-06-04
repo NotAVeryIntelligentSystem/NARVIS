@@ -5,9 +5,9 @@
  */
 package com.narvis.test.dataaccess.conf;
 
-import com.narvis.common.functions.serialization.XmlSerializer;
-import com.narvis.dataaccess.DataAccessFactory;
+import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.dataaccess.models.conf.ApiKeys;
+import java.io.File;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -25,7 +25,9 @@ public class ApiKeyProviderTest {
     public void TestFile() throws Exception
     {
         String apiKeysFilePath = "path_to_file";
-        ApiKeys api = XmlSerializer.fromFile(ApiKeys.class, apiKeysFilePath);
+        
+        File f = new File(apiKeysFilePath);
+        ApiKeys api = XmlFileAccess.fromFile(ApiKeys.class, f);
         
         String apiKey = api.getData("OpenWeatherMap");
         assertEquals("01b5f54b9605d5bbae6cf9f831560fb5", apiKey);

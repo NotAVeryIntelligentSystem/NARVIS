@@ -37,12 +37,24 @@ public class ApiKeys implements IDataProvider {
     
     @Element(name = "Name")
     private String name;  
-    
+
     @ElementMap(entry="ApiKey", key="Name", attribute=true, inline=true)
     private final Map<String, String> apiKeys;
 
+    public Map<String, String> getApiKeys() {
+        return this.apiKeys;
+    }
+
     public ApiKeys() {
         this.apiKeys = new HashMap<>();
+    }
+    
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     // NAME constant to get this object name

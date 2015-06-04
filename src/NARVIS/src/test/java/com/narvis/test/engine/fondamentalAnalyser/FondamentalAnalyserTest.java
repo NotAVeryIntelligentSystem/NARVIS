@@ -1,14 +1,7 @@
 package com.narvis.test.engine.fondamentalAnalyser;
 
-import com.narvis.engine.Action;
-import com.narvis.engine.FondamentalAnalyser;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -44,7 +37,7 @@ List<List<String>> allSentences = new LinkedList();
         parsedSentence3.add("me");
         parsedSentence3.add("weather");
         allSentences.add(parsedSentence3);
-        
+        /*
         try {
             final FondamentalAnalyser fondamentalAnalyser = new FondamentalAnalyser();
             Action action = fondamentalAnalyser.findAction(parsedSentence);
@@ -78,6 +71,6 @@ List<List<String>> allSentences = new LinkedList();
             Logger.getLogger(FondamentalAnalyserTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(FondamentalAnalyserTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
     }
 }

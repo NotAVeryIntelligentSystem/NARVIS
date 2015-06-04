@@ -28,11 +28,7 @@ public class RoutesProviderTest {
             IgnoredWordsProvider myIgnoredWordsProvider = new IgnoredWordsProvider();
             List<IgnoredWord> ignoredWords = myIgnoredWordsProvider.getIgnoredWords();
             
-        } catch (ParserConfigurationException ex) {
-            Logger.getLogger(RoutesProviderTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SAXException ex) {
-            Logger.getLogger(RoutesProviderTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (ParserConfigurationException | SAXException | IOException ex) {
             Logger.getLogger(RoutesProviderTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

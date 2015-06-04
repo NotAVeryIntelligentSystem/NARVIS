@@ -50,9 +50,14 @@ public class ModuleConf implements IDataProvider {
         return this.moduleClassPath;
     }
     
-    public void setModuleClassPaht(String val) {
+    public void setModuleClassPath(String val) {
         this.moduleClassPath = val;
     }
+    
+    public Map<String, String> getEntries() {
+        return this.entries;
+    }
+
     
     @Override
     public String getData(String... keywords) {

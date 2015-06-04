@@ -21,23 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.lang;
+package com.narvis;
 
 /**
  *
  * @author uwy
  */
-/*
-@Root(name = "Language")
-public class Language {
-    @Element(name = "Name")
-    private String name;
-<<<<<<< HEAD
-    
-    
-=======
-
-    @ElementList()
->>>>>>> 7c3d03eb4cca7562e63a12ad178014bd6d023929
-    private List<String> ignoreWords; 
-}*/
+public class App {
+    public static void main(String [] args)
+    {
+        
+    }
+}

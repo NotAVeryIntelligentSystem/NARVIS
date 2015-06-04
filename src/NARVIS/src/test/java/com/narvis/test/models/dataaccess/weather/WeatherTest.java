@@ -6,9 +6,12 @@
 package com.narvis.test.models.dataaccess.weather;
 
 
-import com.narvis.common.functions.serialization.XmlSerializer;
+import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.dataaccess.models.conf.ApiKeys;
 import com.narvis.dataaccess.weather.OpenWeatherMapPortal;
+import java.io.File;
+
+
 import org.junit.Test;
 /**
  *
@@ -23,12 +26,21 @@ public class WeatherTest {
     @Test
     public void GetInfoMeteo() throws Exception
     {
-        String apiKeysFilePath = "path_to_file";
-        ApiKeys api = XmlSerializer.fromFile(ApiKeys.class, apiKeysFilePath);
-        OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(api);
-        //String resultat = weatherPortal.getData("fghgfhfghfghfghfgn", "temperature");
-        //String resString = weatherPortal.getData("Nimes", "fdfngidf");
-        String resString1 = weatherPortal.getData("Nimes", "temperature", "cloud");
+        try {
+            String apiKeysFilePath = "../../conf/modules/Weather/conf/api.key";
+
+            File f = new File(apiKeysFilePath);
+            ApiKeys api = XmlFileAccess.fromFile(ApiKeys.class, f);
+
+            OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(api);
+            String resString1 = weatherPortal.getData("Nimes", "temperature", "cloud");
+            
+            
+        }catch (Exception e ) {
+            
+            System.out.println(e);
+            
+        }
         
 
     }
