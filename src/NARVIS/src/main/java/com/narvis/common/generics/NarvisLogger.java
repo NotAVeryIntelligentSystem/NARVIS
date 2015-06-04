@@ -25,6 +25,7 @@ package com.narvis.common.generics;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Date;
 import java.util.logging.Logger;
 import java.util.logging.ConsoleHandler;
@@ -59,17 +60,17 @@ public class NarvisLogger extends Logger
 
             try {
                 String logDirectoryPath = System.getProperty("user.home");
-                logDirectoryPath += "/narvis-logs";
-                File logDirectory = new File(logDirectoryPath);      
-            
-                if(logDirectory.mkdirs())
+                
+                File logDirectory = new File(logDirectoryPath, "narvis-logs");
+
+                if(!logDirectory.isDirectory() && !logDirectory.mkdirs())
                 {
-                    Date date= new Date();
-                    System.out.println("Date : "+date.getTime());
-                    INSTANCE.addHandler(new FileHandler(logDirectoryPath+"/narvis-log."+date.getTime()+".txt"));
-                    
-                }else{
                     INSTANCE.warning("Can't create logs directory...");
+                }else{
+                    Date date= new Date();
+                    File logPath = new File(logDirectory.getAbsolutePath(), "narvis-log."+date.getTime()+".txt");
+                    
+                    INSTANCE.addHandler(new FileHandler(logPath.getAbsolutePath()));
                 }
 
             } catch (IOException | SecurityException ex) {
