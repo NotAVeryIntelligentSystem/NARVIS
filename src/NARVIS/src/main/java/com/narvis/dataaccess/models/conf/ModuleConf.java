@@ -38,7 +38,8 @@ public class ModuleConf implements IDataProvider {
     private String moduleClassPath;
     
     @ElementMap(entry="entry", key="key", attribute=true, inline=true)
-    private final Map<String, String> entries;
+    @SuppressWarnings("FieldMayBeFinal")
+    private Map<String, String> entries;
   
     public static String MODULE_CLASS_PATH_KEYWORD = "ModuleClassPath";
         

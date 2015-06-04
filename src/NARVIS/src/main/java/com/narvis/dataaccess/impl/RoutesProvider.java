@@ -38,7 +38,7 @@ public class RoutesProvider implements IDataModelProvider<RouteNode> {
     @Override
     public void persist() {
         try {
-            XmlFileAccess.toFile(this.routes, this.getRoutesDataPath());
+            XmlFileAccess.toFile(this.routes, new File(this.conf.getDataFolder(), this.getRoutesDataPath()));
         } catch (Exception ex) {
             NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
         }

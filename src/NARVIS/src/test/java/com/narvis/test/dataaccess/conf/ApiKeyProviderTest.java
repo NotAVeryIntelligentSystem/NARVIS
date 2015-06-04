@@ -24,12 +24,12 @@ public class ApiKeyProviderTest {
     @Test
     public void TestFile() throws Exception
     {
-        String apiKeysFilePath = "path_to_file";
+        String apiKeysFilePath = "../../tests/api/test_api.key";
         
-        File f = new File(apiKeysFilePath);
+        File f = new File(apiKeysFilePath).getAbsoluteFile();
         ApiKeys api = XmlFileAccess.fromFile(ApiKeys.class, f);
         
-        String apiKey = api.getData("OpenWeatherMap");
-        assertEquals("01b5f54b9605d5bbae6cf9f831560fb5", apiKey);
+        String apiKey = api.getData("test");
+        assertEquals("ABCDE", apiKey);
     }
 }

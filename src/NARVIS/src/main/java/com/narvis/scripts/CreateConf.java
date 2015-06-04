@@ -30,6 +30,8 @@ import com.narvis.dataaccess.models.conf.*;
 import com.narvis.dataaccess.models.route.*;
 import com.narvis.dataaccess.weather.*;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  *
@@ -50,10 +52,10 @@ public class CreateConf {
     public static void createRoutesModuleFolder(File modulesFolder) throws Exception {
         File moduleFolder = createFolder(modulesFolder, "Routes");
         File confModuleFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.CONF_FOLDER_NAME);
-        XmlFileAccess.toFile(createModuleConf(RoutesProvider.class.getCanonicalName()), new File(confModuleFolder, ModuleConfigurationDataProvider.MODULE_CONF_FILE_NAME));
+        XmlFileAccess.toFile(createModuleConf(RoutesProvider.class.getCanonicalName(), new Pair<>("RoutesDataPath", "routes.xml")), new File(confModuleFolder, ModuleConfigurationDataProvider.MODULE_CONF_FILE_NAME));
         XmlFileAccess.toFile(createApiKeys("Routes"), new File(confModuleFolder, ModuleConfigurationDataProvider.API_KEY_FILE_NAME));
         File dataFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.DATA_FOLDER_NAME);
-        XmlFileAccess.toFile(createRouteNode(), dataFolder);
+        XmlFileAccess.toFile(createRouteNode(), new File(dataFolder, "routes.xml"));
         createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);   
 
     }
@@ -95,22 +97,17 @@ public class CreateConf {
         XmlFileAccess.toFile(createApiKeys("OpenWeatherMap", new Pair("key", "01b5f54b9605d5bbae6cf9f831560fb5")), new File(confModuleFolder, ModuleConfigurationDataProvider.API_KEY_FILE_NAME));
         createFolder(moduleFolder, ModuleConfigurationDataProvider.DATA_FOLDER_NAME);
         createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);            
-
     }
                            
-    public static File createFolder(String folderPath) {
+    public static File createFolder(String folderPath) throws IOException {
         File retVal = new File(folderPath);
-        if(retVal.mkdirs()) {
-            throw new IllegalArgumentException("Could not create folder !");
-        }
+        Files.createDirectories(retVal.toPath());
         return retVal;
     }
     
-    public static File createFolder(File folder, String subfolderPath) {
+    public static File createFolder(File folder, String subfolderPath) throws IOException {
         File retVal = new File(folder, subfolderPath);
-        if(retVal.mkdirs()) {
-            throw new IllegalArgumentException("Could not create folder !");
-        }
+        Files.createDirectories(retVal.toPath());
         return retVal;
     }
     
