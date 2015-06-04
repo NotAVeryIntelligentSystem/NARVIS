@@ -54,6 +54,8 @@ public class ModuleConf implements IDataProvider {
         this.moduleClassPath = val;
     }
     
+
+    
     @Override
     public String getData(String... keywords) {
         if(keywords[0].equals(MODULE_CLASS_PATH_KEYWORD)) {

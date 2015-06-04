@@ -38,10 +38,10 @@ import java.util.Map.*;
  * @author uwy
  */
 public class ConfigurationDataProvider implements IDataProvider {
-    private static final String GLOBAL_CONF_PATH = "../";
-    private static final String CONF_FOLDER_NAME = "conf";
-    private static final String CONF_FILE_NAME = "narvis.conf";
-    private static final String MODULES_FOLDER_NAME = "modules";
+    public static final String GLOBAL_CONF_PATH = "../";
+    public static final String CONF_FOLDER_NAME = "conf";
+    public static final String CONF_FILE_NAME = "narvis.conf";
+    public static final String MODULES_FOLDER_NAME = "modules";
     
     public static final String NARVIS_CONF_KEYWORD = "NarvisConf";
 
