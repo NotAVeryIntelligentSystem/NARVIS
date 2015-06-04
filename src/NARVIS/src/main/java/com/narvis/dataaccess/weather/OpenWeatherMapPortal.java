@@ -5,17 +5,19 @@
  */
 package com.narvis.dataaccess.weather;
 
-import com.narvis.common.tools.serialization.XmlFileAccess;
+import com.narvis.dataaccess.impl.AnswerBuilder;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
-import com.narvis.dataaccess.interfaces.IDataProvider;
+import com.narvis.dataaccess.interfaces.IAnswerProvider;
+import com.narvis.dataaccess.interfaces.IAnswserBuilder;
+import com.narvis.dataaccess.interfaces.IDataProviderDetails;
 import com.narvis.dataaccess.models.conf.ApiKeys;
-import com.narvis.dataaccess.models.layouts.weather.WeatherAnswers;
 import com.narvis.dataaccess.weather.annotations.Command;
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import net.aksingh.owmjapis.CurrentWeather;
 import net.aksingh.owmjapis.OpenWeatherMap;
@@ -25,17 +27,23 @@ import org.json.JSONException;
 /**
  *
  * Get Data implementation for the OpenWeatherMapPortal
- * The first Parameter must be the name of the city the other parameters could be (Not case sensitive)
+ * The first Parameter must be the name of the city the other parameters could be (Not case sensitive)*
+ * The supported command are :
+ * Empty string : Return Temperature and cloud percentage
+ * Temperature : Return temperature in celsius
+ * Cloud : return cloud percentage
+ * 
+ * 
+ * 
  * @author puma
  */
-public class OpenWeatherMapPortal implements IDataProvider {
+public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvider {
 
     private final ApiKeys weatherApiKeys;
     private CurrentWeather _currentWeather;
-    private String _answer = "";
-    
-    private final String ANSWER_FILE_LOCATION = "";
-    private final String KEY_FOLDER = "WeatherApi";
+    private ModuleConfigurationDataProvider _confProvider;
+    private Map<String,String> _tempDetails;
+
     private final String KEY_TAG = "OpenWeatherMap";
     
     public OpenWeatherMapPortal(ApiKeys api) {
@@ -44,41 +52,10 @@ public class OpenWeatherMapPortal implements IDataProvider {
     
     public OpenWeatherMapPortal(ModuleConfigurationDataProvider moduleConf) {
         this.weatherApiKeys = moduleConf.getApiKeys();
+        this._confProvider = moduleConf;
         
     }
 
-    @Override
-    public String getData(String... keyWords) {
-        
-        try {
-            
-            String key = this.weatherApiKeys.getData(KEY_TAG);
-            
-            if( key == null )
-                return null;
-
-
-            OpenWeatherMap owm = new OpenWeatherMap(key);
-            this._currentWeather = owm.currentWeatherByCityName(keyWords[0]);
-
-            //For each command call the method and format the answer
-            for( int i = 1; i < keyWords.length; i++ ) {
-                String result = CallMethodByCommand(keyWords[i].toLowerCase(Locale.FRENCH));
-                AppendToAnswer(keyWords[i], result);
-            }
-            
-            return this._answer;
-            
-            
-            //return buildResponse(city,celsiusTemperature, percentageOfClouds);
-       
-            
-        } catch (IOException | JSONException | NoSuchElementException  ex ) {
-            return "I can't find the meteo sorry guy !";
-        }
-        
-        
-    }
     
     /**
      * Return the temperature in the city in celsius 
@@ -150,29 +127,105 @@ public class OpenWeatherMapPortal implements IDataProvider {
         return null;
         
     }
-    
+
     /**
-     * The answer builder, add to the answer the result to the command
+     * Get weather data
+     * @param detailsToValue The details : City, Date...
+     * @param keywords the command which represent the data asked, Only the first parameters will be used
+     * @return 
      */
-    private void AppendToAnswer(String command, String result){
-        
+    @Override
+    public String getDataDetails(Map<String, String> detailsToValue, String... keywords) {
+
+
         try {
-            File f = new File(this.ANSWER_FILE_LOCATION);
-            WeatherAnswers answer = XmlFileAccess.fromFile(WeatherAnswers.class, f);
             
+            //Not enough command we quit, or not enough details
+            if( keywords.length < 1 || !detailsToValue.containsKey("city") )
+                return null;
             
-            String finalAnswer = answer.getData(command);
+            String key = this.weatherApiKeys.getData(KEY_TAG);
             
-            this._answer += String.format(finalAnswer, result);
-            this._answer += "\n";
-        } catch (Exception ex) {
+            if( key == null )
+                return null;
             
-            this._answer += "Can not get answer\n";
+            this._tempDetails = detailsToValue;
+
+
+            OpenWeatherMap owm = new OpenWeatherMap(key);
+            this._currentWeather = owm.currentWeatherByCityName(this._tempDetails.get("city"));
+            
+            IAnswserBuilder answerBuilder = new AnswerBuilder();
+            String answerFromXml = answerBuilder.readAnswerForCommand(this._confProvider, keywords[0] );
+            List<String> listOfParams = answerBuilder.getListOfRequiredParams(answerFromXml);
+            Map<String,String> paramsToValues = buildParamsToValueMap(listOfParams);
+            
+            return answerBuilder.buildAnswer(paramsToValues, answerFromXml);
+            
+            //return buildResponse(city,celsiusTemperature, percentageOfClouds);
+       
+            
+        } catch (IOException | JSONException | NoSuchElementException  ex ) {
+            return "I can't find the meteo sorry guy !";
+        }
+    
+    }
+
+    @Override
+    public Map<String, String> buildParamsToValueMap(List<String> listOfParams) {
+     
+        Map<String, String> paramsToValue = new HashMap<>();
+        
+        //To gain time we get all the details and their value
+        paramsToValue.putAll(this._tempDetails);
+        
+        for( String param : listOfParams ) {
+            
+            //Make sur we don't already have the value of the params
+            if( !paramsToValue.containsKey( param ) ) {
+                
+                param = removeBracketFromParam(param);
+                String value = CallMethodByCommand(param);
+                if( value == null ) {
+                    //We don't have the answer, we set it to unknow
+                    paramsToValue.put(param, "unknown");
+                } else {
+                    
+                    paramsToValue.put(param, value);
+                    
+                }
+                
+            }
+            
         }
         
+        return paramsToValue;
+    }
+    
+    
+    @Override
+    public String getData(String... keywords) {
+        throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    /**
+     * Remove the bracket from the param if it exist
+     * @param paramName the name of the param
+     * @return return the param name without bracket
+     */
+    private String removeBracketFromParam(String paramName) {
         
-    }    
+        paramName = paramName.replace("[", "");
+        paramName = paramName.replace("]", "");
+        
+        return paramName;
+    }
+
+ 
 }
+    
+    
+
 
     
     

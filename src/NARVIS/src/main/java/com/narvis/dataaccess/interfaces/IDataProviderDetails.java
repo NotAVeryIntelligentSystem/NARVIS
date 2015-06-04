@@ -21,46 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.layouts.weather;
+package com.narvis.dataaccess.interfaces;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+import java.util.Map;
 
 /**
- * Represent the created answer attached to the command
+ *
  * @author puma
  */
-@Root(name = "Sentence")
-public class WeatherAnswserSentence {
- 
-    @Attribute
-    private String command;
-    
-    @Element
-    private String Value;
-
-    public WeatherAnswserSentence(@Attribute(name = "command") String command, @Element(name = "Value") String Value) {
-        this.command = command;
-        this.Value = Value;
-    }
+public interface IDataProviderDetails extends IDataProvider{
     
     
-    public String getCommand() {
-        return command;
-    }
-
-    public void setCommand(String command) {
-        this.command = command;
-    }
-
-    public String getSentence() {
-        return Value;
-    }
-
-    public void setSentence(String Sentence) {
-        this.Value = Sentence;
-    }
-    
+    String getDataDetails(Map<String,String> detailsToValue, String... keywords);
     
 }

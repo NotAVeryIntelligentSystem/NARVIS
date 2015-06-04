@@ -28,6 +28,9 @@ package com.narvis.dataaccess.interfaces;
  * @author uwy
  */
 public interface IDataProvider {
+    
+    
     public String getData(String... keywords);
+    
     
 }

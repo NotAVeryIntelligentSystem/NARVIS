@@ -79,5 +79,7 @@ public class ConfigurationDataProvider implements IDataProvider {
             return this.narvisConf.getData(nextKeywords);
         }
         return this.modulesConfs.get(keywords[0]).getData(nextKeywords);
-    } 
+    }
+
+ 
 }
