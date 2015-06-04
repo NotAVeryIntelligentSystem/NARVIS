@@ -24,8 +24,8 @@
 package com.narvis.dataaccess.models.conf;
 
 import com.narvis.dataaccess.interfaces.IDataProvider;
-import java.util.Map;
-import org.simpleframework.xml.Root;
+import java.util.*;
+import org.simpleframework.xml.*;
 
 /**
  *
@@ -33,14 +33,18 @@ import org.simpleframework.xml.Root;
  */
 @Root(name="NarvisConf")
 public class NarvisConf implements IDataProvider {
-
+    @ElementMap(entry="entry", key="key", attribute=true, inline=true)
+    @SuppressWarnings("FieldMayBeFinal")
+    private Map<String, String> entries;
+    
+    
     public NarvisConf() {
-        
+        this.entries = new HashMap<>();
     }
     
     @Override
     public String getData(String... keywords) {
-        return null;
+        return this.entries.get(keywords[0]);
     }
     // Nothing here yet
 }

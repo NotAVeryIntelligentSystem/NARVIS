@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+<Route>
+=======
 <Route>
    <Words class="java.util.ArrayList">
       <Word>
@@ -44,3 +47,4 @@
       </Word>
    </Words>
 </Route>
+>>>>>>> d236c579168ea9d86b43574fbfa6a69fa3a3dd55
