@@ -12,6 +12,7 @@ import com.narvis.dataaccess.interfaces.IAnswserBuilder;
 import com.narvis.dataaccess.interfaces.IDataProviderDetails;
 import com.narvis.dataaccess.models.conf.ApiKeys;
 import com.narvis.dataaccess.weather.annotations.Command;
+import com.narvis.dataaccess.conf.exception.CanNotFindValueForParamException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -43,8 +44,11 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
     private CurrentWeather _currentWeather;
     private ModuleConfigurationDataProvider _confProvider;
     private Map<String,String> _tempDetails;
+    
+    private final String DEFAULT_ANSWER = "weather";
+    private final String ERROR_ANSWER = "error";
 
-    private final String KEY_TAG = "OpenWeatherMap";
+    private final String KEY_TAG = "key";
     
     public OpenWeatherMapPortal(ApiKeys api) {
         this.weatherApiKeys = api;
@@ -140,14 +144,19 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
 
         try {
             
-            //Not enough command we quit, or not enough details
-            if( keywords.length < 1 || !detailsToValue.containsKey("city") )
+            //Problem we quit
+            if( keywords.length < 1 || !detailsToValue.containsKey("city") || this._confProvider == null )
                 return null;
             
             String key = this.weatherApiKeys.getData(KEY_TAG);
             
             if( key == null )
                 return null;
+            
+            //If the user asked for nothing special, we pick the default answer
+            if( keywords[0].isEmpty() ) {
+                keywords[0] = DEFAULT_ANSWER;
+            }
             
             this._tempDetails = detailsToValue;
 
@@ -165,14 +174,20 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
             //return buildResponse(city,celsiusTemperature, percentageOfClouds);
        
             
-        } catch (IOException | JSONException | NoSuchElementException  ex ) {
-            return "I can't find the meteo sorry guy !";
-        }
+        } catch ( CanNotFindValueForParamException | IOException | JSONException | NoSuchElementException  ex ) {
+            
+            //Because it failed we return the default error message
+            //The builder don't throw any exception
+            AnswerBuilder builder = new AnswerBuilder();
+            return builder.readAnswerForCommand(_confProvider, ERROR_ANSWER);    
+            
+        } 
+
     
     }
 
     @Override
-    public Map<String, String> buildParamsToValueMap(List<String> listOfParams) {
+    public Map<String, String> buildParamsToValueMap(List<String> listOfParams) throws CanNotFindValueForParamException {
      
         Map<String, String> paramsToValue = new HashMap<>();
         
@@ -184,17 +199,16 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
             //Make sur we don't already have the value of the params
             if( !paramsToValue.containsKey( param ) ) {
                 
-                param = removeBracketFromParam(param);
                 String value = CallMethodByCommand(param);
                 if( value == null ) {
-                    //We don't have the answer, we set it to unknow
-                    paramsToValue.put(param, "unknown");
+                    //We don't have the answer whatever the reason we use the default answer
+                    throw new CanNotFindValueForParamException(param);
+                    
                 } else {
                     
                     paramsToValue.put(param, value);
                     
                 }
-                
             }
             
         }
@@ -205,21 +219,9 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
     
     @Override
     public String getData(String... keywords) {
-        throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported"); 
     }
     
-    /**
-     * Remove the bracket from the param if it exist
-     * @param paramName the name of the param
-     * @return return the param name without bracket
-     */
-    private String removeBracketFromParam(String paramName) {
-        
-        paramName = paramName.replace("[", "");
-        paramName = paramName.replace("]", "");
-        
-        return paramName;
-    }
 
  
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 puma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.conf;
-
-import com.narvis.dataaccess.interfaces.IDataProvider;
-import org.simpleframework.xml.Root;
+package com.narvis.dataaccess.conf.exception;
 
 /**
- *
- * @author uwy
+ * 
+ * @author puma
  */
-@Root(name="AnswersLayout")
-public class AnswersLayout implements IDataProvider {
-    public AnswersLayout() {
-        
+public class CanNotFindValueForParamException extends Exception {
+
+    public CanNotFindValueForParamException(Throwable thrwbl) {
+        super(thrwbl);
+    }
+
+    public CanNotFindValueForParamException(String string) {
+        super(string);
+    }
+
+    public CanNotFindValueForParamException(String string, Throwable thrwbl) {
+        super(string, thrwbl);
     }
     
-    @Override
-    public String getData(String... keywords) {
-        return null; //todo
-    }
-
-
 }

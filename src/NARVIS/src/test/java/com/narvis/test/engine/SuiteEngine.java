@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 puma.
+ * Copyright 2015 Zack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,46 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.layouts;
+package com.narvis.test.engine;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 /**
- * Represent the created answer attached to the command
- * @author puma
+ *
+ * @author Zack
  */
-@Root(name = "Sentence")
-public class AnswserSentence {
- 
-    @Attribute
-    private String command;
+@RunWith(Suite.class)
+@Suite.SuiteClasses({ TestDetailsAnalyser.class, TestFondamentalAnalyser.class, TestParser.class })
+public class SuiteEngine {
     
-    @Element
-    private String Value;
-
-    public AnswserSentence(@Attribute(name = "command") String command, @Element(name = "Value") String Value) {
-        this.command = command;
-        this.Value = Value;
+    public SuiteEngine() {
     }
     
+    @BeforeClass
+    public static void setUpClass() {
+    }
     
-    public String getCommand() {
-        return command;
+    @AfterClass
+    public static void tearDownClass() {
     }
-
-    public void setCommand(String command) {
-        this.command = command;
+    
+    @Before
+    public void setUp() {
     }
-
-    public String getSentence() {
-        return Value;
+    
+    @After
+    public void tearDown() {
     }
 
-    public void setSentence(String Sentence) {
-        this.Value = Sentence;
-    }
-    
-    
+    // TODO add test methods here.
+    // The methods must be annotated with annotation @Test. For example:
+    //
+    // @Test
+    // public void hello() {}
 }

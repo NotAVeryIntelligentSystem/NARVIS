@@ -24,9 +24,10 @@
 package com.narvis.dataaccess.impl;
 
 import com.narvis.dataaccess.interfaces.IAnswserBuilder;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -38,6 +39,9 @@ public class AnswerBuilder implements IAnswserBuilder {
     @Override
     public String readAnswerForCommand(ModuleConfigurationDataProvider providerConf, String command) {
      
+        if( providerConf.getAnswersLayout() == null )
+            return null;
+        
         String answerFromXmlFile = providerConf.getAnswersLayout().getData(command);
         return answerFromXmlFile;
         
@@ -52,9 +56,23 @@ public class AnswerBuilder implements IAnswserBuilder {
 
         //Get all the required params
         Pattern pattern = Pattern.compile("\\[[a-z]*\\]");
-        String[] response = answerFromXml.split(pattern.pattern());
+        Matcher matcher = pattern.matcher(answerFromXml);
+        
+        List<String> result = new ArrayList<>();
+        
+        String param = "";
+        while( matcher.find() ) {
+           
+            param = matcher.group();
+                    
+            param = removeBracketFromParam(param);
+            result.add(param);
+            
+        }
+        
+        
 
-        return Arrays.asList(response);
+        return result;
 
     }
 
@@ -77,7 +95,6 @@ public class AnswerBuilder implements IAnswserBuilder {
         }
         
         return finalAnswer;
-        
     }
 
     /**
@@ -102,6 +119,20 @@ public class AnswerBuilder implements IAnswserBuilder {
         return paramName;
         
     }
+    
+    /**
+     * Remove the bracket from the param if it exist
+     * @param paramName the name of the param
+     * @return return the param name without bracket
+     */
+    private String removeBracketFromParam(String paramName) {
+        
+        paramName = paramName.replace("[", "");
+        paramName = paramName.replace("]", "");
+        
+        return paramName;
+    }
+
 
     
 }

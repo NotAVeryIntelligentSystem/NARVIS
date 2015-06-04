@@ -6,10 +6,14 @@
 package com.narvis.test.models.dataaccess.weather;
 
 
-import com.narvis.common.tools.serialization.XmlFileAccess;
+import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.dataaccess.models.conf.ApiKeys;
 import com.narvis.dataaccess.weather.OpenWeatherMapPortal;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
+import org.junit.Assert;
 
 
 import org.junit.Test;
@@ -23,15 +27,70 @@ public class WeatherTest {
     }
 
     
-    @Test
-    public void GetInfoMeteo() throws Exception
-    {
-        String apiKeysFilePath = "../../tests/weather/api_weather.key";
-
-        File f = new File(apiKeysFilePath).getAbsoluteFile();
-        ApiKeys api = XmlFileAccess.fromFile(ApiKeys.class, f);
-
+    
+    
+    @Test( expected = UnsupportedOperationException.class)
+    public void testCallUnsupportedGetData() {
+        
+        ApiKeys api = new ApiKeys();
+        OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(api);
+        
+        weatherPortal.getData("weather", "city");
     }
 
+    
+    @Test 
+    public void testGetDataWithShittyData() throws Exception {
+        
+    
+        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../conf/modules/Weather/"));
+        OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(conf);
+        
+        Map<String,String> details = new HashMap<>();
+        
+        details.put("city", "fdhdfhgf");
+        
+        String result = weatherPortal.getDataDetails(details, "");
+        
+        Assert.assertEquals("Sorry guy I can't help you", result);
+        
+    }
+    @Test 
+    public void testGetDataWithDefaultCommand() throws Exception {
+        
+        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../conf/modules/Weather/"));
+        OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(conf);
+        
+        Map<String,String> details = new HashMap<>();
+        details.put("city", "nimes");
+        
+        String result = weatherPortal.getDataDetails(details, "");
+        
+        Pattern p = Pattern.compile("The temperature in (([A-Z]*)|([a-z]*))* is ([0-9]*\\.[0-9])°C and the cloud percentage is ([0-9]*\\.[0-9])%");
+        
+        Assert.assertTrue(result.matches(p.pattern()));
+        
+    }
+    
+    
+    @Test
+    public void testGetDataWithTemperatureCommand() throws Exception {
+        
+        
+        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../tests/weather"));
+        OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(conf);
+        
+        Map<String,String> details = new HashMap<>();
+        details.put("city", "nimes");
+        
+        String result = weatherPortal.getDataDetails(details, "temperature");
+        
+        Pattern p = Pattern.compile("The temperature is ([0-9]*\\.[0-9])°C");
+        
+        Assert.assertTrue(result.matches(p.pattern()));
+    }
+    
+    
+    
 
 }

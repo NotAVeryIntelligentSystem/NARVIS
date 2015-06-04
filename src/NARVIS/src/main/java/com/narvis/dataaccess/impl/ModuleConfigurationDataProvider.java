@@ -27,6 +27,7 @@ import com.narvis.common.extensions.filefilters.FolderNameFileFilter;
 import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.models.conf.*;
+import com.narvis.dataaccess.models.layouts.ModulesAnswers;
 import java.io.File;
 import java.util.Map;
 
@@ -49,7 +50,7 @@ public class ModuleConfigurationDataProvider implements IDataProvider {
     
     private final ApiKeys apiKeys;
     private final ModuleConf conf;
-    private final AnswersLayout answersLayout;
+    private final ModulesAnswers answersLayout;
     private final File moduleDataFolder;
 
     public ModuleConfigurationDataProvider(File moduleFolder) throws Exception {
@@ -85,7 +86,7 @@ public class ModuleConfigurationDataProvider implements IDataProvider {
         this.moduleDataFolder = new File(moduleFolder, DATA_FOLDER_NAME);
         this.apiKeys = apiFile == null ? null : XmlFileAccess.fromFile(ApiKeys.class, apiFile);
         this.conf = confFile == null ? null : XmlFileAccess.fromFile(ModuleConf.class, confFile);
-        this.answersLayout = answerFile == null ? null : XmlFileAccess.fromFile(AnswersLayout.class, answerFile);
+        this.answersLayout = answerFile == null ? null : XmlFileAccess.fromFile(ModulesAnswers.class, answerFile);
     }
     
     public File getDataFolder() {
@@ -100,7 +101,7 @@ public class ModuleConfigurationDataProvider implements IDataProvider {
         return this.conf;
     }
     
-    public AnswersLayout getAnswersLayout() {
+    public ModulesAnswers getAnswersLayout() {
         return this.answersLayout;
     }
    

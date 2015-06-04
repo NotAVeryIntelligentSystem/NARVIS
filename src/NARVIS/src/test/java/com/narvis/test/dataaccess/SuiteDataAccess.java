@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 Zack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.conf;
+package com.narvis.test.dataaccess;
 
-import com.narvis.dataaccess.interfaces.IDataProvider;
-import org.simpleframework.xml.Root;
+import com.narvis.test.dataaccess.conf.ApiKeyProviderTest;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 /**
  *
- * @author uwy
+ * @author Zack
  */
-@Root(name="AnswersLayout")
-public class AnswersLayout implements IDataProvider {
-    public AnswersLayout() {
-        
+@RunWith(Suite.class)
+@Suite.SuiteClasses({ ApiKeyProviderTest.class })
+public class SuiteDataAccess {
+    
+    public SuiteDataAccess() {
     }
     
-    @Override
-    public String getData(String... keywords) {
-        return null; //todo
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+    }
+    
+    @After
+    public void tearDown() {
     }
 
-
+    // TODO add test methods here.
+    // The methods must be annotated with annotation @Test. For example:
+    //
+    // @Test
+    // public void hello() {}
 }
