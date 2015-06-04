@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 Zack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,8 +33,8 @@ import java.util.logging.FileHandler;
  *
  * @author Zack
  */
-public class NarvisLogger extends Logger {
-    private final static String PATH = "src\\main\\java\\narvis\\engine\\logger\\logs\\";
+public class NarvisLogger extends Logger 
+{
     private static NarvisLogger INSTANCE = null;
     
     
@@ -59,7 +59,7 @@ public class NarvisLogger extends Logger {
             try {
                 Date date= new Date();
                 System.out.println("Date : "+date.getTime());
-                INSTANCE.addHandler(new FileHandler(PATH+"narvis-log."+date.getTime()+".txt"));
+                INSTANCE.addHandler(new FileHandler("%h/narvis-logs/narvis-log."+date.getTime()+".txt"));
             } catch (IOException | SecurityException ex) {
                 INSTANCE.severe(ex.getMessage());
             }

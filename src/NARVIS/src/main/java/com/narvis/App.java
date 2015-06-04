@@ -23,13 +23,21 @@
  */
 package com.narvis;
 
+import com.narvis.engine.NarvisEngine;
+
 /**
  *
  * @author uwy
  */
 public class App {
-    public static void main(String [] args)
+    public static void main(String [] args) throws Exception
     {
-        
+        System.out.println("  _   _            _____ __      __ _____   _____ ");
+        System.out.println(" | \\ | |    /\\    |  __ \\\\ \\    / /|_   _| / ____| ");
+        System.out.println(" |  \\| |   /  \\   | |__) |\\ \\  / /   | |  | (___    ");
+        System.out.println(" | . ` |  / /\\ \\  |  _  /  \\ \\/ /    | |   \\___ \\ ");
+        System.out.println(" | |\\  | / ____ \\ | | \\ \\   \\  /    _| |_  ____) | ");
+        System.out.println(" |_| \\_|/_/    \\_\\|_|  \\_\\   \\/    |_____||_____/ 0.1a");
+        NarvisEngine.getInstance().start();
     }
 }

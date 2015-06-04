@@ -5,7 +5,7 @@
  */
 package com.narvis.frontend.twitter.input;
 
-import com.narvis.engine.Narvis;
+import com.narvis.engine.NarvisEngine;
 import com.narvis.frontend.MessageInOut;
 import com.narvis.frontend.interfaces.IInput;
 import static java.lang.Thread.sleep;
@@ -22,7 +22,7 @@ import twitter4j.TwitterException;
  *
  * @author Alban
  */
-public class TwitterInput implements IInput, Runnable{
+public class Input implements IInput, Runnable{
     public String nameAPI = "Twitter";
     public String internalName = "nakJarvis";
     private Twitter twitterLink;
@@ -30,7 +30,7 @@ public class TwitterInput implements IInput, Runnable{
     private long lastMessageId = 0; // Meh
     private long lastMessageIdMinusOne; // Meh
     
-    public TwitterInput(){
+    public Input(){
         this.twitterLink = AccessTwitter.loadAccessTwitter();
     }
     
@@ -98,7 +98,7 @@ public class TwitterInput implements IInput, Runnable{
             else
                 return null;
         } catch (TwitterException ex) {
-            Logger.getLogger(TwitterInput.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -109,12 +109,16 @@ public class TwitterInput implements IInput, Runnable{
         while(!Thread.currentThread().isInterrupted()){
             lastMessage = this.getInput();
             if(lastMessage != null){
-                Narvis.getMessage(lastMessage);
+                try {
+                    NarvisEngine.getInstance().getMessage(lastMessage);
+                } catch (Exception ex) {
+                    Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             try {
                 sleep(60000);
             } catch (InterruptedException ex) {
-                Logger.getLogger(TwitterInput.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
