@@ -21,21 +21,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.narvis.test.common.generics;
 
-import com.narvis.test.dataaccess.*;
-import com.narvis.test.engine.*;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import com.narvis.common.generics.NarvisLogger;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  *
  * @author Zack
  */
-@RunWith(Suite.class)
-@SuiteClasses({ SuiteEngine.class, SuiteDataAccess.class })
-public class SuiteNarvis {
+public class TestNarvisLogger {
     
-    public SuiteNarvis() {
+    public TestNarvisLogger() {
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+    }
+    
+    @After
+    public void tearDown() {
+    }
+
+    // TODO add test methods here.
+    // The methods must be annotated with annotation @Test. For example:
+    //
+    // @Test
+    // public void hello() {}
+    
+    @Test
+    public void TestGetInstance()
+    {
+        NarvisLogger instance = NarvisLogger.getInstance();
+        
+        instance.info("TestGetInstance");
     }
 }
