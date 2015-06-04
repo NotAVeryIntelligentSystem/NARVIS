@@ -95,16 +95,4 @@ public class ModulesAnswers implements IDataProvider{
         
     }
 
-    /**
-     * This version of getData is not supported by this class
-     * @param details
-     * @param keywords
-     * @return 
-     */
-    @Override
-    public String getData(Map<String, String> details, String... keywords) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-
 }

@@ -114,9 +114,5 @@ public class ModuleConfigurationDataProvider implements IDataProvider {
         return null; // todo : Handle error maybe ?
     }
 
-    @Override
-    public String getData(Map<String, String> details, String... keywords) {
-        throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
-    }
     
 }

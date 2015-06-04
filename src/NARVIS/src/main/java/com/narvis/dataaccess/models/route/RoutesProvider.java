@@ -55,9 +55,4 @@ public class RoutesProvider implements IDataModelProvider<RouteNode> {
         return this.routes;
     }
 
-    @Override
-    public String getData(Map<String, String> details, String... keywords) {
-        throw new UnsupportedOperationException("Not supported by this class"); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }

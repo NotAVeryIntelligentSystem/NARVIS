@@ -43,9 +43,4 @@ public class NarvisConf implements IDataProvider {
         return null;
     }
     // Nothing here yet
-
-    @Override
-    public String getData(Map<String, String> details, String... keywords) {
-        throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
-    }
 }

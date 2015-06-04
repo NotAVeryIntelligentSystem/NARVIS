@@ -23,6 +23,7 @@
  */
 package com.narvis.dataaccess.interfaces;
 
+import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import java.util.List;
 import java.util.Map;
 
@@ -34,11 +35,11 @@ public interface IAnswserBuilder {
     
     /**
      * Read the XML answer file to retrieve the answer attached to the given command
-     * @param provider The name of the calling provider
+     * @param providerConf the provider 
      * @param command the command 
      * @return The Answer from the XML file 
      */
-    String readAnswerForCommand(String provider, String command);
+    String readAnswerForCommand(ModuleConfigurationDataProvider providerConf, String command);
     
     /**
      * Retrieve all the params needed to fulfill the answer
@@ -48,7 +49,8 @@ public interface IAnswserBuilder {
     List<String> getListOfRequiredParams(String answerFromXml);
     
     /**
-     * Finally build the answer by replacing all the occurence of a param with its value from the map
+     * Finally build the answer by replacing all the occurence of a param with its value from the map.
+     * This method is idiot it will find any occurence of the 
      * @param paramsToValue the map which link each param with its value
      * @param answerFromXml the answer from the XML file
      * @return the final answer

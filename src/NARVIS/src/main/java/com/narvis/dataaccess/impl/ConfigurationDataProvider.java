@@ -83,9 +83,5 @@ public class ConfigurationDataProvider implements IDataProvider {
         return this.modulesConfs.get(keywords[0]).getData(nextKeywords);
     }
 
-    @Override
-    public String getData(Map<String, String> details, String... keywords) {
-        throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+ 
 }

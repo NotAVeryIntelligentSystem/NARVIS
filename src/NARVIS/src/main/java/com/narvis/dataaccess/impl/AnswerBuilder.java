@@ -24,8 +24,10 @@
 package com.narvis.dataaccess.impl;
 
 import com.narvis.dataaccess.interfaces.IAnswserBuilder;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -33,6 +35,73 @@ import java.util.Map;
  */
 public class AnswerBuilder implements IAnswserBuilder {
 
+    @Override
+    public String readAnswerForCommand(ModuleConfigurationDataProvider providerConf, String command) {
+     
+        String answerFromXmlFile = providerConf.getAnswersLayout().getData(command);
+        return answerFromXmlFile;
+        
+    }
+
+    @Override
+    public List<String> getListOfRequiredParams(String answerFromXml) {
+        
+        if( answerFromXml == null ) {
+            return null;
+        }
+
+        //Get all the required params
+        Pattern pattern = Pattern.compile("\\[[a-z]*\\]");
+        String[] response = answerFromXml.split(pattern.pattern());
+
+        return Arrays.asList(response);
+
+    }
+
+    @Override
+    public String buildAnswer(Map<String, String> paramsToValue, String answerFromXml) {
+     
+        String finalAnswer = answerFromXml;
+        
+        for( Map.Entry<String,String> paramToValue : paramsToValue.entrySet() ) {
+               
+            //We need to make sur the param name is delimited with bracket
+            //Our standard way to delimit parameters
+            String paramName = paramToValue.getKey();
+            paramName = AddBracketToParamName(paramName);
+            
+            
+            //Replace every occurence of a params with its value
+            finalAnswer = finalAnswer.replace( paramName, paramToValue.getValue());
+            
+        }
+        
+        return finalAnswer;
+        
+    }
+
+    /**
+     * Add the bracket around the param name. Do nothing if there is already bracket
+     */   
+    private String AddBracketToParamName(String paramName) {
+
+        
+        //No bracket at the end, add it
+        if( !paramName.endsWith("]") )
+        {
+            paramName = paramName.concat("]");
+        }
+        
+        
+        //No bracket at the beginning, add it
+        if( paramName.charAt(0) != '[' ) 
+        {
+            paramName = "[".concat(paramName);  
+        }
+        
+        return paramName;
+        
+    }
 
     
 }

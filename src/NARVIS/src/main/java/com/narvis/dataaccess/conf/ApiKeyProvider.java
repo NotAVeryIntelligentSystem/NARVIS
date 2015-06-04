@@ -59,15 +59,4 @@ public class ApiKeyProvider implements IDataProvider{
             return null;
         }
     }
-
-    @Override
-    public String getData(Map<String, String> details, String... keywords) {
-        throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-  
-    
-    
-    
-    
 }

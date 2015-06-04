@@ -1,8 +1,7 @@
 /*
-<<<<<<< HEAD
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 puma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,17 +20,18 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
-*/
-
+ */
 package com.narvis.dataaccess.interfaces;
 
-/*
- * @author uwy
+import java.util.Map;
+
+/**
+ *
+ * @author puma
  */
-public interface IDataProvider {
+public interface IDataProviderDetails extends IDataProvider{
     
     
-    public String getData(String... keywords);
-    
+    String getDataDetails(Map<String,String> detailsToValue, String... keywords);
     
 }
