@@ -23,17 +23,63 @@
  */
 package com.narvis.test.engine;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import com.narvis.engine.NarvisEngine;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author Zack
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ TestDetailsAnalyser.class, TestFondamentalAnalyser.class, TestParser.class, TestNarvisEngine.class })
-public class SuiteEngine {
+public class TestNarvisEngine {
     
-    public SuiteEngine() {
+    public TestNarvisEngine() {
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+    }
+    
+    @After
+    public void tearDown() {
+    }
+
+    // TODO add test methods here.
+    // The methods must be annotated with annotation @Test. For example:
+    //
+    // @Test
+    // public void hello() {}
+    
+    @Test
+    public void TestGetInstance()
+    {
+        try {
+            NarvisEngine myInstance = NarvisEngine.getInstance();
+        } catch (Exception ex) {
+            fail(ex.getMessage());
+        }
+    }
+    
+    @Test
+    public void TestStart()
+    {
+        try {
+            NarvisEngine myInstance = NarvisEngine.getInstance();
+            myInstance.start();
+        } catch (Exception ex) {
+            fail(ex.getMessage());
+        }
     }
 }
