@@ -3,19 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.narvis.engine;
+package com.narvis.frontend.console.output;
 
 import com.narvis.frontend.MessageInOut;
+import com.narvis.frontend.interfaces.IOutput;
 
 /**
  *
  * @author Nakou
  */
-public class Narvis {
+public class Output implements IOutput{
 
-    public static void getMessage(MessageInOut lastMessage) {
-        // GO TO PARSER AND STUFF
-        // Xxoo - Nakou
+    @Override
+    public void setOuput(MessageInOut m) {
+        System.out.println(m.getContent());
     }
     
 }

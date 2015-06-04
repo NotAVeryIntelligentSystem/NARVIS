@@ -5,7 +5,7 @@
  */
 package com.narvis.frontend.console.input;
 
-import com.narvis.engine.Narvis;
+import com.narvis.engine.NarvisEngine;
 import com.narvis.frontend.MessageInOut;
 import com.narvis.frontend.interfaces.IInput;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.Scanner;
  *
  * @author Nakou
  */
-public class ConsoleInput implements IInput {
+public class Input implements IInput {
 
     private MessageInOut getMessage(String s){
         return new MessageInOut("Console",s,"localhost");
@@ -26,7 +26,7 @@ public class ConsoleInput implements IInput {
         Scanner sc = new Scanner(System.in);
         System.out.println("NARVIS/READY/>");
         String s = sc.nextLine();
-        Narvis.getMessage(this.getMessage(s));
+        NarvisEngine.getMessage(this.getMessage(s));
     }
     
 }
