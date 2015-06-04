@@ -32,14 +32,14 @@ import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Commit;
 
 /**
- * Represent the XML file wich contains the answers for each command
+ * Represent the XML file which contains the answers for each command
  * @author puma
  */
 @Root(name = "Weather")
 public class WeatherAnswers implements IDataProvider{
     
      
-     private Map<String, String> CommandToAnswer = new HashMap<>();
+    private Map<String, String> CommandToAnswer = new HashMap<>();
     
     @ElementList
     private List<WeatherAnswserSentence> Answer;

@@ -5,7 +5,7 @@
  */
 package com.narvis.dataaccess.models.lang.word;
 
-import com.narvis.common.functions.serialization.XmlSerializer;
+import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.dataaccess.interfaces.IDataModelProvider;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class DictionaryProvider implements IDataModelProvider<Dictionary> {
 
     public DictionaryProvider(ModuleConfigurationDataProvider conf) throws ParserConfigurationException, SAXException, IOException, Exception{
         this.conf = conf;
-        this.dictionary = XmlSerializer.fromFile(Dictionary.class, this.getRoutesDataPath());
+        this.dictionary = XmlFileAccess.fromFile(Dictionary.class, this.getRoutesDataPath());
     }
     
     private String getRoutesDataPath() {

@@ -5,7 +5,7 @@
  */
 package com.narvis.dataaccess.weather;
 
-import com.narvis.common.functions.serialization.XmlSerializer;
+import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.models.conf.ApiKeys;
@@ -158,7 +158,7 @@ public class OpenWeatherMapPortal implements IDataProvider {
         
         try {
             File f = new File(this.ANSWER_FILE_LOCATION);
-            WeatherAnswers answer = XmlSerializer.fromFile(WeatherAnswers.class, f);
+            WeatherAnswers answer = XmlFileAccess.fromFile(WeatherAnswers.class, f);
             
             
             String finalAnswer = answer.getData(command);

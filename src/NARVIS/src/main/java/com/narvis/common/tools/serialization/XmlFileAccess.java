@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.common.functions.serialization;
+package com.narvis.common.tools.serialization;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -31,15 +31,18 @@ import org.simpleframework.xml.core.*;
  *
  * @author uwy
  */
-public class XmlSerializer {
+public class XmlFileAccess {
     private static final Persister persister = new Persister(); // Make it only once since we need a single global settings
     
     
     public static <T> void toFile(T toSerialize, String file) throws Exception {
-        XmlSerializer.toFile(toSerialize, new File(file));
+        XmlFileAccess.toFile(toSerialize, new File(file));
     }
     
     public static <T> void toFile(T toSerialize, File file ) throws Exception {
+        if(!file.canWrite()) {
+            throw new IllegalArgumentException("Can't write file" + file.getAbsolutePath() + ", check your permissions !");
+        }
         persister.write(toSerialize, file);
     }
     
@@ -48,10 +51,13 @@ public class XmlSerializer {
     }
     
     public static <T> T fromFile(Class<T> type, String filePath) throws Exception {
-        return XmlSerializer.fromFile(type, new File(filePath));
+        return XmlFileAccess.fromFile(type, new File(filePath));
     }
     
     public static <T> T fromFile(Class<T> type, File file) throws Exception {
+        if(!file.canRead()) {
+            throw new IllegalArgumentException("Can't read file " + file.getAbsolutePath() + ", check your permissions !");
+        }
         return persister.read(type, file);
     }
 }
