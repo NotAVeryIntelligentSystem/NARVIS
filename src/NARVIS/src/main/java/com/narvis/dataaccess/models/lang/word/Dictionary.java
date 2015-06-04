@@ -37,7 +37,7 @@ import org.simpleframework.xml.Root;
 @Root(name="Dictionary")
 public class Dictionary {
     @ElementList(name="Words", required = false)
-    List<Word> words;
+    private List<Word> words;
     
     public Dictionary()
     {
@@ -98,5 +98,10 @@ public class Dictionary {
         }
         
         return returnWord;
+    }
+    
+    public void addWord(Word word)
+    {
+        words.add(word);
     }
 }

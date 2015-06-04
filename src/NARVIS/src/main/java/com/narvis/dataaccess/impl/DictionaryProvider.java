@@ -23,11 +23,14 @@
  */
 package com.narvis.dataaccess.impl;
 
+import com.narvis.common.debug.NarvisLogger;
 import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.dataaccess.interfaces.IDataModelProvider;
 import com.narvis.dataaccess.models.lang.word.Dictionary;
+import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
@@ -42,11 +45,11 @@ public class DictionaryProvider implements IDataModelProvider<Dictionary> {
 
     public DictionaryProvider(ModuleConfigurationDataProvider conf) throws ParserConfigurationException, SAXException, IOException, Exception{
         this.conf = conf;
-        this.dictionary = XmlFileAccess.fromFile(Dictionary.class, this.getRoutesDataPath());
+        this.dictionary = XmlFileAccess.fromFile(Dictionary.class, new File(this.conf.getDataFolder(), this.getDictionaryDataPath()));
     }
     
-    private String getRoutesDataPath() {
-        return this.conf.getData("RoutesDataPath");
+    private String getDictionaryDataPath() {
+        return this.conf.getData("Conf", "DictionaryDataPath");
     }
     
     @Override
@@ -56,7 +59,11 @@ public class DictionaryProvider implements IDataModelProvider<Dictionary> {
 
     @Override
     public void persist() {
-        // NOPE NOPE NOPE
+        try {
+            XmlFileAccess.toFile(this.dictionary, new File(this.conf.getDataFolder(), this.getDictionaryDataPath()));
+        } catch (Exception ex) {
+            NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
+        }
     }
 
     @Override

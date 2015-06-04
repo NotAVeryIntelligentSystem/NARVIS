@@ -25,6 +25,7 @@ package com.narvis.engine;
 
 import com.narvis.dataaccess.DataAccessFactory;
 import com.narvis.dataaccess.interfaces.IDataModelProvider;
+import com.narvis.dataaccess.interfaces.IMetaDataProvider;
 import com.narvis.dataaccess.models.lang.word.Dictionary;
 import com.narvis.dataaccess.models.lang.word.Word;
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class Parser {
     public Parser() throws Exception
     {
         // Récupération du RoutesProvider
+        IMetaDataProvider metaDataProvider = DataAccessFactory.getMetaDataProvider();
         this.dictionaryProvider = (IDataModelProvider<Dictionary>) DataAccessFactory.getMetaDataProvider().getDataProvider("Dictionary");
     }
     
@@ -60,7 +62,7 @@ public class Parser {
     public List<String> Parse(String sentence)
     {
         ArrayList<String> parsedMessage = new ArrayList<>();
-        sentence.toLowerCase();
+        sentence = sentence.toLowerCase();
         parsedMessage.addAll(Arrays.asList(sentence.split(" ")));
 
         transformSpaceInQuoteWithUnderscore(sentence);        

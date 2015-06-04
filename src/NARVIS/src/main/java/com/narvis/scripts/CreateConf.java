@@ -29,6 +29,8 @@ import com.narvis.common.generics.*;
 import com.narvis.common.tools.serialization.XmlFileAccessException;
 import com.narvis.dataaccess.impl.*;
 import com.narvis.dataaccess.models.conf.*;
+import com.narvis.dataaccess.models.lang.word.Dictionary;
+import com.narvis.dataaccess.models.lang.word.Word;
 import com.narvis.dataaccess.models.route.*;
 import com.narvis.dataaccess.weather.*;
 import com.narvis.frontend.console.AccessConsole;
@@ -48,7 +50,7 @@ public class CreateConf {
         
         try {
             System.out.println("Starting conf creation");
-            File baseFolder = createFolder("D:\\Users\\Nakou\\Documents\\NetBeansProjects\\NARVIS\\release\\");
+            File baseFolder = createFolder("../../release");
             File confFolder = createFolder(baseFolder, ConfigurationDataProvider.CONF_FOLDER_NAME);
             XmlFileAccess.toFile(createNarvisConf(), new File(confFolder, ConfigurationDataProvider.CONF_FILE_NAME));
             File modulesFolder = createFolder(baseFolder, ConfigurationDataProvider.MODULES_FOLDER_NAME);
@@ -57,6 +59,8 @@ public class CreateConf {
             File frontendsFolder = createFolder(baseFolder, ConfigurationDataProvider.FRONTENDS_FOLDER_NAME);
             //createTwitterFrontEndFolder(frontendsFolder);
             createConsoleFrontEndFolder(frontendsFolder);
+            createDictionaryModuleFolder(modulesFolder);
+            //createTwitterFrontEndFolder(frontendsFolder); 
             System.out.println("Finished conf creation");
         } 
         catch (Exception ex) {
@@ -87,6 +91,8 @@ public class CreateConf {
 //etData("token"), this.conf.getApiKeys().getData("tokenSecret"), this.conf.getApiKeys().getData("consumerKey"), this.conf.getApiKeys().getData("consumerSecret")
     }
     
+    
+    /* Routes */
     
     public static void createRoutesModuleFolder(File modulesFolder) throws Exception {
         File moduleFolder = createFolder(modulesFolder, "Routes");
@@ -127,6 +133,56 @@ public class CreateConf {
         }
         return retVal;
     }
+    
+    
+    /* Dictionary */
+    
+    public static void createDictionaryModuleFolder(File modulesFolder) throws Exception {
+        File moduleFolder = createFolder(modulesFolder, "Dictionary");
+        File confModuleFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.CONF_FOLDER_NAME);
+        XmlFileAccess.toFile(createModuleConf(DictionaryProvider.class.getCanonicalName(), new Pair<>("DictionaryDataPath", "dictionary.xml")), new File(confModuleFolder, ModuleConfigurationDataProvider.MODULE_CONF_FILE_NAME));
+        XmlFileAccess.toFile(createApiKeys("Dictionary"), new File(confModuleFolder, ModuleConfigurationDataProvider.API_KEY_FILE_NAME));
+        File dataFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.DATA_FOLDER_NAME);
+        XmlFileAccess.toFile(createDictionary(), new File(dataFolder, "dictionary.xml"));
+        createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);   
+    }
+    
+    public static Dictionary createDictionary() {
+        Dictionary retVal = new Dictionary();
+        
+        String[] informationTypes = new String[1];
+        String[] hints = new String[1];
+        
+        informationTypes[0] = "preposition";
+        hints[0] = "location";        
+        retVal.addWord(createWord("in", informationTypes, hints));
+        
+        informationTypes[0] = "location";
+        retVal.addWord(createWord("london", informationTypes, null));
+
+        return retVal;    
+    }
+    
+    public static Word createWord(String name, String[] informationTypes, String[] hints) {
+        Word retVal = new Word();
+        
+        retVal.setValue(name);
+        
+        for(String informationType : informationTypes) {
+            retVal.addInformationType(informationType);
+        }
+        
+        if(hints != null)
+        {
+            for(String hint : hints) {
+                retVal.addHint(hint);
+            }
+        }
+        
+        return retVal;
+    }
+    
+    
     
     public static void createWeatherModuleFolder(File modulesFolder) throws Exception {
         File moduleFolder = createFolder(modulesFolder, "OpenWeatherMap");

@@ -1,0 +1,26 @@
+<Dictionary>
+   <Words class="java.util.LinkedList">
+      <Word IsIgnored="false">
+         <Value>in</Value>
+         <InformationTypes class="java.util.LinkedList">
+            <string>preposition</string>
+         </InformationTypes>
+         <Hint class="java.util.LinkedList">
+            <string>location</string>
+         </Hint>
+      </Word>
+      <Word IsIgnored="false">
+         <Value>london</Value>
+         <InformationTypes class="java.util.LinkedList">
+            <string>location</string>
+         </InformationTypes>
+         <Hint class="java.util.LinkedList"/>
+      </Word>
+      
+      <Word IsIgnored="true">
+         <Value>the</Value>
+         <InformationTypes class="java.util.LinkedList"/>
+         <Hint class="java.util.LinkedList"/>
+      </Word>
+   </Words>
+</Dictionary>

@@ -21,22 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.test.common.generics;
+package com.narvis.test.engine;
 
-import com.narvis.common.debug.NarvisLogger;
+import com.narvis.engine.NarvisEngine;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author Zack
  */
-public class TestNarvisLogger {
+public class TestNarvisEngine {
     
-    public TestNarvisLogger() {
+    public TestNarvisEngine() {
     }
     
     @BeforeClass
@@ -54,12 +55,31 @@ public class TestNarvisLogger {
     @After
     public void tearDown() {
     }
+
+    // TODO add test methods here.
+    // The methods must be annotated with annotation @Test. For example:
+    //
+    // @Test
+    // public void hello() {}
     
     @Test
     public void TestGetInstance()
     {
-        NarvisLogger instance = NarvisLogger.getInstance();
-        
-        instance.info("TestGetInstance");
+        try {
+            NarvisEngine myInstance = NarvisEngine.getInstance();
+        } catch (Exception ex) {
+            fail(ex.getMessage());
+        }
+    }
+    
+    @Test
+    public void TestStart()
+    {
+        try {
+            NarvisEngine myInstance = NarvisEngine.getInstance();
+            myInstance.start();
+        } catch (Exception ex) {
+            fail(ex.getMessage());
+        }
     }
 }
