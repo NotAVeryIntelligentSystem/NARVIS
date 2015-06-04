@@ -38,13 +38,12 @@ public class Executer implements AutoCloseable {
     private final BlockingQueue<Runnable> toExecute;
     private final Thread executionLoop;
     
-    @SuppressWarnings("CallToThreadStartDuringObjectConstruction") // this is intended
     public Executer(String name) {
         this.toExecute = new LinkedBlockingQueue<>();
         this.executionLoop = new Thread(name){
             @Override
             public void run() {
-                while(true) {
+                while(!Thread.currentThread().isInterrupted()) {
                     try {
                         // Automatically interrupted when this thread is interrupted so we shouldn't worry much
                         toExecute.take().run();
@@ -54,7 +53,11 @@ public class Executer implements AutoCloseable {
                 }
             }
         };
+    }
+    
+    public void start() {
         this.executionLoop.start();
+        
     }
     
     public <T> T addToExecute(RunnableFuture<T> executable) throws ExecuterException {
@@ -62,6 +65,14 @@ public class Executer implements AutoCloseable {
             this.toExecute.put(executable);
             return executable.get();
         } catch (InterruptedException | ExecutionException ex) {
+            throw new ExecuterException(ex);
+        }
+    }
+    
+    public void addToExecute(Runnable executable) throws ExecuterException {
+        try {
+            this.toExecute.put(executable);
+        } catch (InterruptedException ex) {
             throw new ExecuterException(ex);
         }
     }

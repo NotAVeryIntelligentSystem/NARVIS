@@ -29,6 +29,7 @@ import com.narvis.common.tools.reflection.Factory;
 import com.narvis.common.tools.reflection.FactoryException;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.models.conf.*;
+import com.narvis.frontend.interfaces.IFrontEnd;
 import java.io.File;
 import java.util.*;
 import java.util.Map.*;
@@ -43,13 +44,17 @@ public class ConfigurationDataProvider implements IDataProvider {
 
     public static final String CONF_FILE_NAME = "narvis.conf";
     public static final String MODULES_FOLDER_NAME = "modules";
+    public static final String FRONTENDS_FOLDER_NAME = "frontends";
+
     public static final String NARVIS_CONF_KEYWORD = "NarvisConf";
 
     private final NarvisConf narvisConf;
     private final Map<String, ModuleConfigurationDataProvider> modulesConfs;
+    private final Map<String, FrontEndConfigurationDataProvider> frontEndConfs;
     
     public ConfigurationDataProvider() throws Exception {
         this.modulesConfs = new HashMap<>();
+        this.frontEndConfs = new HashMap<>();
         File globalFolder = new File(CONF_FOLDER_NAME);
         assert globalFolder.isDirectory() == true  : "Path for global folder isn't a folder !";
         this.narvisConf = XmlFileAccess.fromFile(NarvisConf.class, globalFolder.listFiles(new FolderNameFileFilter(CONF_FOLDER_NAME))[0].listFiles(new FileNameFileFilter(CONF_FILE_NAME))[0]);
@@ -58,16 +63,29 @@ public class ConfigurationDataProvider implements IDataProvider {
                 this.modulesConfs.put(moduleFolder.getName(), new ModuleConfigurationDataProvider(moduleFolder));
             }
         }
+        for(File frontendFolder : globalFolder.listFiles(new FolderNameFileFilter(MODULES_FOLDER_NAME))) {
+            if(frontendFolder.isDirectory()) {
+                this.frontEndConfs.put(frontendFolder.getName(), new FrontEndConfigurationDataProvider(frontendFolder));
+            }
+        }
     }
 
     // Returns the MODULES not the configuration
-    public Map<String, IDataProvider> getDataProviders() throws FactoryException {
+    public Map<String, IDataProvider> createDataProviders() throws FactoryException {
         Map<String, IDataProvider> retVal = new HashMap<>();
         for(Entry<String, ModuleConfigurationDataProvider> entry : this.modulesConfs.entrySet()) {
             retVal.put(entry.getKey(), (IDataProvider) Factory.fromName(entry.getValue().getConf().getModuleClassPath(), entry.getValue(), ModuleConfigurationDataProvider.class));
         }
         return retVal;
-    } 
+    }
+    
+    public Map<String, IFrontEnd> createFrontEnds() throws FactoryException {
+        Map<String, IFrontEnd> retVal = new HashMap<>();
+        for(Entry<String, FrontEndConfigurationDataProvider> entry : this.frontEndConfs.entrySet()) {
+            retVal.put(entry.getKey(), (IFrontEnd) Factory.fromName(entry.getValue().getConf().getModuleClassPath(), entry.getValue(), FrontEndConfigurationDataProvider.class));
+        }
+        return retVal;        
+    }
 
     @Override
     public String getData(String... keywords) {
@@ -77,6 +95,9 @@ public class ConfigurationDataProvider implements IDataProvider {
         }
         if(NARVIS_CONF_KEYWORD.equals(keywords[0])) {
             return this.narvisConf.getData(nextKeywords);
+        }
+        if(this.frontEndConfs.containsKey(keywords[0])) {
+            return this.frontEndConfs.get(keywords[0]).getData(nextKeywords);
         }
         return this.modulesConfs.get(keywords[0]).getData(nextKeywords);
     }

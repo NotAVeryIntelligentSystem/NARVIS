@@ -46,6 +46,11 @@ public class CreateConf {
         File modulesFolder = createFolder(baseFolder, ConfigurationDataProvider.MODULES_FOLDER_NAME);
         createWeatherModuleFolder(modulesFolder);
         createRoutesModuleFolder(modulesFolder);
+        
+    }
+    
+    public static void createTwitterFrontEnd(File frontEndFolder) {
+        
     }
     
     

@@ -5,13 +5,14 @@
  */
 package com.narvis.engine;
 
-import com.narvis.dataaccess.impl.MetaDataProvider;
-import com.narvis.dataaccess.interfaces.IDataProvider;
-import com.narvis.dataaccess.interfaces.IDataProviderDetails;
-import com.narvis.frontend.IOManager;
+import com.narvis.common.tools.executer.Executer;
+import com.narvis.common.tools.executer.ExecuterException;
+import com.narvis.dataaccess.*;
+import com.narvis.dataaccess.interfaces.*;
 import com.narvis.frontend.MessageInOut;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.RunnableFuture;
 
 /**
  *
@@ -20,19 +21,20 @@ import java.util.Map;
 public class NarvisEngine {
 
     private static String IOname = "console"; // TODO : Change by load from conf files
-    private IOManager inputs;
     private static NarvisEngine narvis;
     
     private Parser parser;
     private FondamentalAnalyser fondamental;
     private DetailsAnalyser detailAnalyser;
-    private MetaDataProvider metaDataProvider;
+    private IMetaDataProvider metaDataProvider;
+    private final Executer executer;
     
     private NarvisEngine() throws Exception{
+        this.executer = new Executer("Narvis engine");
         parser = new Parser();
         fondamental = new FondamentalAnalyser();
         detailAnalyser = new DetailsAnalyser();
-        metaDataProvider = new MetaDataProvider();
+        metaDataProvider = DataAccessFactory.getMetaDataProvider();
     }
     
     public static NarvisEngine getInstance() throws Exception{
@@ -45,11 +47,23 @@ public class NarvisEngine {
     }
     
     public void start(){
-        inputs = new IOManager(NarvisEngine.IOname);
+        this.executer.start();
+        this.metaDataProvider.getFrontEnd("Twitter").start();
     }
     
-    public void getMessage(MessageInOut lastMessage){
-        this.brainProcess(lastMessage.getContent());
+    public void close() throws Exception {
+        this.metaDataProvider.getFrontEnd("Twitter").close();
+        this.executer.close();
+    }
+    
+    public void getMessage(final MessageInOut lastMessage) throws ExecuterException{
+        this.executer.addToExecute(new Runnable() {
+
+            @Override
+            public void run() {
+                brainProcess(lastMessage.getContent());
+            }
+        });
     }
     
     private void brainProcess(String message){
