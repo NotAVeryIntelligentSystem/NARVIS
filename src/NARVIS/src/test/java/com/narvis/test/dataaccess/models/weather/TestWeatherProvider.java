@@ -43,7 +43,7 @@ public class TestWeatherProvider {
     public void testGetDataWithShittyData() throws Exception {
         
     
-        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../conf/modules/Weather/"));
+        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../tests/weather"));
         OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(conf);
         
         Map<String,String> details = new HashMap<>();
@@ -58,7 +58,7 @@ public class TestWeatherProvider {
     @Test 
     public void testGetDataWithDefaultCommand() throws Exception {
         
-        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../conf/modules/Weather/"));
+        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../tests/weather"));
         OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(conf);
         
         Map<String,String> details = new HashMap<>();
@@ -76,7 +76,7 @@ public class TestWeatherProvider {
     @Test
     public void testGetDataWithShittyCommand() throws Exception {
         
-        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../conf/modules/Weather/"));
+        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../tests/weather"));
         OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(conf);
         
         Map<String,String> details = new HashMap<>();
@@ -87,8 +87,5 @@ public class TestWeatherProvider {
         
         Assert.assertEquals("Sorry guy I can't help you", result);
     }
-    
-    
-    
 
 }
