@@ -23,7 +23,7 @@
  */
 package com.narvis.test.common.generics;
 
-import com.narvis.common.generics.NarvisLogger;
+import com.narvis.common.debug.NarvisLogger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

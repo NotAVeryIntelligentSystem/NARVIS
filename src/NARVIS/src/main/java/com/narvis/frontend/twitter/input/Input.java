@@ -5,6 +5,7 @@
  */
 package com.narvis.frontend.twitter.input;
 
+import com.narvis.common.tools.executer.Executer;
 import com.narvis.engine.NarvisEngine;
 import com.narvis.frontend.MessageInOut;
 import com.narvis.frontend.interfaces.IInput;
@@ -22,7 +23,8 @@ import twitter4j.TwitterException;
  *
  * @author Alban
  */
-public class Input implements IInput, Runnable{
+public class Input implements IInput{
+    private final Thread listenloop;
     public String nameAPI = "Twitter";
     public String internalName = "nakJarvis";
     private Twitter twitterLink;
@@ -30,8 +32,30 @@ public class Input implements IInput, Runnable{
     private long lastMessageId = 0; // Meh
     private long lastMessageIdMinusOne; // Meh
     
-    public Input(){
-        this.twitterLink = AccessTwitter.loadAccessTwitter();
+    public Input(Twitter twit){
+        this.twitterLink = twit;
+        this.listenloop = new Thread("Twitter listen") {
+            @Override
+            public void run() {
+                MessageInOut lastMessage = null;
+                while(!Thread.currentThread().isInterrupted()){
+                    lastMessage = getInput();
+                    if(lastMessage != null){
+                        try {
+                            NarvisEngine.getInstance().getMessage(lastMessage);
+                        } catch (Exception ex) {
+                            Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    try {
+                        sleep(60000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+
+        };
     }
     
     public void getMessages() throws TwitterException{
@@ -104,27 +128,12 @@ public class Input implements IInput, Runnable{
     }
 
     @Override
-    public void run() {
-        MessageInOut lastMessage = null;
-        while(!Thread.currentThread().isInterrupted()){
-            lastMessage = this.getInput();
-            if(lastMessage != null){
-                try {
-                    NarvisEngine.getInstance().getMessage(lastMessage);
-                } catch (Exception ex) {
-                    Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            try {
-                sleep(60000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public void start() {
+        this.listenloop.start();
     }
 
     @Override
-    public void start() {
-        this.run();
+    public void close() {
+        this.listenloop.interrupt();
     }
 }

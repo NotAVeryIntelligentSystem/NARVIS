@@ -34,5 +34,10 @@ public class Input implements IInput {
             Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    @Override
+    public void close() throws Exception {
+        
+    }
     
 }

@@ -21,15 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.interfaces;
-
-import com.narvis.frontend.interfaces.IFrontEnd;
+package com.narvis.frontend.interfaces;
 
 /**
  *
  * @author uwy
  */
-public interface IMetaDataProvider {
-    public IDataProvider getDataProvider(String... keywords);
-    public IFrontEnd getFrontEnd(String... keywords);
+public interface IFrontEnd {
+    public void start();
+    public void close();
+    public IInput getInput();
+    public IOutput getOutput();
+
 }

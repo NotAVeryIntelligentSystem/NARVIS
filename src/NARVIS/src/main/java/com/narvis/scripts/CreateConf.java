@@ -23,15 +23,20 @@
  */
 package com.narvis.scripts;
 
+import com.narvis.common.debug.NarvisLogger;
 import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.common.generics.*;
+import com.narvis.common.tools.serialization.XmlFileAccessException;
 import com.narvis.dataaccess.impl.*;
 import com.narvis.dataaccess.models.conf.*;
 import com.narvis.dataaccess.models.route.*;
 import com.narvis.dataaccess.weather.*;
+import com.narvis.frontend.twitter.AccessTwitter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -39,13 +44,37 @@ import java.nio.file.Files;
  */
 public class CreateConf {
     
-    public static void main(String [] args) throws Exception {
-        File baseFolder = createFolder("/home/uwy/dev/NARVIS/release/");
-        File confFolder = createFolder(baseFolder, ConfigurationDataProvider.CONF_FOLDER_NAME);
-        XmlFileAccess.toFile(createNarvisConf(), new File(confFolder, ConfigurationDataProvider.CONF_FILE_NAME));
-        File modulesFolder = createFolder(baseFolder, ConfigurationDataProvider.MODULES_FOLDER_NAME);
-        createWeatherModuleFolder(modulesFolder);
-        createRoutesModuleFolder(modulesFolder);
+    public static void main(String [] args) {
+        
+        try {
+            System.out.println("Starting conf creation");
+            File baseFolder = createFolder("/home/uwy/dev/NARVIS/release/");
+            File confFolder = createFolder(baseFolder, ConfigurationDataProvider.CONF_FOLDER_NAME);
+            XmlFileAccess.toFile(createNarvisConf(), new File(confFolder, ConfigurationDataProvider.CONF_FILE_NAME));
+            File modulesFolder = createFolder(baseFolder, ConfigurationDataProvider.MODULES_FOLDER_NAME);
+            createWeatherModuleFolder(modulesFolder);
+            createRoutesModuleFolder(modulesFolder);
+            File frontendsFolder = createFolder(baseFolder, ConfigurationDataProvider.FRONTENDS_FOLDER_NAME);
+            createTwitterFrontEndFolder(frontendsFolder);
+            System.out.println("Finished conf creation");
+        } 
+        catch (Exception ex) {
+            NarvisLogger.getInstance().log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    public static void createTwitterFrontEndFolder(File frontendsFolder) throws IOException, XmlFileAccessException {
+        File twitterFolder = createFolder(frontendsFolder, "Twitter");
+        File confModuleFolder = createFolder(twitterFolder, FrontEndConfigurationDataProvider.CONF_FOLDER_NAME);
+        XmlFileAccess.toFile(createModuleConf(AccessTwitter.class.getCanonicalName()), new File(confModuleFolder, FrontEndConfigurationDataProvider.MODULE_CONF_FILE_NAME));
+        XmlFileAccess.toFile(createApiKeys("Twitter", 
+                new Pair("token", "askNakou"), 
+                new Pair("tokenSecret", "askNakou"), 
+                new Pair("consumerKey", "askNakou"), 
+                new Pair("consumerSecret", "askNakou")), new File(confModuleFolder, FrontEndConfigurationDataProvider.API_KEY_FILE_NAME));
+
+//etData("token"), this.conf.getApiKeys().getData("tokenSecret"), this.conf.getApiKeys().getData("consumerKey"), this.conf.getApiKeys().getData("consumerSecret")
     }
     
     
@@ -93,7 +122,7 @@ public class CreateConf {
         File moduleFolder = createFolder(modulesFolder, "OpenWeatherMap");
         File confModuleFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.CONF_FOLDER_NAME);
         XmlFileAccess.toFile(createModuleConf(OpenWeatherMapPortal.class.getCanonicalName()), new File(confModuleFolder, ModuleConfigurationDataProvider.MODULE_CONF_FILE_NAME));
-        XmlFileAccess.toFile(createApiKeys("OpenWeatherMap", new Pair("key", "01b5f54b9605d5bbae6cf9f831560fb5")), new File(confModuleFolder, ModuleConfigurationDataProvider.API_KEY_FILE_NAME));
+        XmlFileAccess.toFile(createApiKeys("OpenWeatherMap", new Pair("key", "askNakou")), new File(confModuleFolder, ModuleConfigurationDataProvider.API_KEY_FILE_NAME));
         createFolder(moduleFolder, ModuleConfigurationDataProvider.DATA_FOLDER_NAME);
         createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);            
     }

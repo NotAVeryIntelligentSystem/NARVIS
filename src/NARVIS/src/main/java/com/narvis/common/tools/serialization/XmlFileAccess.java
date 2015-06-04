@@ -23,8 +23,13 @@
  */
 package com.narvis.common.tools.serialization;
 
+import com.narvis.common.debug.NarvisLogger;
+import com.narvis.dataaccess.models.conf.NarvisConf;
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.simpleframework.xml.core.*;
 
 /**
@@ -35,34 +40,55 @@ public class XmlFileAccess {
     private static final Persister persister = new Persister(); // Make it only once since we need a single global settings
     
     
-    public static <T> void toFile(T toSerialize, String file) throws Exception {
+    public static <T> void toFile(T toSerialize, String file) throws XmlFileAccessException {
         XmlFileAccess.toFile(toSerialize, new File(file));
+
     }
     
-    public static <T> void toFile(T toSerialize, File file ) throws Exception {
-        if(!file.exists()) {
-            if(!file.createNewFile()) {
+    public static <T> void toFile(T toSerialize, File file) throws XmlFileAccessException  {
+        try {
+            if(!file.exists()) {
+                if(!file.createNewFile()) {
+                    throw new IllegalArgumentException("Can't write file" + file.getAbsolutePath() + ", check your permissions !");
+                }
+            }
+            if(!file.canWrite()) {
                 throw new IllegalArgumentException("Can't write file" + file.getAbsolutePath() + ", check your permissions !");
             }
+            NarvisLogger.getInstance().log(Level.INFO, "Serializing into file : {0}", file.getAbsolutePath());
+            persister.write(toSerialize, file);
+        } catch (Exception ex) {
+            NarvisLogger.getInstance().log(Level.SEVERE, null, ex);
+            throw new XmlFileAccessException(ex);
+
         }
-        if(!file.canWrite()) {
-            throw new IllegalArgumentException("Can't write file" + file.getAbsolutePath() + ", check your permissions !");
-        }
-        persister.write(toSerialize, file);
     }
     
-    public static <T> void toStream(T toSerialize, OutputStream stream) throws Exception {
-        persister.write(toSerialize, stream);
+    public static <T> void toStream(T toSerialize, OutputStream stream) throws XmlFileAccessException {
+        try {
+            NarvisLogger.getInstance().log(Level.INFO, "Serializing into stream.");
+            persister.write(toSerialize, stream);
+        } catch (Exception ex) {
+            NarvisLogger.getInstance().log(Level.SEVERE, null, ex);
+            throw new XmlFileAccessException(ex);
+
+        }
     }
     
-    public static <T> T fromFile(Class<T> type, String filePath) throws Exception {
+    public static <T> T fromFile(Class<T> type, String filePath) throws XmlFileAccessException {
         return XmlFileAccess.fromFile(type, new File(filePath));
     }
     
-    public static <T> T fromFile(Class<T> type, File file) throws Exception {
-        if(!file.canRead()) {
-            throw new IllegalArgumentException("Can't read file " + file.getAbsolutePath() + ", check your permissions !");
+    public static <T> T fromFile(Class<T> type, File file) throws XmlFileAccessException {
+        try {
+            if(!file.canRead()) {
+                throw new IllegalArgumentException("Can't read file " + file.getAbsolutePath() + ", check your permissions !");
+            }
+            NarvisLogger.getInstance().log(Level.INFO, "Deserializing file : {0}", file.getAbsolutePath());
+            return persister.read(type, file);
+        } catch (Exception ex) {
+            NarvisLogger.getInstance().log(Level.SEVERE, null, ex);
+            throw new XmlFileAccessException(ex);
         }
-        return persister.read(type, file);
     }
 }
