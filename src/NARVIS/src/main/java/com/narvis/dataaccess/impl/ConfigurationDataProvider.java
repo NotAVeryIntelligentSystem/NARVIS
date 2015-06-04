@@ -38,7 +38,7 @@ import java.util.Map.*;
  * @author uwy
  */
 public class ConfigurationDataProvider implements IDataProvider {
-    public static final String GLOBAL_CONF_PATH = "../../release";
+    public static final String GLOBAL_CONF_PATH = "../../release/";
     public static final String CONF_FOLDER_NAME = "conf";
 
     public static final String CONF_FILE_NAME = "narvis.conf";
@@ -50,7 +50,7 @@ public class ConfigurationDataProvider implements IDataProvider {
     
     public ConfigurationDataProvider() throws Exception {
         this.modulesConfs = new HashMap<>();
-        File globalFolder = new File(CONF_FOLDER_NAME);
+        File globalFolder = new File(GLOBAL_CONF_PATH+CONF_FOLDER_NAME);
         assert globalFolder.isDirectory() == true  : "Path for global folder isn't a folder !";
         this.narvisConf = XmlFileAccess.fromFile(NarvisConf.class, globalFolder.listFiles(new FolderNameFileFilter(CONF_FOLDER_NAME))[0].listFiles(new FileNameFileFilter(CONF_FILE_NAME))[0]);
         for(File moduleFolder : globalFolder.listFiles(new FolderNameFileFilter(MODULES_FOLDER_NAME))) {
