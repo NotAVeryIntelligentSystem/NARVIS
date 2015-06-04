@@ -8,6 +8,7 @@ package com.narvis.frontend.twitter.input;
 import com.narvis.engine.NarvisEngine;
 import com.narvis.frontend.MessageInOut;
 import com.narvis.frontend.interfaces.IInput;
+import com.narvis.frontend.twitter.AccessTwitter;
 import static java.lang.Thread.sleep;
 import java.util.ArrayList;
 import java.util.List;
