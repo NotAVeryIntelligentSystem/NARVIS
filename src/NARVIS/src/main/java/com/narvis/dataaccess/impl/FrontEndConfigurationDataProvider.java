@@ -25,9 +25,6 @@ package com.narvis.dataaccess.impl;
 
 import com.narvis.common.extensions.filefilters.FolderNameFileFilter;
 import com.narvis.common.tools.serialization.XmlFileAccess;
-import static com.narvis.dataaccess.impl.ModuleConfigurationDataProvider.API_KEY_FILE_NAME;
-import static com.narvis.dataaccess.impl.ModuleConfigurationDataProvider.CONF_FOLDER_NAME;
-import static com.narvis.dataaccess.impl.ModuleConfigurationDataProvider.MODULE_CONF_FILE_NAME;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.models.conf.ApiKeys;
 import com.narvis.dataaccess.models.conf.ModuleConf;

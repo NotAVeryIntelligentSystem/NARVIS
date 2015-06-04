@@ -5,7 +5,8 @@
  */
 package com.narvis.frontend.twitter;
 
-import com.narvis.common.generics.NarvisLogger;
+import com.narvis.common.debug.NarvisLogger;
+import com.narvis.dataaccess.impl.FrontEndConfigurationDataProvider;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.frontend.interfaces.*;
 import com.narvis.frontend.twitter.input.Input;
@@ -19,13 +20,13 @@ import twitter4j.auth.AccessToken;
  * @author Alban
  */
 public class AccessTwitter implements IFrontEnd {
-    private final ModuleConfigurationDataProvider conf;
+    private final FrontEndConfigurationDataProvider conf;
     private IInput input;
     private IOutput output;
 
     private Twitter twitter;
 
-    public AccessTwitter(ModuleConfigurationDataProvider conf) {
+    public AccessTwitter(FrontEndConfigurationDataProvider conf) {
         this.conf = conf;
     }
     

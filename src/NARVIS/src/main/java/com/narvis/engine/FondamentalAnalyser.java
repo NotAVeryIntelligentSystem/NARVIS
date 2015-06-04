@@ -23,7 +23,7 @@
  */
 package com.narvis.engine;
 
-import com.narvis.common.generics.NarvisLogger;
+import com.narvis.common.debug.NarvisLogger;
 import com.narvis.dataaccess.DataAccessFactory;
 import com.narvis.dataaccess.interfaces.IDataModelProvider;
 import com.narvis.dataaccess.models.route.ActionNode;
@@ -48,8 +48,8 @@ public class FondamentalAnalyser {
     private List<String> details = null; // La phrase parsée à partir de laquelle l'arbre est parcouru. Elle devient par la suite la liste des détails de la phrase.
     
     /**
-     * Constructeur par défaut
-     * @throws ParserConfigurationException : Le provider de configuration du module
+     * Default constructor
+     * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
      * @throws Exception 
@@ -67,52 +67,57 @@ public class FondamentalAnalyser {
      */
     public Action findAction(List<String> pParsedSentence){
         
-        RouteNode route;            // Racine du modèle des routes
-        ActionNode action = null;   // Noeud action correspondant à la phrase
-        Action implAction = null;   // Action à retourner correspondante à la phrase 
+        RouteNode route;            // Root of the route model
+        ActionNode action = null;   // Action node that correspond to the sentence
+        Action implAction = null;   // Returned action that correspond to the sentence
         
-        /* 
-        Initialise la liste des détails avec la phrase parsée.
-        Lorsqu'une action est trouvée sur un chemin, tous les mots de la phrase
-        ayant permit d'accéder à l'action sont supprimés.
-        Ainsi, une fois l'action trouvée il ne reste dans les détails plus que
-        les mots correspondant réélement aux détails de la phrase.
+        /*
+        If the sentence in params is NULL or empty, return NULL.
+        Because no route could ever match an empty sentence.      
+        */
+        if(pParsedSentence == null || pParsedSentence.isEmpty())
+            return null;
+        
+        /*
+        Initialize the details with the parsed sentence.
+        When an action is finded in a route, all the words that were used in
+        the route are removed from details.
+        So, when an action is finded there are in details only the words that
+        correspond to the real details.
         */
         details = pParsedSentence;
         
-        /* Récupère le modèle des routes */
+        /* Get route model */
         route = routesProvider.getModel();
         
-        /* Récupère les mots à la racine */
+        /* Get WordNodes children of the root */
         List<WordNode> rootWords = route.getWords();
         
         /*
-        On parcour les noeuds du premier niveau de l'arbre avant de faire appel 
-        à la fonction récurcive (searchPath()).
-        On doit faire ça parceque la racine de l'arbre (RouteNode) n'est pas 
-        du même type que le paramètre attendu par
-        la fonction récurcive, qui est un mot (WordNode).
+        Brows nodes of the first level of the tree before calling the recurcive
+        function (searchPath() ).
+        We have to do this because the root (RouteNode) hasn't the same type
+        as the param expected by the recurcive function, that is a WordNode.
         */
         
-        /* Pour chaque mots */
         for(WordNode word : rootWords)
         {
-            /* Récupère le premier mot de la phrase */
+            /* Get the first word of the sentence */
             final String currentSentenceWord = details.get(0);
             
-            /* Si le noeud n'est pas vide OU qu'il correspond au mot courrant */
+            /* If the word is empty OR equals the current word */
             if(word.getValue() == null || word.getValue().isEmpty() || word.getValue().equals(currentSentenceWord))
             {
-                /* Recherche une action correspondant à la suite de la phrase */
+                /* Search an action that match the sentence */
                 action = searchPath(word, 1);
 
-                /* Si une action a été trouvée */
+                /* If an action is finded */
                 if(action != null)
                 {
-                    /* Si le noeud n'est pas vide */
+                    /* If the node isn't empty */
                     if(word.getValue() != null || !word.getValue().isEmpty())
                     {
-                        /* On supprime le mot des détails puisqu'il a été "consommé" par le fondamental analyser */
+                        /* Remove the current word in the details because he was used by the fondamental analyser */
                         details.remove(0);
                     }
                     break;
@@ -120,7 +125,7 @@ public class FondamentalAnalyser {
             }
         }
 
-        /* Si une action a été trouvée */
+        /* If no action is found */
         if(action != null){
             /* Récupère le nom de provider correspondant au noeud action */
             providerName = action.getProviderName();

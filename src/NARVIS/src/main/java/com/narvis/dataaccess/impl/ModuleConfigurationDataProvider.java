@@ -28,7 +28,6 @@ import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.models.conf.*;
 import java.io.File;
-import java.util.Map;
 
 /**
  *
@@ -119,7 +118,7 @@ public class ModuleConfigurationDataProvider implements IDataProvider {
             case ANSWERS_KEYWORD:
                 return this.answersLayout.getData(nextKeywords);
         }
-        return null; // todo : Handle error maybe ?
+        return null;
     }
 
     

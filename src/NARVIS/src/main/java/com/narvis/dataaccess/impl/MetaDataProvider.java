@@ -23,7 +23,7 @@
  */
 package com.narvis.dataaccess.impl;
 
-import com.narvis.common.generics.NarvisLogger;
+import com.narvis.common.debug.NarvisLogger;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.interfaces.IMetaDataProvider;
 import com.narvis.frontend.interfaces.IFrontEnd;
@@ -43,14 +43,9 @@ public class MetaDataProvider implements IMetaDataProvider {
     public static final String FRONTEND_KEYWORD = "FrontEnd";
 
     public MetaDataProvider() throws Exception {
-        try {
-            this.config = new ConfigurationDataProvider();
-            this.providers = this.config.createDataProviders();
-            this.frontEnds = this.config.createFrontEnds();
-        } catch (Exception ex) {
-           NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
-           throw ex;
-        }
+        this.config = new ConfigurationDataProvider();
+        this.providers = this.config.createDataProviders();
+        this.frontEnds = this.config.createFrontEnds();
     }
     
     @Override

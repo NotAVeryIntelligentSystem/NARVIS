@@ -23,10 +23,10 @@
  */
 package com.narvis.dataaccess.impl;
 
-import com.narvis.common.extensions.filefilters.*;
 import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.common.tools.reflection.Factory;
 import com.narvis.common.tools.reflection.FactoryException;
+import com.narvis.common.tools.serialization.XmlFileAccessException;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.models.conf.*;
 import com.narvis.frontend.interfaces.IFrontEnd;
@@ -39,7 +39,7 @@ import java.util.Map.*;
  * @author uwy
  */
 public class ConfigurationDataProvider implements IDataProvider {
-    public static final String GLOBAL_CONF_PATH = "../../release";
+    public static final String GLOBAL_CONF_PATH = "../../release/";
     public static final String CONF_FOLDER_NAME = "conf";
 
     public static final String CONF_FILE_NAME = "narvis.conf";
@@ -52,25 +52,27 @@ public class ConfigurationDataProvider implements IDataProvider {
     private final Map<String, ModuleConfigurationDataProvider> modulesConfs;
     private final Map<String, FrontEndConfigurationDataProvider> frontEndConfs;
     
-    public ConfigurationDataProvider() throws Exception {
+    public ConfigurationDataProvider() throws XmlFileAccessException, Exception {
         this.modulesConfs = new HashMap<>();
         this.frontEndConfs = new HashMap<>();
-        File globalFolder = new File(CONF_FOLDER_NAME);
-        assert globalFolder.isDirectory() == true  : "Path for global folder isn't a folder !";
-        this.narvisConf = XmlFileAccess.fromFile(NarvisConf.class, globalFolder.listFiles(new FolderNameFileFilter(CONF_FOLDER_NAME))[0].listFiles(new FileNameFileFilter(CONF_FILE_NAME))[0]);
-        for(File moduleFolder : globalFolder.listFiles(new FolderNameFileFilter(MODULES_FOLDER_NAME))) {
+        File globalFolder = new File(GLOBAL_CONF_PATH);
+        if(!globalFolder.isDirectory()) {
+            throw new IllegalArgumentException("Path for global folder isn't a folder !");
+        }
+        this.narvisConf = XmlFileAccess.fromFile(NarvisConf.class, new File(new File(globalFolder, CONF_FOLDER_NAME), CONF_FILE_NAME));
+        for(File moduleFolder : new File(globalFolder, MODULES_FOLDER_NAME).listFiles()) {
             if(moduleFolder.isDirectory()) {
                 this.modulesConfs.put(moduleFolder.getName(), new ModuleConfigurationDataProvider(moduleFolder));
             }
         }
-        for(File frontendFolder : globalFolder.listFiles(new FolderNameFileFilter(MODULES_FOLDER_NAME))) {
+        for(File frontendFolder : new File(globalFolder, FRONTENDS_FOLDER_NAME).listFiles()) {
             if(frontendFolder.isDirectory()) {
                 this.frontEndConfs.put(frontendFolder.getName(), new FrontEndConfigurationDataProvider(frontendFolder));
             }
         }
     }
 
-    // Returns the MODULES not the configuration
+    // Returns the MODULES not the configuration 
     public Map<String, IDataProvider> createDataProviders() throws FactoryException {
         Map<String, IDataProvider> retVal = new HashMap<>();
         for(Entry<String, ModuleConfigurationDataProvider> entry : this.modulesConfs.entrySet()) {

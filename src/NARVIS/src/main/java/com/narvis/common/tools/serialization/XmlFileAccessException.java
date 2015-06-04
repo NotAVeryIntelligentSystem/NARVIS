@@ -21,19 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.engine;
-
-import com.narvis.frontend.MessageInOut;
+package com.narvis.common.tools.serialization;
 
 /**
  *
- * @author Nakou
+ * @author uwy
  */
-public class Narvis {
+public class XmlFileAccessException extends Exception {
 
-    public static void getMessage(MessageInOut lastMessage) {
-        // GO TO PARSER AND STUFF
-        // Xxoo - Nakou
+    /**
+     * Creates a new instance of <code>XmlFileAccessException</code> without
+     * detail message.
+     */
+    public XmlFileAccessException() {
     }
     
+    public XmlFileAccessException(Exception ex) {
+        super(ex);
+    }
+
+    /**
+     * Constructs an instance of <code>XmlFileAccessException</code> with the
+     * specified detail message.
+     *
+     * @param msg the detail message.
+     */
+    public XmlFileAccessException(String msg) {
+        super(msg);
+    }
 }

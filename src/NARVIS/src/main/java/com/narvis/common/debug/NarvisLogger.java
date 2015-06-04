@@ -21,13 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.common.generics;
+package com.narvis.common.debug;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.logging.Logger;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.FileHandler;
+import java.util.logging.*;
 
 /**
  *

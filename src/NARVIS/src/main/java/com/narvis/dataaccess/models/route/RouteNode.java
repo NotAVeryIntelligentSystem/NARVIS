@@ -16,7 +16,7 @@ import org.simpleframework.xml.Root;
  */
 @Root(name = "Route")
 public class RouteNode {
-    @ElementList(name="Words", type = WordNode.class)
+    @ElementList(name="Words", type = WordNode.class, required = false)
     private List<WordNode> words;
     
     public RouteNode()

@@ -42,10 +42,10 @@ public class Word {
     @Element(name="Value", type = String.class)
     String value;
     
-    @ElementList (name="InformationTypes", type = String.class)
+    @ElementList (name="InformationTypes", type = String.class, required = false)
     List<String> informationTypes;
     
-    @ElementList (name="Hint", type = String.class)
+    @ElementList (name="Hint", type = String.class, required = false)
     List<String> hints;
     
     public Word()

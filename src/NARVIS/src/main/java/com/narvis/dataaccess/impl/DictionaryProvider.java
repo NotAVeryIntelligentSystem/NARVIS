@@ -21,11 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.lang.word;
+package com.narvis.dataaccess.impl;
 
 import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.dataaccess.interfaces.IDataModelProvider;
+import com.narvis.dataaccess.models.lang.word.Dictionary;
 import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;

@@ -24,7 +24,7 @@
 package com.narvis.dataaccess.impl;
 
 import com.narvis.common.tools.serialization.XmlFileAccess;
-import com.narvis.common.generics.NarvisLogger;
+import com.narvis.common.debug.NarvisLogger;
 import com.narvis.dataaccess.interfaces.IDataModelProvider;
 import com.narvis.dataaccess.models.route.RouteNode;
 import java.io.File;
@@ -50,7 +50,7 @@ public class RoutesProvider implements IDataModelProvider<RouteNode> {
     }
     
     private String getRoutesDataPath() {
-        return this.conf.getData("RoutesDataPath");
+        return this.conf.getData("Conf", "RoutesDataPath");
     }
 
     @Override
