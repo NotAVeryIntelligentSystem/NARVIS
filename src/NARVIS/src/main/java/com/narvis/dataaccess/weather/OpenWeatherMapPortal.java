@@ -54,7 +54,6 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
         this.weatherApiKeys = moduleConf.getApiKeys();
         this._confProvider = moduleConf;
         
-        
     }
 
     

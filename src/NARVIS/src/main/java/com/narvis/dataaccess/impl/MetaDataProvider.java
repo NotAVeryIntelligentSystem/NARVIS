@@ -44,7 +44,6 @@ public class MetaDataProvider implements IMetaDataProvider {
         try {
             this.config = new ConfigurationDataProvider();
             this.providers = this.config.getDataProviders();
-
         } catch (Exception ex) {
            NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
            throw ex;

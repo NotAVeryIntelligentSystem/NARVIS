@@ -6,7 +6,7 @@
 package com.narvis.test.models.dataaccess.weather;
 
 
-import com.narvis.common.functions.serialization.XmlSerializer;
+import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.dataaccess.models.conf.ApiKeys;
 import com.narvis.dataaccess.weather.OpenWeatherMapPortal;
 import java.io.File;
@@ -30,7 +30,7 @@ public class WeatherTest {
             String apiKeysFilePath = "../../conf/modules/Weather/conf/api.key";
 
             File f = new File(apiKeysFilePath);
-            ApiKeys api = XmlSerializer.fromFile(ApiKeys.class, f);
+            ApiKeys api = XmlFileAccess.fromFile(ApiKeys.class, f);
 
             OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(api);
             String resString1 = weatherPortal.getData("Nimes", "temperature", "cloud");

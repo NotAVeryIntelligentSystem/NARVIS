@@ -24,7 +24,7 @@
 package com.narvis.dataaccess.impl;
 
 import com.narvis.common.extensions.filefilters.FolderNameFileFilter;
-import com.narvis.common.functions.serialization.XmlSerializer;
+import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.models.conf.*;
 import java.io.File;
@@ -35,11 +35,13 @@ import java.util.Map;
  * @author uwy
  */
 public class ModuleConfigurationDataProvider implements IDataProvider {
-    private static final String CONF_FOLDER_NAME = "conf";
-    private static final String LAYOUTS_FOLDER_NAME = "layouts";
-    private static final String ANSWERS_FILE_NAME = "answers.xml";
-    private static final String API_KEY_FILE_NAME = "api.key";
-    private static final String MODULE_CONF_FILE_NAME = "module.conf";
+    public static final String CONF_FOLDER_NAME = "conf";
+    public static final String LAYOUTS_FOLDER_NAME = "layouts";
+    public static final String DATA_FOLDER_NAME = "data";
+
+    public static final String ANSWERS_FILE_NAME = "answers.xml";
+    public static final String API_KEY_FILE_NAME = "api.key";
+    public static final String MODULE_CONF_FILE_NAME = "module.conf";
     
     public static final String API_KEYWORD = "Api";
     public static final String CONF_KEYWORD = "Conf";
@@ -48,6 +50,7 @@ public class ModuleConfigurationDataProvider implements IDataProvider {
     private final ApiKeys apiKeys;
     private final ModuleConf conf;
     private final AnswersLayout answersLayout;
+    private final File moduleDataFolder;
 
     public ModuleConfigurationDataProvider(File moduleFolder) throws Exception {
         File apiFile = null;
@@ -79,9 +82,14 @@ public class ModuleConfigurationDataProvider implements IDataProvider {
                     break;
             }
         }
-        this.apiKeys = apiFile == null ? null : XmlSerializer.fromFile(ApiKeys.class, apiFile);
-        this.conf = confFile == null ? null : XmlSerializer.fromFile(ModuleConf.class, confFile);
-        this.answersLayout = answerFile == null ? null : XmlSerializer.fromFile(AnswersLayout.class, answerFile);
+        this.moduleDataFolder = new File(moduleFolder, DATA_FOLDER_NAME);
+        this.apiKeys = apiFile == null ? null : XmlFileAccess.fromFile(ApiKeys.class, apiFile);
+        this.conf = confFile == null ? null : XmlFileAccess.fromFile(ModuleConf.class, confFile);
+        this.answersLayout = answerFile == null ? null : XmlFileAccess.fromFile(AnswersLayout.class, answerFile);
+    }
+    
+    public File getDataFolder() {
+        return this.moduleDataFolder;
     }
     
     public ApiKeys getApiKeys() {
