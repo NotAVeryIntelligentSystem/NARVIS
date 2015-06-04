@@ -10,22 +10,22 @@ package com.narvis.frontend;
  * @author Alban
  */
 public class MessageInOut {
-    private String inputAPI; // "ModuleAPIName"
+    private String inputAPIClass; // "ModuleAPIName"
     private String content; // "Message"
     private String answerTo; // "recepiant1;recepiant2" ex : "nakou;uwybbq"
     
-    public MessageInOut(String inputAPI, String content, String answerTo){
+    public MessageInOut(String inputAPIClass, String content, String answerTo){
         this.content = content;
-        this.inputAPI = inputAPI;
+        this.inputAPIClass = inputAPIClass;
         this.answerTo = answerTo;
     }
 
     public String getInputAPI() {
-        return inputAPI;
+        return inputAPIClass;
     }
 
     public void setInputAPI(String inputAPI) {
-        this.inputAPI = inputAPI;
+        this.inputAPIClass = inputAPI;
     }
 
     public String getContent() {

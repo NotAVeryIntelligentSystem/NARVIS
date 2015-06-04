@@ -1,0 +1,7 @@
+<Answers>
+	<Sentences>
+		<Sentence command="temperature">
+			<Value>The temperature is %s</Value>
+		</Sentence>
+	</Sentences>
+</Answers>

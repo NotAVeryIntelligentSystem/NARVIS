@@ -24,11 +24,8 @@
 package com.narvis.dataaccess.models.conf;
 
 import com.narvis.dataaccess.interfaces.IDataProvider;
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.Root;
+import java.util.*;
+import org.simpleframework.xml.*;
 
 /**
  *

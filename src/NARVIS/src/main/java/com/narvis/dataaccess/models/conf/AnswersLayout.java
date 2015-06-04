@@ -24,6 +24,7 @@
 package com.narvis.dataaccess.models.conf;
 
 import com.narvis.dataaccess.interfaces.IDataProvider;
+import java.util.Map;
 import org.simpleframework.xml.Root;
 
 /**
@@ -40,4 +41,6 @@ public class AnswersLayout implements IDataProvider {
     public String getData(String... keywords) {
         return null; //todo
     }
+
+
 }

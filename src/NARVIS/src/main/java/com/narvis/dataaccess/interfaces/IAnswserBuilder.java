@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 puma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,45 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.lang.word;
+package com.narvis.dataaccess.interfaces;
 
-import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
-import com.narvis.dataaccess.interfaces.IDataModelProvider;
-import java.io.IOException;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
- * @author Zack
+ * @author puma
  */
-public class DictionaryProvider implements IDataModelProvider<Dictionary> {
+public interface IAnswserBuilder {
     
-    private final Dictionary dictionary;
-    private final ModuleConfigurationDataProvider conf;
-
-    public DictionaryProvider(ModuleConfigurationDataProvider conf) throws ParserConfigurationException, SAXException, IOException, Exception{
-        this.conf = conf;
-        this.dictionary = XmlFileAccess.fromFile(Dictionary.class, this.getRoutesDataPath());
-    }
+    /**
+     * Read the XML answer file to retrieve the answer attached to the given command
+     * @param providerConf the provider 
+     * @param command the command 
+     * @return The Answer from the XML file 
+     */
+    String readAnswerForCommand(ModuleConfigurationDataProvider providerConf, String command);
     
-    private String getRoutesDataPath() {
-        return this.conf.getData("RoutesDataPath");
-    }
+    /**
+     * Retrieve all the params needed to fulfill the answer
+     * @param answerFromXml The answer returned by readAnswerForCommand method
+     * @return A list containing all the params
+     */
+    List<String> getListOfRequiredParams(String answerFromXml);
     
-    @Override
-    public Dictionary getModel(String... keywords) {
-        return this.dictionary;
-    }
-
-    @Override
-    public void persist() {
-        // NOPE NOPE NOPE
-    }
-
-    @Override
-    public String getData(String... keywords) {
-        return this.dictionary.toString();
-    }
+    /**
+     * Finally build the answer by replacing all the occurence of a param with its value from the map.
+     * This method is idiot it will find any occurence of the 
+     * @param paramsToValue the map which link each param with its value
+     * @param answerFromXml the answer from the XML file
+     * @return the final answer
+     */
+    String buildAnswer(Map<String, String> paramsToValue, String answerFromXml);
+    
 }

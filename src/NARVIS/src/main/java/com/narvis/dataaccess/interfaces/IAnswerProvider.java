@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 puma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,23 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.lang;
+package com.narvis.dataaccess.interfaces;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  *
- * @author uwy
+ * @author puma
  */
-/*
-@Root(name = "Language")
-public class Language {
-    @Element(name = "Name")
-    private String name;
-<<<<<<< HEAD
+public interface IAnswerProvider {
     
+    /**
+     * Build a map which link each param with its value
+     * @param listOfParams the list of param needed to fulfill the answer
+     * @return A Map containing the params and their values
+     */
+    Map<String, String> buildParamsToValueMap(List<String> listOfParams);
     
-=======
-
-    @ElementList()
->>>>>>> 7c3d03eb4cca7562e63a12ad178014bd6d023929
-    private List<String> ignoreWords; 
-}*/
+}
