@@ -21,9 +21,9 @@ import org.junit.Test;
  *
  * @author puma
  */
-public class WeatherTest {
+public class TestWeatherProvider {
     
-    public WeatherTest() {
+    public TestWeatherProvider() {
     }
 
     
@@ -66,7 +66,7 @@ public class WeatherTest {
         
         String result = weatherPortal.getDataDetails(details, "");
         
-        Pattern p = Pattern.compile("The temperature in (([A-Z]*)|([a-z]*))* is ([0-9]*\\.[0-9])°C and the cloud percentage is ([0-9]*\\.[0-9])%");
+        Pattern p = Pattern.compile("The temperature in (([A-Z]*)|([a-z]*))* is ([0-9]*\\.[0-9]*)°C and the cloud percentage is ([0-9]*\\.[0-9])%");
         
         Assert.assertTrue(result.matches(p.pattern()));
         
@@ -76,8 +76,7 @@ public class WeatherTest {
     @Test
     public void testGetDataWithTemperatureCommand() throws Exception {
         
-        
-        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../tests/weather"));
+        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../conf/modules/Weather/"));
         OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(conf);
         
         Map<String,String> details = new HashMap<>();
