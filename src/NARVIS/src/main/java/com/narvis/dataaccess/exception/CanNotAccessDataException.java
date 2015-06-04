@@ -21,23 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.interfaces;
-
-import com.narvis.dataaccess.exception.CanNotFindValueForParamException;
-import java.util.List;
-import java.util.Map;
+package com.narvis.dataaccess.exception;
 
 /**
  *
  * @author puma
  */
-public interface IAnswerProvider {
+public class CanNotAccessDataException extends ProviderException {
+
+    public CanNotAccessDataException(String providerName, String string) {
+        super(providerName, string);
+    }
+
+    public CanNotAccessDataException(Throwable thrwbl) {
+        super(thrwbl);
+    }
+
+    public CanNotAccessDataException(String providerName, String string, Throwable thrwbl) {
+        super(providerName, string, thrwbl);
+    }
     
-    /**
-     * Build a map which link each param with its value
-     * @param listOfParams the list of param needed to fulfill the answer
-     * @return A Map containing the params and their values
-     */
-    Map<String, String> buildParamsToValueMap(List<String> listOfParams) throws CanNotFindValueForParamException;
+    
     
 }

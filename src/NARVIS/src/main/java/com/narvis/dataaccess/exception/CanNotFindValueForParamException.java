@@ -21,24 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.conf.exception;
+package com.narvis.dataaccess.exception;
 
 /**
  * 
  * @author puma
  */
-public class CanNotFindValueForParamException extends Exception {
+public class CanNotFindValueForParamException extends ProviderException {
 
     public CanNotFindValueForParamException(Throwable thrwbl) {
         super(thrwbl);
     }
 
-    public CanNotFindValueForParamException(String string) {
-        super(string);
+    public CanNotFindValueForParamException(String providerName, String string) {
+        super(providerName, string);
     }
 
-    public CanNotFindValueForParamException(String string, Throwable thrwbl) {
-        super(string, thrwbl);
+    public CanNotFindValueForParamException(String providerName, String string, Throwable thrwbl) {
+        super(providerName, string, thrwbl);
     }
+
+    
+    
+    
     
 }

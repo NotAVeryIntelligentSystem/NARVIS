@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.test.models.dataaccess.answerbuilder;
+package com.narvis.test.dataaccess.models.answerbuilder;
 
 import com.narvis.dataaccess.impl.AnswerBuilder;
 import com.narvis.dataaccess.interfaces.IAnswserBuilder;
