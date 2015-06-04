@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 puma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,37 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.common.functions.serialization;
+package com.narvis.dataaccess.interfaces;
 
-import java.io.File;
-import java.io.OutputStream;
-import org.simpleframework.xml.core.*;
+import java.util.Map;
 
 /**
  *
- * @author uwy
+ * @author puma
  */
-public class XmlSerializer {
-    private static final Persister persister = new Persister(); // Make it only once since we need a single global settings
+public interface IDataProviderDetails extends IDataProvider{
     
     
-    public static <T> void toFile(T toSerialize, String file) throws Exception {
-        XmlSerializer.toFile(toSerialize, new File(file));
-    }
+    String getDataDetails(Map<String,String> detailsToValue, String... keywords);
     
-    public static <T> void toFile(T toSerialize, File file ) throws Exception {
-        persister.write(toSerialize, file);
-    }
-    
-    public static <T> void toStream(T toSerialize, OutputStream stream) throws Exception {
-        persister.write(toSerialize, stream);
-    }
-    
-    public static <T> T fromFile(Class<T> type, String filePath) throws Exception {
-        return XmlSerializer.fromFile(type, new File(filePath));
-    }
-    
-    public static <T> T fromFile(Class<T> type, File file) throws Exception {
-        return persister.read(type, file);
-    }
 }

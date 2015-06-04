@@ -50,10 +50,13 @@ public class ModuleConf implements IDataProvider {
         return this.moduleClassPath;
     }
     
-    public void setModuleClassPaht(String val) {
+    public void setModuleClassPath(String val) {
         this.moduleClassPath = val;
     }
     
+    public Map<String, String> getEntries() {
+        return this.entries;
+    }
 
     
     @Override
@@ -64,4 +67,5 @@ public class ModuleConf implements IDataProvider {
         return this.entries.get(keywords[0]);
     }
     //Todo
+
 }

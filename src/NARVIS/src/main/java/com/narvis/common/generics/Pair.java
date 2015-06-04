@@ -21,23 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.lang;
+package com.narvis.common.generics;
 
 /**
  *
  * @author uwy
+ * @param <T>
+ * @param <U>
  */
-/*
-@Root(name = "Language")
-public class Language {
-    @Element(name = "Name")
-    private String name;
-<<<<<<< HEAD
+public class Pair<T, U> {
+    public final T item1;
+    public final U item2;
     
-    
-=======
-
-    @ElementList()
->>>>>>> 7c3d03eb4cca7562e63a12ad178014bd6d023929
-    private List<String> ignoreWords; 
-}*/
+    public Pair(T item1, U item2) {
+        this.item1 = item1;
+        this.item2 = item2;
+    }
+}

@@ -5,7 +5,7 @@
  */
 package com.narvis.dataaccess.models.lang;
 
-import com.narvis.dataaccess.models.route.RoutesProvider;
+import com.narvis.dataaccess.impl.RoutesProvider;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;

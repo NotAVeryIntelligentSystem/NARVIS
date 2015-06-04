@@ -24,7 +24,7 @@
 package com.narvis.dataaccess.impl;
 
 import com.narvis.common.extensions.filefilters.*;
-import com.narvis.common.functions.serialization.XmlSerializer;
+import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.common.tools.reflection.Factory;
 import com.narvis.common.tools.reflection.FactoryException;
 import com.narvis.dataaccess.interfaces.IDataProvider;
@@ -40,9 +40,9 @@ import java.util.Map.*;
 public class ConfigurationDataProvider implements IDataProvider {
     public static final String GLOBAL_CONF_PATH = "../";
     public static final String CONF_FOLDER_NAME = "conf";
+
     public static final String CONF_FILE_NAME = "narvis.conf";
     public static final String MODULES_FOLDER_NAME = "modules";
-    
     public static final String NARVIS_CONF_KEYWORD = "NarvisConf";
 
     private final NarvisConf narvisConf;
@@ -52,16 +52,14 @@ public class ConfigurationDataProvider implements IDataProvider {
         this.modulesConfs = new HashMap<>();
         File globalFolder = new File(CONF_FOLDER_NAME);
         assert globalFolder.isDirectory() == true  : "Path for global folder isn't a folder !";
-        this.narvisConf = XmlSerializer.fromFile(NarvisConf.class, globalFolder.listFiles(new FolderNameFileFilter(CONF_FOLDER_NAME))[0].listFiles(new FileNameFileFilter(CONF_FILE_NAME))[0]);
+        this.narvisConf = XmlFileAccess.fromFile(NarvisConf.class, globalFolder.listFiles(new FolderNameFileFilter(CONF_FOLDER_NAME))[0].listFiles(new FileNameFileFilter(CONF_FILE_NAME))[0]);
         for(File moduleFolder : globalFolder.listFiles(new FolderNameFileFilter(MODULES_FOLDER_NAME))) {
             if(moduleFolder.isDirectory()) {
                 this.modulesConfs.put(moduleFolder.getName(), new ModuleConfigurationDataProvider(moduleFolder));
             }
         }
     }
-    
 
-    
     // Returns the MODULES not the configuration
     public Map<String, IDataProvider> getDataProviders() throws FactoryException {
         Map<String, IDataProvider> retVal = new HashMap<>();
@@ -82,5 +80,6 @@ public class ConfigurationDataProvider implements IDataProvider {
         }
         return this.modulesConfs.get(keywords[0]).getData(nextKeywords);
     }
-    
+
+ 
 }
