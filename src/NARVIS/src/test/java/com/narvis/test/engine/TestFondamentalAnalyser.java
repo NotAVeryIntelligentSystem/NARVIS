@@ -157,6 +157,13 @@ public class TestFondamentalAnalyser {
         newParsedSentence.add("someone");
         newParsedSentence.add("weather");
         parsedSentences.add(newParsedSentence);
+        
+        List<String> newParsedSentence2 = new LinkedList<>();
+        newParsedSentence2.add("bring");
+        newParsedSentence2.add("someone");
+        newParsedSentence2.add("weather");
+        List<String> expectedDetails = new LinkedList<>();
+        expectedDetails.add("someone");
         /**/
         
         /* Expected Result */
@@ -174,11 +181,11 @@ public class TestFondamentalAnalyser {
             /* Ajoute la nouvelle route */
             myFondamentalAnalyser.createSimilarityBetween(parsedSentences);
             
-            myAction = myFondamentalAnalyser.findAction(newParsedSentence);
+            myAction = myFondamentalAnalyser.findAction(newParsedSentence2);
             assertNotNull(myAction); // La route doit être trouvée
             
             assertEquals(myAction.getProviderName(), expectedProviderName);
-            assertTrue(myAction.getDetails().isEmpty());
+            assertArrayEquals(myAction.getDetails().toArray(), expectedDetails.toArray());
             assertTrue(myAction.getPrecisions().isEmpty());
             
         } catch (SAXException ex) {
