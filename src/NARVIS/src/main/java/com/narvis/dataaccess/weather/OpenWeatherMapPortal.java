@@ -48,7 +48,9 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
 
     private final String DEFAULT_ANSWER = "weather";
     private final String ERROR_ANSWER = "error";
+    private final String LOCATION_STRING = "location";
 
+    private String _city;
     private final String KEY_TAG = "key";
 
     //tests purpose only
@@ -102,6 +104,15 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
         return Float.toString(cloudPercentage);
 
     }
+    
+    @Command(CommandName = "city") 
+    public String getCity() {
+        
+        return _city;
+        
+    }
+    
+
 
     /**
      * Call the method wich provide the answer for the given method
@@ -151,35 +162,57 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
      */
     @Override
     public String getDataDetails(Map<String, String> detailsToValue, String... keywords) throws NoValueException, ProviderException {
-        //Problem we quit
-        if (keywords.length < 1 || !detailsToValue.containsKey("city") || this._confProvider == null || this._confProvider.getAnswersLayout() == null) {
+       
+         
+        //Problem we give weather in nimesquit
+        if ( !detailsToValue.containsKey(LOCATION_STRING) ) {
+            
+            _city = lookForValueLocation(detailsToValue);
+            
+            if( _city == null )
+                throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "Not enough keywords", this._confProvider.getErrorsLayout().getData("engine"));
+        }else {
+            
+            _city = detailsToValue.get(this.LOCATION_STRING);
+            
+        }
+        
+        if( this._confProvider == null || this._confProvider.getAnswersLayout() == null) {
             
             throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "Not enough keywords", this._confProvider.getErrorsLayout().getData("engine"));
         }
-
+        
+        
+        
         String key = this.weatherApiKeys.getData(KEY_TAG);
 
         if (key == null) {
             return null;
         }
 
+        String wantedAnswer = "";
         //If the user asked for nothing special, we pick the default answer
-        if (keywords[0].isEmpty()) {
-            keywords[0] = DEFAULT_ANSWER;
+        if (keywords.length == 0) {
+            
+            wantedAnswer = DEFAULT_ANSWER;
+        }else if( keywords[0] != null ) {
+            
+            wantedAnswer = keywords[0];
+            
         }
 
         this._tempDetails = detailsToValue;
 
         OpenWeatherMap owm = new OpenWeatherMap(key);
         try {
-            this._currentWeather = owm.currentWeatherByCityName(this._tempDetails.get("city"));
+            this._currentWeather = owm.currentWeatherByCityName(_city);
         } catch (IOException | JSONException ex) {
             NarvisLogger.logException(ex);
             throw new ProviderException(OpenWeatherMapPortal.class, "Woops, this is (really really) bad.", this._confProvider.getData("general"));
         }
 
         IAnswerBuilder answerBuilder = new AnswerBuilder();
-        String answerFromXml = answerBuilder.readAnswerForCommand(this._confProvider.getAnswersLayout(), keywords[0]);
+        String answerFromXml = answerBuilder.readAnswerForCommand(this._confProvider.getAnswersLayout(), wantedAnswer);
 
         //Can not find the answer from the xml something went wrong we quit
         if (answerFromXml == null) {
@@ -227,4 +260,19 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
         throw new UnsupportedOperationException("Not supported");
     }
 
+    
+    private String lookForValueLocation( Map<String,String> details ) {
+        
+        for( Map.Entry<String, String> entry : details.entrySet() ) {
+
+            if( entry.getValue().equals(LOCATION_STRING) ) {
+                return entry.getKey();
+            }
+        }
+        
+        return null;
+        
+        
+    }
+    
 }

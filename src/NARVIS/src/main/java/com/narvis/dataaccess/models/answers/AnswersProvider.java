@@ -64,7 +64,7 @@ public class AnswersProvider implements IDataProviderDetails, IAnswerProvider {
     @Override
     public String getDataDetails(Map<String,String> details, String... keywords) throws IllegalKeywordException, ProviderException{
     
-        if( keywords.length < 2 || keywords[0] == null && keywords[1] == null ) {
+        if( keywords.length < 1 || keywords[0] == null ) {
             throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "Not enough keywords", this._confProvider.getErrorsLayout().getData("engine"));
         }
         
