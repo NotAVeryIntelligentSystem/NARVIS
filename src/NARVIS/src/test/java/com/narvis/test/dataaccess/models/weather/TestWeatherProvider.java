@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.narvis.test.models.dataaccess.weather;
+package com.narvis.test.dataaccess.models.weather;
 
 
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
@@ -43,7 +43,7 @@ public class TestWeatherProvider {
     public void testGetDataWithShittyData() throws Exception {
         
     
-        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../conf/modules/Weather/"));
+        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../tests/weather"));
         OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(conf);
         
         Map<String,String> details = new HashMap<>();
@@ -58,7 +58,7 @@ public class TestWeatherProvider {
     @Test 
     public void testGetDataWithDefaultCommand() throws Exception {
         
-        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../conf/modules/Weather/"));
+        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../tests/weather"));
         OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(conf);
         
         Map<String,String> details = new HashMap<>();
@@ -74,22 +74,18 @@ public class TestWeatherProvider {
     
     
     @Test
-    public void testGetDataWithTemperatureCommand() throws Exception {
+    public void testGetDataWithShittyCommand() throws Exception {
         
-        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../conf/modules/Weather/"));
+        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../tests/weather"));
         OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(conf);
         
         Map<String,String> details = new HashMap<>();
         details.put("city", "nimes");
         
-        String result = weatherPortal.getDataDetails(details, "temperature");
+        String result = weatherPortal.getDataDetails(details, "gfdghdfhg");
         
-        Pattern p = Pattern.compile("The temperature is ([0-9]*\\.[0-9])°C");
         
-        Assert.assertTrue(result.matches(p.pattern()));
+        Assert.assertEquals("Sorry guy I can't help you", result);
     }
-    
-    
-    
 
 }

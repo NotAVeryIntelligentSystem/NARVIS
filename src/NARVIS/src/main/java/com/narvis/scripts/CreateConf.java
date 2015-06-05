@@ -33,12 +33,12 @@ import com.narvis.dataaccess.models.lang.word.Dictionary;
 import com.narvis.dataaccess.models.lang.word.Word;
 import com.narvis.dataaccess.models.route.*;
 import com.narvis.dataaccess.weather.*;
+import com.narvis.frontend.console.AccessConsole;
 import com.narvis.frontend.twitter.AccessTwitter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -50,15 +50,17 @@ public class CreateConf {
         
         try {
             System.out.println("Starting conf creation");
-            File baseFolder = createFolder("C:\\Users\\Zack\\Documents\\NetBeansProjects\\NARVIS\\release");
+            File baseFolder = createFolder("../../release");
             File confFolder = createFolder(baseFolder, ConfigurationDataProvider.CONF_FOLDER_NAME);
             XmlFileAccess.toFile(createNarvisConf(), new File(confFolder, ConfigurationDataProvider.CONF_FILE_NAME));
             File modulesFolder = createFolder(baseFolder, ConfigurationDataProvider.MODULES_FOLDER_NAME);
             //createWeatherModuleFolder(modulesFolder);
             //createRoutesModuleFolder(modulesFolder);
-            createDictionaryModuleFolder(modulesFolder);
             File frontendsFolder = createFolder(baseFolder, ConfigurationDataProvider.FRONTENDS_FOLDER_NAME);
             //createTwitterFrontEndFolder(frontendsFolder);
+            createConsoleFrontEndFolder(frontendsFolder);
+            createDictionaryModuleFolder(modulesFolder);
+            //createTwitterFrontEndFolder(frontendsFolder); 
             System.out.println("Finished conf creation");
         } 
         catch (Exception ex) {
@@ -76,6 +78,15 @@ public class CreateConf {
                 new Pair("tokenSecret", "askNakou"), 
                 new Pair("consumerKey", "askNakou"), 
                 new Pair("consumerSecret", "askNakou")), new File(confModuleFolder, FrontEndConfigurationDataProvider.API_KEY_FILE_NAME));
+
+//etData("token"), this.conf.getApiKeys().getData("tokenSecret"), this.conf.getApiKeys().getData("consumerKey"), this.conf.getApiKeys().getData("consumerSecret")
+    }
+    
+    public static void createConsoleFrontEndFolder(File frontendsFolder) throws IOException, XmlFileAccessException {
+        File consoleFolder = createFolder(frontendsFolder, "Console");
+        File confModuleFolder = createFolder(consoleFolder, FrontEndConfigurationDataProvider.CONF_FOLDER_NAME);
+        XmlFileAccess.toFile(createModuleConf(AccessConsole.class.getCanonicalName()), new File(confModuleFolder, FrontEndConfigurationDataProvider.MODULE_CONF_FILE_NAME));
+        XmlFileAccess.toFile(createApiKeys("Console"), new File(confModuleFolder, FrontEndConfigurationDataProvider.API_KEY_FILE_NAME));
 
 //etData("token"), this.conf.getApiKeys().getData("tokenSecret"), this.conf.getApiKeys().getData("consumerKey"), this.conf.getApiKeys().getData("consumerSecret")
     }

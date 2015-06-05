@@ -5,6 +5,7 @@
  */
 package com.narvis.dataaccess.weather;
 
+import com.narvis.dataaccess.exception.CanNotAccessDataException;
 import com.narvis.dataaccess.impl.AnswerBuilder;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.dataaccess.interfaces.IAnswerProvider;
@@ -12,7 +13,8 @@ import com.narvis.dataaccess.interfaces.IAnswserBuilder;
 import com.narvis.dataaccess.interfaces.IDataProviderDetails;
 import com.narvis.dataaccess.models.conf.ApiKeys;
 import com.narvis.dataaccess.weather.annotations.Command;
-import com.narvis.dataaccess.conf.exception.CanNotFindValueForParamException;
+import com.narvis.dataaccess.exception.CanNotFindValueForParamException;
+import com.narvis.dataaccess.exception.ProviderException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -65,13 +67,14 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
     /**
      * Return the temperature in the city in celsius 
      * @return 
+     * @throws com.narvis.dataaccess.exception.CanNotAccessDataException in case the data is not accessible
      */
     @Command(CommandName = "temperature")
-    public String getTemperatureInCelsius() {
+    public String getTemperatureInCelsius() throws CanNotAccessDataException {
      
         //Early out
         if( this._currentWeather == null || !this._currentWeather.hasMainInstance()  ||  !this._currentWeather.getMainInstance().hasMaxTemperature() )
-            throw new NoSuchElementException("Can not find temperature");
+            throw new CanNotAccessDataException("Weather","Can not find temperature");
         
         float farenheitTemperature = this._currentWeather.getMainInstance().getTemperature();
         float celsiusTemp = (farenheitTemperature - 32.0f)* 5.0f/9.0f;
@@ -81,13 +84,14 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
     /**
      * Return the percentage of clouds 
      * @return 
+     * @throws com.narvis.dataaccess.exception.CanNotAccessDataException in case the data is not accessible
      */
     @Command(CommandName = "cloud")
-    public String GetPercentageOfCloud() {
+    public String GetPercentageOfCloud() throws CanNotAccessDataException {
         
         //Early out
         if( this._currentWeather == null || !this._currentWeather.hasCloudsInstance() || !this._currentWeather.getCloudsInstance().hasPercentageOfClouds() )
-            throw new NoSuchElementException("Can not find clouds percentage");
+            throw new CanNotAccessDataException("Weather", "Can not find clouds percentage");
         
         float cloudPercentage = this._currentWeather.getCloudsInstance().getPercentageOfClouds();
         
@@ -167,6 +171,13 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
             
             IAnswserBuilder answerBuilder = new AnswerBuilder();
             String answerFromXml = answerBuilder.readAnswerForCommand(this._confProvider, keywords[0] );
+            
+            //Can not find the answer from the xml something went wrong we quit
+            if( answerFromXml == null ) {
+                throw new CanNotFindValueForParamException("Weather", "Command not supported" );
+            }
+            
+            
             List<String> listOfParams = answerBuilder.getListOfRequiredParams(answerFromXml);
             Map<String,String> paramsToValues = buildParamsToValueMap(listOfParams);
             
@@ -175,7 +186,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
             //return buildResponse(city,celsiusTemperature, percentageOfClouds);
        
             
-        } catch ( CanNotFindValueForParamException | IOException | JSONException | NoSuchElementException  ex ) {
+        } catch ( ProviderException | IOException | JSONException | NoSuchElementException  ex ) {
             
             //Because it failed we return the default error message
             //The builder don't throw any exception
@@ -203,7 +214,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
                 String value = CallMethodByCommand(param);
                 if( value == null ) {
                     //We don't have the answer whatever the reason we use the default answer
-                    throw new CanNotFindValueForParamException(param);
+                    throw new CanNotFindValueForParamException( "Weather" , param);
                     
                 } else {
                     
