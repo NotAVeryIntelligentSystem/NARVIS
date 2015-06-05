@@ -127,7 +127,7 @@ public class TestRoutesProvider {
             assertEquals(myAction.getProviderName(), "weather");
             
         } catch (Exception ex) {
-            NarvisLogger.getInstance().logException(ex);
+            NarvisLogger.logException(ex);
             throw ex;
         }
     }

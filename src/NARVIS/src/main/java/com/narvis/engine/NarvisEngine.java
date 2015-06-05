@@ -13,7 +13,10 @@ import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.exception.ProviderException;
 import com.narvis.dataaccess.interfaces.*;
+import com.narvis.dataaccess.models.answers.AnswersProvider;
 import com.narvis.frontend.MessageInOut;
+import com.narvis.frontend.interfaces.IOutput;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.RunnableFuture;
@@ -26,13 +29,14 @@ import java.util.logging.Logger;
  */
 public class NarvisEngine {
 
-    private static String IOname = "console"; // TODO : Change by load from conf files
+    private static String IOname = "Console"; // TODO : Change by load from conf files
     private static NarvisEngine narvis;
 
     private Parser parser;
     private FondamentalAnalyser fondamental;
     private DetailsAnalyser detailAnalyser;
-    private IMetaDataProvider metaDataProvider;
+    private IMetaDataProvider metaDataProviderAction;
+    private IMetaDataProvider metaDataProviderAnswer;
     private final Executer executer;
 
     private NarvisEngine() throws Exception {
@@ -40,7 +44,8 @@ public class NarvisEngine {
         parser = new Parser();
         fondamental = new FondamentalAnalyser();
         detailAnalyser = new DetailsAnalyser();
-        metaDataProvider = DataAccessFactory.getMetaDataProvider();
+        metaDataProviderAction = DataAccessFactory.getMetaDataProvider();
+        metaDataProviderAnswer = DataAccessFactory.getMetaDataProvider();
     }
 
     public static NarvisEngine getInstance() throws Exception {
@@ -54,11 +59,11 @@ public class NarvisEngine {
 
     public void start() {
         this.executer.start();
-        this.metaDataProvider.getFrontEnd("Console").start();
+        this.metaDataProviderAction.getFrontEnd(IOname).start();
     }
 
     public void close() throws Exception {
-        this.metaDataProvider.getFrontEnd("Console").close();
+        this.metaDataProviderAction.getFrontEnd(IOname).close();
         this.executer.close();
     }
 
@@ -68,7 +73,7 @@ public class NarvisEngine {
             @Override
             public void run() {
                 try {
-                    brainProcess(lastMessage.getContent());
+                    brainProcess(lastMessage);
                 } catch (IllegalKeywordException ex) {
                     NarvisLogger.logException(ex);
                     onError();
@@ -87,18 +92,27 @@ public class NarvisEngine {
         // todo
     }
 
-    private void brainProcess(String message) throws NoDataException, ProviderException{
-        List<String> parsedSentence = parser.parse(message);
+    private void brainProcess(MessageInOut message) throws NoDataException, ProviderException{
+        List<String> parsedSentence = parser.parse(message.getContent());
         Action action = fondamental.findAction(parsedSentence);
+        
         Map<String, String> detailsTypes = detailAnalyser.getDetailsTypes(action.getDetails());
-        IDataProvider provider = this.metaDataProvider.getDataProvider(action.getProviderName());
+        IDataProvider provider = this.metaDataProviderAction.getDataProvider(action.getProviderName());
+        String protoAnswer = "";
+        
+        String[] askForArray = (String[]) action.getPrecisions().toArray(new String[action.getPrecisions().size()]);
         if (provider instanceof IDataProviderDetails) {
-            String protoAnswer = ((IDataProviderDetails) provider).getDataDetails(detailsTypes, (String[]) action.getPrecisions().toArray());
+            protoAnswer = ((IDataProviderDetails) provider).getDataDetails(detailsTypes, askForArray);
         } else {
-            String protoAnswer = ((IDataProvider) provider).getData((String[]) action.getPrecisions().toArray());
+            protoAnswer = ((IDataProvider) provider).getData(askForArray);
         }
-        // AnswerBuilder;
-
+        Map<String,String> answerParams = new HashMap<>();
+        answerParams.put("sentence", protoAnswer);
+        IDataProvider answerBuilder = this.metaDataProviderAnswer.getDataProvider("Answers");
+        String[] bullshit = new String[1];
+        bullshit[0] = "polite3";
+        String finalAnswer = ((IDataProviderDetails) answerBuilder).getDataDetails(answerParams, bullshit);
+        this.metaDataProviderAction.getFrontEnd(IOname).getOutput().setOuput(new MessageInOut(message.getInputAPI(),finalAnswer,message.getAnswerTo()));
     }
 
 }

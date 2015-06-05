@@ -21,38 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.conf;
-
-import com.narvis.dataaccess.interfaces.IConfDataProvider;
-import com.narvis.dataaccess.interfaces.IDataProvider;
-import static com.narvis.dataaccess.models.conf.ModuleConf.MODULE_CLASS_PATH_KEYWORD;
-import java.util.*;
-import org.simpleframework.xml.*;
+package com.narvis.dataaccess.interfaces;
 
 /**
  *
  * @author uwy
  */
-@Root(name = "NarvisConf")
-public class NarvisConf implements IConfDataProvider {
-
-    @ElementMap(entry = "entry", key = "key", attribute = true, inline = true, required = false)
-    @SuppressWarnings("FieldMayBeFinal")
-    private Map<String, String> entries;
-
-    public NarvisConf() {
-        this.entries = new HashMap<>();
-    }
-
-    @Override
-    public String getData(String... keywords) {
-        return this.entries.get(keywords[0]);
-    }
-    // Nothing here yet
-
-    @Override
-    public void setData(String... keywords) {
-        this.entries.replace(keywords[0], keywords[1]);
-    }
-
+public interface IConfDataProvider extends IDataProvider {
+    public void setData(String... keywords);
 }

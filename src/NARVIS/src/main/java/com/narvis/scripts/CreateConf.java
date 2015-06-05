@@ -24,15 +24,14 @@
 package com.narvis.scripts;
 
 import com.narvis.common.debug.NarvisLogger;
-import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.common.generics.*;
-import com.narvis.common.tools.serialization.XmlFileAccessException;
+import com.narvis.common.tools.serialization.*;
 import com.narvis.dataaccess.impl.*;
 import com.narvis.dataaccess.models.conf.*;
-import com.narvis.dataaccess.models.lang.word.Dictionary;
-import com.narvis.dataaccess.models.lang.word.Word;
+import com.narvis.dataaccess.models.lang.word.*;
 import com.narvis.dataaccess.models.layouts.ModuleErrors;
 import com.narvis.dataaccess.models.route.*;
+import com.narvis.frontend.twitter.AccessTwitter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -49,20 +48,20 @@ public class CreateConf {
             System.out.println("Starting conf creation");
             File baseFolder = createFolder("../../release");
             File confFolder = createFolder(baseFolder, ConfigurationDataProvider.CONF_FOLDER_NAME);
-            XmlFileAccess.toFile(createNarvisConf(), new File(confFolder, ConfigurationDataProvider.CONF_FILE_NAME));
+            //XmlFileAccess.toFile(createNarvisConf(), new File(confFolder, ConfigurationDataProvider.CONF_FILE_NAME));
             // Modules
             File modulesFolder = createFolder(baseFolder, ConfigurationDataProvider.MODULES_FOLDER_NAME);
-            createWeatherModuleFolder(modulesFolder);
-            createRoutesModuleFolder(modulesFolder);
-            createDictionaryModuleFolder(modulesFolder);
+            //createWeatherModuleFolder(modulesFolder);
+            //createRoutesModuleFolder(modulesFolder);
+            //createDictionaryModuleFolder(modulesFolder);
 
             // Front ends
             File frontendsFolder = createFolder(baseFolder, ConfigurationDataProvider.FRONTENDS_FOLDER_NAME);
             createTwitterFrontEndFolder(frontendsFolder);
-            createConsoleFrontEndFolder(frontendsFolder);
+            //createConsoleFrontEndFolder(frontendsFolder);
             
             System.out.println("Finished conf creation");
-        } catch (Exception ex) {
+        } catch (IOException | XmlFileAccessException ex) {
             NarvisLogger.logException(ex);
         }
 
@@ -72,13 +71,14 @@ public class CreateConf {
         File twitterFolder = createFolder(frontendsFolder, "Twitter");
         File confModuleFolder = createFolder(twitterFolder, FrontEndConfigurationDataProvider.CONF_FOLDER_NAME);
         File layoutFolder = createFolder(twitterFolder, FrontEndConfigurationDataProvider.LAYOUTS_FOLDER_NAME);
-        XmlFileAccess.toFile(createErrorsLayout(
+        
+        /*XmlFileAccess.toFile(createErrorsLayout(
                 new Pair("general", "Hum... I'm sure you don't really need to know that"),
                 new Pair("engine", ""),
                 new Pair("data", ""),
                 new Pair("noanswers", "I don't know what you're talking about...")
-        ), new File(layoutFolder, ModuleConfigurationDataProvider.ERRORS_FILE_NAME));
-        //XmlFileAccess.toFile(createModuleConf(AccessTwitter.class.getCanonicalName()), new File(confModuleFolder, FrontEndConfigurationDataProvider.MODULE_CONF_FILE_NAME));
+        ), new File(layoutFolder, ModuleConfigurationDataProvider.ERRORS_FILE_NAME));*/
+        XmlFileAccess.toFile(createModuleConf(AccessTwitter.class.getCanonicalName(), new Pair("LastTwitterMessageId", "0")), new File(confModuleFolder, FrontEndConfigurationDataProvider.MODULE_CONF_FILE_NAME));
         /*XmlFileAccess.toFile(createApiKeys("Twitter",
                 new Pair("token", "askNakou"),
                 new Pair("tokenSecret", "askNakou"),

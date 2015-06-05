@@ -29,6 +29,7 @@ import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.common.tools.serialization.XmlFileAccessException;
 import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoDataException;
+import com.narvis.dataaccess.exception.PersistException;
 import com.narvis.dataaccess.exception.ProviderException;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.models.conf.*;
@@ -57,14 +58,14 @@ public final class ModuleConfigurationDataProvider implements IDataProvider {
     public static final String ANSWERS_KEYWORD = "Answer";
     public static final String ERRORS_KEYWORD = "Error";
 
-
+    private final File moduleFolder;
     private final ApiKeys apiKeys;
     private final ModuleConf conf;
     private final ModuleAnswers answersLayout;
     private final ModuleErrors errorsLayout;
-    private final File moduleDataFolder;
 
     public ModuleConfigurationDataProvider(File moduleFolder) throws ProviderException {
+        this.moduleFolder = moduleFolder;
         File apiFile = null;
         File confFile = null;
         File answerFile = null;
@@ -101,7 +102,6 @@ public final class ModuleConfigurationDataProvider implements IDataProvider {
                     break;
             }
         }
-        this.moduleDataFolder = new File(moduleFolder, DATA_FOLDER_NAME);
         try {
             this.apiKeys = apiFile == null ? null : XmlFileAccess.fromFile(ApiKeys.class, apiFile);
             this.conf = confFile == null ? null : XmlFileAccess.fromFile(ModuleConf.class, confFile);
@@ -115,7 +115,7 @@ public final class ModuleConfigurationDataProvider implements IDataProvider {
     }
 
     public File getDataFolder() {
-        return this.moduleDataFolder;
+        return new File(this.moduleFolder, DATA_FOLDER_NAME);
     }
 
     public ApiKeys getApiKeys() {
@@ -132,6 +132,18 @@ public final class ModuleConfigurationDataProvider implements IDataProvider {
     
     public ModuleErrors getErrorsLayout() {
         return this.errorsLayout;
+    }
+    
+    public void persist() throws PersistException {
+        try {
+            XmlFileAccess.toFile(this.apiKeys, new File(new File(this.moduleFolder, CONF_FOLDER_NAME), API_KEY_FILE_NAME));
+            XmlFileAccess.toFile(this.conf, new File(new File(this.moduleFolder, CONF_FOLDER_NAME), MODULE_CONF_FILE_NAME));
+            XmlFileAccess.toFile(this.answersLayout, new File(new File(this.moduleFolder, LAYOUTS_FOLDER_NAME), ANSWERS_FILE_NAME));
+            XmlFileAccess.toFile(this.errorsLayout, new File(new File(this.moduleFolder, LAYOUTS_FOLDER_NAME), ERRORS_FILE_NAME));
+        } catch (XmlFileAccessException ex) {
+            NarvisLogger.logException(ex);
+            throw new PersistException(ModuleConfigurationDataProvider.class, "Could not persist conf files", ex, "general");
+        }
     }
 
     @Override
