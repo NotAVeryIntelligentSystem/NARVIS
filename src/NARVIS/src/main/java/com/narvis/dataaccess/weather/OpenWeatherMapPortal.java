@@ -150,7 +150,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
         try {
             
             //Problem we quit
-            if( keywords.length < 1 || !detailsToValue.containsKey("city") || this._confProvider == null )
+            if( keywords.length < 1 || !detailsToValue.containsKey("city") || this._confProvider == null || this._confProvider.getAnswersLayout() == null )
                 return null;
             
             String key = this.weatherApiKeys.getData(KEY_TAG);
@@ -170,7 +170,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
             this._currentWeather = owm.currentWeatherByCityName(this._tempDetails.get("city"));
             
             IAnswserBuilder answerBuilder = new AnswerBuilder();
-            String answerFromXml = answerBuilder.readAnswerForCommand(this._confProvider, keywords[0] );
+            String answerFromXml = answerBuilder.readAnswerForCommand(this._confProvider.getAnswersLayout(), keywords[0] );
             
             //Can not find the answer from the xml something went wrong we quit
             if( answerFromXml == null ) {
@@ -191,7 +191,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
             //Because it failed we return the default error message
             //The builder don't throw any exception
             AnswerBuilder builder = new AnswerBuilder();
-            return builder.readAnswerForCommand(_confProvider, ERROR_ANSWER);    
+            return builder.readAnswerForCommand(_confProvider.getAnswersLayout(), ERROR_ANSWER);    
             
         } 
 
