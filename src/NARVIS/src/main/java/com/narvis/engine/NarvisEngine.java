@@ -87,8 +87,8 @@ public class NarvisEngine {
         // todo
     }
 
-    private void brainProcess(String message) throws NoDataException, IllegalKeywordException, ProviderException {
-        List<String> parsedSentence = parser.Parse(message);
+    private void brainProcess(String message) throws NoDataException, ProviderException{
+        List<String> parsedSentence = parser.parse(message);
         Action action = fondamental.findAction(parsedSentence);
         Map<String, String> detailsTypes = detailAnalyser.getDetailsTypes(action.getDetails());
         IDataProvider provider = this.metaDataProvider.getDataProvider(action.getProviderName());

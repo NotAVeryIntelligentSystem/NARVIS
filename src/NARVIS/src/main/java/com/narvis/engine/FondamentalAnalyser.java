@@ -104,17 +104,27 @@ public class FondamentalAnalyser {
         List<WordNode> rootWords = route.getWords();
 
         /*
-         Brows nodes of the first level of the tree before calling the recurcive
-         function (searchPath() ).
-         We have to do this because the root (RouteNode) hasn't the same type
-         as the param expected by the recurcive function, that is a WordNode.
-         */
-        for (WordNode word : rootWords) {
+        Brows nodes of the first level of the tree before calling the recurcive
+        function (searchPath() ).
+        We have to do this because the root (RouteNode) hasn't the same type
+        as the param expected by the recurcive function, that is a WordNode.
+        */
+        WordNode jockerWordNode = null;
+        
+        for(WordNode word : rootWords)
+        {
             /* Get the first word of the sentence */
             final String currentSentenceWord = details.get(0);
-
-            /* If the word is empty OR equals the current word */
-            if (word.getValue() == null || word.getValue().isEmpty() || word.getValue().equals(currentSentenceWord)) {
+            
+            /* If the word is empty, it's a "joker" we gonna use at the end */
+            if(word.getValue() == null || word.getValue().isEmpty())
+            {
+                jockerWordNode = word;
+            }
+            
+            /* If the word is equals the current word */
+            if(word.getValue() != null && word.getValue().equals(currentSentenceWord))
+            {
                 /* Search an action that match the sentence */
                 action = searchPath(word, 1);
 
@@ -128,6 +138,12 @@ public class FondamentalAnalyser {
                     break;
                 }
             }
+        }
+        
+        /* If we didn't find any action and we have a joker, we try to find an action with it */
+        if(jockerWordNode != null && action == null)
+        {
+            action = searchPath(jockerWordNode, 1);
         }
 
         /* If no action is found */
@@ -268,17 +284,27 @@ public class FondamentalAnalyser {
         /* Si il reste des mots à analyser dans la phrase */
         if (iWord < details.size()) {
             final String currentSentenceWord = details.get(iWord);
+            
+            WordNode jockerWordNode = null;
             for (WordNode currentWordNode : wordNodeChildren) {
-                if (currentWordNode.getValue() == null || currentWordNode.getValue().isEmpty()) {
-                    action = searchPath(currentWordNode, iWord + 1);
-                    break;
-
-                } else if (currentWordNode.getValue().equals(currentSentenceWord)) {
+                /* If the word is empty, it's a "joker" we gonna use at the end */
+                if(currentWordNode.getValue() == null || currentWordNode.getValue().isEmpty())
+                {
+                    jockerWordNode = currentWordNode;
+                }
+            
+                if(currentWordNode.getValue() != null && currentWordNode.getValue().equals(currentSentenceWord)){
                     details.remove(iWord);
                     action = searchPath(currentWordNode, iWord);
                     break;
 
                 }
+            }
+            
+            /* If we didn't find any action and we have a joker, we try to find an action with it */
+            if(jockerWordNode != null && action == null)
+            {
+                action = searchPath(jockerWordNode, iWord+1);
             }
         }
 

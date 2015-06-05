@@ -26,7 +26,6 @@ package com.narvis.dataaccess.models.lang.word;
 import com.narvis.common.debug.NarvisLogger;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -38,6 +37,7 @@ import org.simpleframework.xml.Root;
 public class Dictionary {
 
     @ElementList(name = "Words", required = false)
+    @SuppressWarnings("FieldMayBeFinal")
     private List<Word> words;
 
     public Dictionary() {
@@ -52,10 +52,10 @@ public class Dictionary {
         Word word = null;
         for (Word w : this.words) {
             if (w.getValue().equalsIgnoreCase(value)) {
-                word = w;
                 if (word != null) {
-                    NarvisLogger.getInstance().log(Level.WARNING, "Word duplication : {0}", w.getValue());
+                    NarvisLogger.logInfo("Word duplication : " + w.getValue());
                 }
+                word = w;
             }
         }
 
@@ -65,7 +65,7 @@ public class Dictionary {
     public List<Word> getWordsByInformationType(String informationType) {
         List<Word> returnWords;
         returnWords = new LinkedList<>();
-        informationType.toLowerCase();
+        informationType = informationType.toLowerCase();
 
         for (Word w : this.words) {
             if (w.getInformationTypes().contains(informationType)) {
