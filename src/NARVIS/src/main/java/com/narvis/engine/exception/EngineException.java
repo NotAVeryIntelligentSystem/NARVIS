@@ -27,22 +27,34 @@ package com.narvis.engine.exception;
  *
  * @author puma
  */
-public class AmbigousException extends EngineException {
+public class EngineException extends Exception {
+    private final String narvisErrorMessage;
 
-    public AmbigousException(String msg, String narvisErrorMessage) {
-        super(msg, narvisErrorMessage);
+    public String getNarvisErrorMessage() {
+        return narvisErrorMessage;
+    }
+    
+    public EngineException(String msg, String narvisErrorMessage) {
+        super(msg);
+        this.narvisErrorMessage = narvisErrorMessage;
     }
 
-    public AmbigousException(Throwable thrwbl, String narvisErrorMessage) {
-        super(thrwbl, narvisErrorMessage);
+    public EngineException(Class<?> providerName, String msg, String narvisErrorMessage) {
+        super("Engine : " + providerName.getCanonicalName() + " " + msg);
+        this.narvisErrorMessage = narvisErrorMessage;
+
     }
 
-    public AmbigousException(Class<?> providerName, String msg, String narvisErrorMessage) {
-        super(providerName, msg, narvisErrorMessage);
+    public EngineException(Throwable thrwbl, String narvisErrorMessage) {
+        super(thrwbl);
+        this.narvisErrorMessage = narvisErrorMessage;
+
     }
 
-    public AmbigousException(Class<?> providerName, String string, Throwable thrwbl, String narvisErrorMessage) {
-        super(providerName, string, thrwbl, narvisErrorMessage);
+    public EngineException(Class<?> providerName, String string, Throwable thrwbl, String narvisErrorMessage) {
+        super("Engine : " + providerName.getCanonicalName() + " " + string, thrwbl);
+        this.narvisErrorMessage = narvisErrorMessage;
+
     }
 
 }

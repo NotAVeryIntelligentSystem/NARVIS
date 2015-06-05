@@ -29,7 +29,7 @@ import com.narvis.dataaccess.exception.*;
  *
  * @author puma
  */
-public class NoActionException extends ProviderException {
+public class NoActionException extends EngineException {
 
     public NoActionException(String msg, String narvisErrorMessage) {
         super(msg, narvisErrorMessage);

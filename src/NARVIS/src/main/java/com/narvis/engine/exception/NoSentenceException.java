@@ -23,13 +23,12 @@
  */
 package com.narvis.engine.exception;
 
-import com.narvis.dataaccess.exception.*;
 
 /**
  *
  * @author puma
  */
-public class NoSentenceException extends ProviderException {
+public class NoSentenceException extends EngineException {
 
     public NoSentenceException(String msg, String narvisErrorMessage) {
         super(msg, narvisErrorMessage);
