@@ -67,7 +67,7 @@ public class NarvisEngine {
     }
     
     private void brainProcess(String message){
-        List<String> parsedSentence = parser.Parse(message);
+        List<String> parsedSentence = parser.parse(message);
         Action action = fondamental.findAction(parsedSentence);
         Map<String,String> detailsTypes = detailAnalyser.getDetailsTypes(action.getDetails());
         IDataProvider provider = this.metaDataProvider.getDataProvider(action.getProviderName());

@@ -35,9 +35,13 @@ import com.narvis.engine.FondamentalAnalyser;
 import com.narvis.engine.Parser;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
@@ -50,15 +54,15 @@ public class RoutesProvider implements IDataProviderDetails, IDataModelProvider<
     private final RouteNode routes;
     private final ModuleConfigurationDataProvider conf;
     
-    private final FondamentalAnalyser fondamentalAnalyser;
-    private final Parser parser;
+    private FondamentalAnalyser fondamentalAnalyser;
+    private Parser parser;
     
     public RoutesProvider(ModuleConfigurationDataProvider conf) throws ParserConfigurationException, SAXException, IOException, Exception{
         this.conf = conf;
         this.routes = XmlFileAccess.fromFile(RouteNode.class, new File(this.conf.getDataFolder(), this.getRoutesDataPath()));
         
-        this.fondamentalAnalyser = new FondamentalAnalyser();
-        this.parser = new Parser();
+        this.fondamentalAnalyser = null;
+        this.parser = null;
     }
     
     private String getRoutesDataPath() {
@@ -93,13 +97,27 @@ public class RoutesProvider implements IDataProviderDetails, IDataModelProvider<
             return "Fuck fuck fuck...";
         }
         
+        if(this.fondamentalAnalyser == null || this.parser == null)
+        {
+            try {
+                this.fondamentalAnalyser = new FondamentalAnalyser();
+                this.parser = new Parser();
+                
+            } catch (Exception ex) {
+                NarvisLogger.getInstance().log(Level.SEVERE, ex.getMessage());
+                return "Fuck fuck fuck...";
+            }
+        }
+        
         String command = keywords[0];
         
         switch(command)
         {
             case "add":
+                // TODO : Add path from a sentence and a provider name
                 break;
             case "similarity":
+                createSimilarityBetween(getParsedSentencesFromDetails(detailsToValue));
                 break;
             default:
                 return "Fuck fuck fuck...";
@@ -166,22 +184,32 @@ public class RoutesProvider implements IDataProviderDetails, IDataModelProvider<
             if(parsedSentence.size() > 0){
                 final String currentSentenceWord = parsedSentence.get(0);
                 parsedSentence.remove(0);
-                
-                for (WordNode routesWord : words) {
 
-                    if(routesWord.getValue() == null || routesWord.getValue().isEmpty() || routesWord.getValue().equals(currentSentenceWord)){
+                WordNode jokerWordNode = null;
+                for (WordNode routesWord : words) {
+                    /* If the word is empty, it's a "joker" we gonna use at the end */
+                    if(routesWord.getValue() == null || routesWord.getValue().isEmpty())
+                    {
+                        jokerWordNode = routesWord;
+                    }
+                
+                    if(routesWord.getValue() != null && routesWord.getValue().equals(currentSentenceWord)){
                         createPath(routesWord, parsedSentence, findedAction);
                         isFound = true;
                         break;
                     }
                 }
-
+                
+                if(!isFound && jokerWordNode != null && isJokerWord(currentSentenceWord)){
+                    createPath(jokerWordNode, parsedSentence, findedAction);
+                }                
                 /* Si aucun noeud enfant ne correspond au mot, on créé un nouveau noeud */
-                if(!isFound){
+                else if(!isFound){
                     WordNode newWordNode;
 
-                    if(!currentSentenceWord.equals("something") && !currentSentenceWord.equals("someone")){
+                    if(!isJokerWord(currentSentenceWord)){
                         newWordNode = new WordNode(currentSentenceWord);
+
                     }else{
                         newWordNode = new WordNode(null);
                     }
@@ -213,20 +241,30 @@ public class RoutesProvider implements IDataProviderDetails, IDataModelProvider<
             final String currentSentenceWord = parsedSentence.get(0);
             parsedSentence.remove(0);
             
+            WordNode jokerWordNode = null;
             for (WordNode routesWord : routesWords) {
-                
-                if(routesWord.getValue() == null || routesWord.getValue().isEmpty() || routesWord.getValue().equals(currentSentenceWord)){
+                /* If the word is empty, it's a "joker" we gonna use at the end */
+                if(routesWord.getValue() == null || routesWord.getValue().isEmpty())
+                {
+                    jokerWordNode = routesWord;
+                }
+                    
+                if(routesWord.getValue() != null && routesWord.getValue().equals(currentSentenceWord)){
                     createPath(routesWord, parsedSentence, action);
                     isFound = true;
                     break;
                 }
             }
             
+            if(!isFound && jokerWordNode != null && isJokerWord(currentSentenceWord)){
+                createPath(jokerWordNode, parsedSentence, action);
+            }
+            
             /* Si aucun noeud enfant ne correspond au mot, on créé un nouveau noeud */
-            if(!isFound){
+            else if(!isFound){
                 WordNode newWordNode;
              
-                if(!currentSentenceWord.equals("something") && !currentSentenceWord.equals("someone")){
+                if(!isJokerWord(currentSentenceWord)){
                     newWordNode = new WordNode(currentSentenceWord);
                 }else{
                     newWordNode = new WordNode(null);
@@ -245,5 +283,39 @@ public class RoutesProvider implements IDataProviderDetails, IDataModelProvider<
             wordNode.addAction(newActionNode);
         }
     }
+ 
     
+    /**
+     * Brows details map to find details that are sentences and parse these sentences.
+     * @param detailsToValue : Details map to scan
+     * @return Parsed sentences
+     */
+    private List<List<String>> getParsedSentencesFromDetails(Map<String, String> detailsToValue)
+    {
+        List<List<String>> parsedSentences = new LinkedList<>();
+        
+        Set keys = detailsToValue.keySet();
+        Iterator it = keys.iterator();
+        while (it.hasNext()){
+           String key = (String) it.next();
+           
+           /* If the key contain spaces, this is actualy a sentence */
+           if(key.contains(" "))
+           {
+               List<String> currentParsedSentence = parser.parse(key);
+               parsedSentences.add(currentParsedSentence);
+           }
+        }
+        return parsedSentences;
+    }
+    
+    private boolean isJokerWord(String word)
+    {
+        if(word.equals("something") || word.equals("someone"))
+        {
+            return true;
+        }
+        
+        return false;
+    }
 }

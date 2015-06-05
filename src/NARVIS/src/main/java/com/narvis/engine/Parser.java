@@ -59,18 +59,19 @@ public class Parser {
      * @param sentence : Chaine de caractères contenant le message à parser
      * @return Le message parsé en une liste de mots
      */
-    public List<String> Parse(String sentence)
+    public List<String> parse(String sentence)
     {
-        ArrayList<String> parsedMessage = new ArrayList<>();
+        List<String> parsedMessage = new ArrayList<>();
         sentence = sentence.toLowerCase();
-        parsedMessage.addAll(Arrays.asList(sentence.split(" ")));
 
-        transformSpaceInQuoteWithUnderscore(sentence);        
+        sentence = transformSpaceInQuoteWithUnderscore(sentence);
+        
+        parsedMessage.addAll(Arrays.asList(sentence.split(" ")));
         
         List<Word> ignoredWords = dictionaryProvider.getModel().getIgnoredWords();
         parsedMessage.removeAll(wordsToStrings(ignoredWords));
         
-        replaceUndescoreBySpace(parsedMessage);
+        parsedMessage = replaceUndescoreBySpace(parsedMessage);
         
         return parsedMessage;
     }
@@ -79,7 +80,7 @@ public class Parser {
      * Remplace les espaces entre les mots entourés de " par des _ afin qu'ils soient concidérés comme un ensemble de mots
      * @param sentence 
      */
-    private void transformSpaceInQuoteWithUnderscore(String sentence)
+    private String transformSpaceInQuoteWithUnderscore(String sentence)
     {
         boolean replaceSpace = false;
         
@@ -90,7 +91,7 @@ public class Parser {
             if(sentenceChar[i] == '"')
             {
                 replaceSpace = !replaceSpace;
-            }else if (sentenceChar[i] == ' ')
+            }else if (replaceSpace && sentenceChar[i] == ' ')
             {
                 sentenceChar[i] = '_';
             }
@@ -99,18 +100,24 @@ public class Parser {
         sentence = String.copyValueOf(sentenceChar);
         
         sentence = sentence.replaceAll("\"", "");
+        
+        return sentence;
     }
     
     /**
      * Remplace dans tous les mots d'une liste de mots les underscore par des espaces
      * @param parsedSentence  : La liste de mot à traiter
+     * @return
      */
-    private void replaceUndescoreBySpace(List<String> parsedSentence)
+    private List<String> replaceUndescoreBySpace(List<String> parsedSentence)
     {
+        List<String> newParsedSentence = new LinkedList<>();
         for(String word : parsedSentence)
         {
             word = word.replace("_", " ");
+            newParsedSentence.add(word);
         }
+        return newParsedSentence;
     }
     
     /**
@@ -120,7 +127,7 @@ public class Parser {
      */
     private List<String> wordsToStrings(List<Word> words)
     {
-        List<String> strings = new LinkedList<>();
+        List<String> strings = new ArrayList<>();
         
         for(Word word : words)
         {
