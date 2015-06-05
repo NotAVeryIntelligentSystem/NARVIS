@@ -31,8 +31,11 @@ import com.narvis.dataaccess.models.lang.word.Dictionary;
 import com.narvis.dataaccess.models.lang.word.Word;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Permet de parser une chaine de caractère en une liste de mots.
@@ -75,6 +78,30 @@ public class Parser {
         
         parsedMessage = replaceUndescoreBySpace(parsedMessage);
         return parsedMessage;
+    }
+    
+    /**
+     * Brows details map to find details that are sentences and parse these sentences.
+     * @param detailsToValue : Details map to scan
+     * @return Parsed sentences
+     */
+    public List<List<String>> getParsedSentencesFromDetails(Map<String, String> detailsToValue) throws NoDataException
+    {
+        List<List<String>> parsedSentences = new LinkedList<>();
+        
+        Set keys = detailsToValue.keySet();
+        Iterator it = keys.iterator();
+        while (it.hasNext()){
+           String key = (String) it.next();
+           
+           /* If the key contain spaces, this is actualy a sentence */
+           if(key.contains(" "))
+           {
+               List<String> currentParsedSentence = this.parse(key);
+               parsedSentences.add(currentParsedSentence);
+           }
+        }
+        return parsedSentences;
     }
 
     /**

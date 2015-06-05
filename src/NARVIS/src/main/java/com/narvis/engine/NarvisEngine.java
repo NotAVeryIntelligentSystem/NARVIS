@@ -11,11 +11,14 @@ import com.narvis.common.tools.executer.ExecuterException;
 import com.narvis.dataaccess.*;
 import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoDataException;
+import com.narvis.dataaccess.exception.PersistException;
 import com.narvis.dataaccess.exception.ProviderException;
 import com.narvis.dataaccess.interfaces.*;
+import com.narvis.engine.exception.EngineException;
 import com.narvis.engine.exception.NoActionException;
 import com.narvis.engine.exception.NoSentenceException;
 import com.narvis.frontend.MessageInOut;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +35,7 @@ public class NarvisEngine {
     private static NarvisEngine narvis;
 
     private Parser parser;
-    private FondamentalAnalyser fondamental;
+    private FondamentalAnalyser fondamentalAnalyser;
     private DetailsAnalyser detailAnalyser;
     private IMetaDataProvider metaDataProviderAction;
     private IMetaDataProvider metaDataProviderAnswer;
@@ -42,7 +45,7 @@ public class NarvisEngine {
     private NarvisEngine() throws Exception {
         this.executer = new Executer("Narvis engine");
         parser = new Parser();
-        fondamental = new FondamentalAnalyser();
+        fondamentalAnalyser = new FondamentalAnalyser();
         detailAnalyser = new DetailsAnalyser();
         metaDataProviderAction = DataAccessFactory.getMetaDataProvider();
         metaDataProviderAnswer = DataAccessFactory.getMetaDataProvider();
@@ -98,7 +101,7 @@ public class NarvisEngine {
     private void brainProcess(MessageInOut message) throws NoDataException, ProviderException, NoActionException, NoSentenceException{
         this.lastMessage = message;
         List<String> parsedSentence = parser.parse(message.getContent());
-        Action action = fondamental.findAction(parsedSentence);
+        Action action = fondamentalAnalyser.findAction(parsedSentence);
         
         Map<String, String> detailsTypes = detailAnalyser.getDetailsTypes(action.getDetails());
         IDataProvider provider = this.metaDataProviderAction.getDataProvider(action.getProviderName());
@@ -119,4 +122,45 @@ public class NarvisEngine {
         this.metaDataProviderAction.getFrontEnd(IOname).getOutput().setOuput(new MessageInOut(message.getInputAPI(),finalAnswer,message.getAnswerTo()));
     }
 
+    
+    /**
+     * Guide NARVIS to choose the right internal action.
+     * @param action : The action to execute
+     * @return The answer
+     */ 
+    private String doInternalAction(Action action, Map<String, String> detailsTypes) throws ParseException, EngineException, NoDataException, PersistException
+    {
+        String answer = "";
+        if(action.getPrecisions().isEmpty())
+            throw new NoActionException("No internal action found", "I don't understand what you're asking for");
+        
+        switch(action.getPrecisions().get(0))
+        {
+            case "learnsimilaritybetweenroutes":
+                answer = learnSimilarityBetweenRoutes(detailsTypes);
+                break;
+            default:
+                throw new NoActionException("No internal action found", "I don't understand what you're asking for"); 
+        }
+        
+        return answer;
+    }
+    
+    /**
+     * Learn the similarity between sentences that are passed in details.
+     * @param details
+     * @return The success answer if the action has succesfuly
+     * @throws ParseException
+     * @throws EngineException
+     * @throws NoDataException
+     * @throws PersistException 
+     */
+    private String learnSimilarityBetweenRoutes(Map<String, String> details) throws ParseException, EngineException, NoDataException, PersistException
+    {
+        String successAnswer = "I've learned this similarity.";
+        
+        fondamentalAnalyser.createSimilarityBetween(parser.getParsedSentencesFromDetails(details));
+        
+        return successAnswer;
+    }
 }
