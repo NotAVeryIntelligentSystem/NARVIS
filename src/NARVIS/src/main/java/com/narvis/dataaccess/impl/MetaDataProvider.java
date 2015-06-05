@@ -23,19 +23,17 @@
  */
 package com.narvis.dataaccess.impl;
 
-import com.narvis.common.debug.NarvisLogger;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.interfaces.IMetaDataProvider;
 import com.narvis.frontend.interfaces.IFrontEnd;
 import java.util.Map;
-import java.util.logging.Level;
 
 /**
  *
  * @author uwy
  */
 public class MetaDataProvider implements IMetaDataProvider {
-    
+
     private final ConfigurationDataProvider config;
     private final Map<String, IDataProvider> providers;
     private final Map<String, IFrontEnd> frontEnds;
@@ -47,10 +45,10 @@ public class MetaDataProvider implements IMetaDataProvider {
         this.providers = this.config.createDataProviders();
         this.frontEnds = this.config.createFrontEnds();
     }
-    
+
     @Override
     public IDataProvider getDataProvider(String... keywords) {
-        if(CONF_KEYWORD.equals(keywords[0])) {
+        if (CONF_KEYWORD.equals(keywords[0])) {
             return this.config;
         }
         return this.providers.get(keywords[0]);
@@ -60,5 +58,5 @@ public class MetaDataProvider implements IMetaDataProvider {
     public IFrontEnd getFrontEnd(String... keywords) {
         return this.frontEnds.get(keywords[0]);
     }
-    
+
 }

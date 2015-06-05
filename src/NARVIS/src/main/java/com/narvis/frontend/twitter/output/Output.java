@@ -21,15 +21,16 @@ import twitter4j.TwitterException;
  *
  * @author Alban
  */
-public class Output  implements IOutput{
+public class Output implements IOutput {
+
     public String nameAPI = "Twitter";
     public String internalName = "nakJarvis";
     private final Twitter twitterLink;
-    
-    public Output(Twitter twitter){
+
+    public Output(Twitter twitter) {
         this.twitterLink = twitter;
     }
-    
+
     @Override
     public void setOuput(MessageInOut m) {
         try {

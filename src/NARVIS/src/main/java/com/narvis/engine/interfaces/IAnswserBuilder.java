@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.interfaces;
+package com.narvis.engine.interfaces;
 
 import com.narvis.dataaccess.models.layouts.ModulesAnswers;
 import java.util.List;
@@ -32,29 +32,34 @@ import java.util.Map;
  * @author puma
  */
 public interface IAnswserBuilder {
-    
+
     /**
-     * Read the XML answer file to retrieve the answer attached to the given command
-     * @param providerConf the provider 
-     * @param command the command 
-     * @return The Answer from the XML file 
+     * Read the XML answer file to retrieve the answer attached to the given
+     * command
+     *
+     * @param providerConf the provider
+     * @param command the command
+     * @return The Answer from the XML file
      */
     String readAnswerForCommand(ModulesAnswers providerConf, String command);
-    
+
     /**
      * Retrieve all the params needed to fulfill the answer
+     *
      * @param answerFromXml The answer returned by readAnswerForCommand method
      * @return A list containing all the params
      */
     List<String> getListOfRequiredParams(String answerFromXml);
-    
+
     /**
-     * Finally build the answer by replacing all the occurence of a param with its value from the map.
-     * This method is idiot it will find any occurence of the 
+     * Finally build the answer by replacing all the occurence of a param with
+     * its value from the map. This method is idiot it will find any occurence
+     * of the
+     *
      * @param paramsToValue the map which link each param with its value
      * @param answerFromXml the answer from the XML file
      * @return the final answer
      */
     String buildAnswer(Map<String, String> paramsToValue, String answerFromXml);
-    
+
 }

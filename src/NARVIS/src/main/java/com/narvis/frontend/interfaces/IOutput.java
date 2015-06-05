@@ -7,11 +7,11 @@ package com.narvis.frontend.interfaces;
 
 import com.narvis.frontend.MessageInOut;
 
-
 /**
  *
  * @author Alban
  */
 public interface IOutput {
+
     public void setOuput(MessageInOut m);
 }

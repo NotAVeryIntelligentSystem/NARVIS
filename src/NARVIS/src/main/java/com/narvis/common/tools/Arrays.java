@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 puma.
+ * Copyright 2015 uwy.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,28 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.exception;
+package com.narvis.common.tools;
 
 /**
  *
- * @author puma
+ * @author uwy
  */
-public class CanNotFindAnswerForCommandException extends ProviderException {
+public class Arrays {
 
-    public CanNotFindAnswerForCommandException(Throwable thrwbl) {
-        super(thrwbl);
+    private Arrays() {
+
     }
 
-    public CanNotFindAnswerForCommandException(String providerName, String string) {
-        super(providerName, string);
+    public static <T extends Object> T[] SkipFirst(T[] items, int count) {
+        Object[] retVal = new Object[items.length - count];
+        for (int i = count; i < items.length; i++) {
+            retVal[i - count] = items[i];
+        }
+        return (T[]) retVal;
     }
-
-    public CanNotFindAnswerForCommandException(String providerName, String string, Throwable thrwbl) {
-        super(providerName, string, thrwbl);
-    }
-
-    
-    
-    
-    
 }

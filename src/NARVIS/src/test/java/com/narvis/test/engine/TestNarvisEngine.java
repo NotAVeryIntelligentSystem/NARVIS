@@ -36,22 +36,22 @@ import static org.junit.Assert.*;
  * @author Zack
  */
 public class TestNarvisEngine {
-    
+
     public TestNarvisEngine() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -61,20 +61,17 @@ public class TestNarvisEngine {
     //
     // @Test
     // public void hello() {}
-    
     @Test
-    public void TestGetInstance()
-    {
+    public void TestGetInstance() {
         try {
             NarvisEngine myInstance = NarvisEngine.getInstance();
         } catch (Exception ex) {
             fail(ex.getMessage());
         }
     }
-    
+
     @Test
-    public void TestStart()
-    {
+    public void TestStart() {
         try {
             NarvisEngine myInstance = NarvisEngine.getInstance();
             myInstance.start();

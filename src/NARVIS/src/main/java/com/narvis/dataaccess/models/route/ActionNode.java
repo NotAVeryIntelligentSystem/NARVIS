@@ -17,28 +17,27 @@ import org.simpleframework.xml.Root;
  */
 @Root(name = "Action")
 public class ActionNode {
+
     @Element(name = "Provider", type = String.class)
     private String providerName;
-    @ElementList(name = "AskFor", required=false, type = String.class)
+    @ElementList(name = "AskFor", required = false, type = String.class)
     public List<String> askFor;
 
-    public ActionNode()
-    {
+    public ActionNode() {
         providerName = "";
         askFor = new LinkedList<>();
     }
-    
-    public ActionNode(@Element(name="Provider") String providerName, @ElementList(name="AskFor") List<String> askFor) {
+
+    public ActionNode(@Element(name = "Provider") String providerName, @ElementList(name = "AskFor") List<String> askFor) {
         this.providerName = providerName;
         this.askFor = askFor;
     }
-    
-    public ActionNode(String providerName)
-    {
+
+    public ActionNode(String providerName) {
         this.providerName = providerName;
         askFor = new LinkedList<>();
     }
-    
+
     public String getProviderName() {
         return providerName;
     }
@@ -46,14 +45,12 @@ public class ActionNode {
     public List<String> getAskFor() {
         return askFor;
     }
-    
-    public void setProdiverName(String providerName)
-    {
+
+    public void setProdiverName(String providerName) {
         this.providerName = providerName;
     }
-    
-    public void setAskFor(List<String> askFor)
-    {
+
+    public void setAskFor(List<String> askFor) {
         this.askFor = askFor;
     }
 }

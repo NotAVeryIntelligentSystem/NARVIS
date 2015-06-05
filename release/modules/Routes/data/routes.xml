@@ -42,5 +42,27 @@
          </Words>
          <Actions class="java.util.LinkedList"/>
       </Word>
+      <Word>
+         <Words class="java.util.LinkedList">
+            <Word>
+               <Value>mean</Value>
+               <Words class="java.util.LinkedList">
+                  <Word>
+                     <Words class="java.util.LinkedList"/>
+                     <Actions class="java.util.LinkedList">
+                        <Action>
+                           <Provider>Routes</Provider>
+                           <AskFor class="java.util.LinkedList">
+                              <string>similarity</string>
+                           </AskFor>
+                        </Action>
+                     </Actions>
+                  </Word>
+               </Words>
+               <Actions class="java.util.LinkedList"/>
+            </Word>
+         </Words>
+         <Actions class="java.util.LinkedList"/>
+      </Word>
    </Words>
 </Route>

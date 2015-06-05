@@ -30,16 +30,16 @@ import org.simpleframework.xml.Root;
  *
  * @author uwy
  */
-@Root(name="AnswersLayout")
+@Root(name = "AnswersLayout")
 public class AnswersLayout implements IDataProvider {
+
     public AnswersLayout() {
-        
+
     }
-    
+
     @Override
     public String getData(String... keywords) {
         return null; //todo
     }
-
 
 }

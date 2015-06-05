@@ -35,31 +35,30 @@ import org.junit.Test;
  * @author Zack
  */
 public class TestNarvisLogger {
-    
+
     public TestNarvisLogger() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
-    
+
     @Test
-    public void TestGetInstance()
-    {
+    public void TestGetInstance() {
         NarvisLogger instance = NarvisLogger.getInstance();
-        
+
         instance.info("TestGetInstance");
     }
 }

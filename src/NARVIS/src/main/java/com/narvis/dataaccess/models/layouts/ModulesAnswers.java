@@ -30,15 +30,14 @@ import org.simpleframework.xml.Root;
 
 /**
  * Represent the XML file which contains the answers for each command
+ *
  * @author puma
  */
 @Root(name = "Answers")
-public class ModulesAnswers implements IDataProvider{
-    
-     
+public class ModulesAnswers implements IDataProvider {
 
     @ElementMap(entry = "Sentence", key = "command", attribute = true, inline = true)
-    private Map<String,String> map;
+    private Map<String, String> map;
 
     public Map<String, String> getMap() {
         return map;
@@ -50,14 +49,12 @@ public class ModulesAnswers implements IDataProvider{
 
     @Override
     public String getData(String... keywords) {
-        if( map != null && map.containsKey(keywords[0]) ) {
+        if (map != null && map.containsKey(keywords[0])) {
             return map.get(keywords[0]);
-        }else {
+        } else {
             return null;
         }
-        
-        
-    }
 
+    }
 
 }

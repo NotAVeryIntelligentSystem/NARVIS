@@ -24,8 +24,9 @@
 package com.narvis.test.dataaccess;
 
 import com.narvis.test.dataaccess.conf.ApiKeyProviderTest;
-import com.narvis.test.dataaccess.models.answerbuilder.TestAnswerBuilder;
-import com.narvis.test.dataaccess.models.weather.TestWeatherProvider;
+import com.narvis.test.dataaccess.models.*;
+import com.narvis.test.dataaccess.models.answerbuilder.*;
+import com.narvis.test.dataaccess.models.weather.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -34,9 +35,9 @@ import org.junit.runners.Suite;
  * @author Zack
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ ApiKeyProviderTest.class, TestAnswerBuilder.class, TestWeatherProvider.class })
+@Suite.SuiteClasses({ ApiKeyProviderTest.class, TestAnswerBuilder.class, TestWeatherProvider.class, TestRoutesProvider.class})
 public class SuiteDataAccess {
-    
+
     public SuiteDataAccess() {
     }
 }

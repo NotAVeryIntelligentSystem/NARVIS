@@ -23,7 +23,8 @@ import twitter4j.TwitterException;
  *
  * @author Alban
  */
-public class Input implements IInput{
+public class Input implements IInput {
+
     private final Thread listenloop;
     public String nameAPI = "Twitter";
     public String internalName = "nakJarvis";
@@ -31,16 +32,16 @@ public class Input implements IInput{
     private List<MessageInOut> messageList;
     private long lastMessageId = 0; // Meh
     private long lastMessageIdMinusOne; // Meh
-    
-    public Input(Twitter twit){
+
+    public Input(Twitter twit) {
         this.twitterLink = twit;
         this.listenloop = new Thread("Twitter listen") {
             @Override
             public void run() {
                 MessageInOut lastMessage = null;
-                while(!Thread.currentThread().isInterrupted()){
+                while (!Thread.currentThread().isInterrupted()) {
                     lastMessage = getInput();
-                    if(lastMessage != null){
+                    if (lastMessage != null) {
                         try {
                             NarvisEngine.getInstance().getMessage(lastMessage);
                         } catch (Exception ex) {
@@ -57,8 +58,8 @@ public class Input implements IInput{
 
         };
     }
-    
-    public void getMessages() throws TwitterException{
+
+    public void getMessages() throws TwitterException {
         List<Status> statuses = this.twitterLink.getMentionsTimeline();
         this.lastMessageIdMinusOne = this.lastMessageId; // meh
         this.lastMessageId = statuses.get(0).getId(); // meh
@@ -66,9 +67,9 @@ public class Input implements IInput{
         MessageInOut temp;
         String[] tempParser;
         for (Status status : statuses) {
-            if(status != null){
+            if (status != null) {
                 tempParser = this.tweetParser(status);
-                temp = new MessageInOut(this.nameAPI,tempParser[0],tempParser[1]);
+                temp = new MessageInOut(this.nameAPI, tempParser[0], tempParser[1]);
                 messageList.add(temp);
             }
         }
@@ -78,36 +79,36 @@ public class Input implements IInput{
     public List<MessageInOut> getInputs() {
         return messageList;
     }
-    
-    private String getOtherResponseName(String tweet){
+
+    private String getOtherResponseName(String tweet) {
         String recepiantsResponse = "";
         String[] parts = tweet.split(" ");
-        for(String s : parts){
-            if(s.charAt(0) == '@'){ // is a name
-                if(!s.split("@")[1].equals(this.internalName)){ // is not NARVIS
+        for (String s : parts) {
+            if (s.charAt(0) == '@') { // is a name
+                if (!s.split("@")[1].equals(this.internalName)) { // is not NARVIS
                     recepiantsResponse += ";" + s.split("@")[1];
                 }
             }
         }
         return recepiantsResponse;
     }
-    
-    private String getCleanTweet(String tweet){
+
+    private String getCleanTweet(String tweet) {
         String cleanTweet = "";
         String[] parts = tweet.split(" ");
-        for(String s : parts){
-            if(!(s.charAt(0) == '@')){
-                if(s.charAt(0) == '#'){
-                    cleanTweet += " " + s.replace("#","");
+        for (String s : parts) {
+            if (!(s.charAt(0) == '@')) {
+                if (s.charAt(0) == '#') {
+                    cleanTweet += " " + s.replace("#", "");
                 } else {
                     cleanTweet += " " + s;
                 }
-            }            
+            }
         }
         return cleanTweet;
     }
-    
-    private String[] tweetParser(Status status){
+
+    private String[] tweetParser(Status status) {
         String[] returnValue = new String[2];
         returnValue[0] = getCleanTweet(status.getText());
         returnValue[1] = status.getUser().getScreenName() + getOtherResponseName(status.getText());
@@ -117,10 +118,12 @@ public class Input implements IInput{
     public MessageInOut getInput() {
         try {
             this.getMessages();
-            if(this.lastMessageId != this.lastMessageIdMinusOne) // Meh
+            if (this.lastMessageId != this.lastMessageIdMinusOne) // Meh
+            {
                 return messageList.get(0);
-            else
+            } else {
                 return null;
+            }
         } catch (TwitterException ex) {
             Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 Zack.
+ * Copyright 2015 puma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,21 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-import com.narvis.test.dataaccess.*;
-import com.narvis.test.engine.*;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+package com.narvis.dataaccess.exception;
 
 /**
  *
- * @author Zack
+ * @author puma
  */
-@RunWith(Suite.class)
-@SuiteClasses({SuiteEngine.class, SuiteDataAccess.class})
-public class SuiteNarvis {
+public class NoAnswerException extends ProviderException {
 
-    public SuiteNarvis() {
+    public NoAnswerException(String msg) {
+        super(msg);
     }
+
+    public NoAnswerException(Throwable thrwbl) {
+        super(thrwbl);
+    }
+
+    public NoAnswerException(Class<?> providerName, String msg) {
+        super(providerName, msg);
+    }
+
+    public NoAnswerException(Class<?> providerName, String string, Throwable thrwbl) {
+        super(providerName, string, thrwbl);
+    }
+
 }

@@ -41,22 +41,22 @@ import static org.junit.Assert.*;
  * @author Zack
  */
 public class TestParser {
-    
+
     public TestParser() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -66,27 +66,24 @@ public class TestParser {
     //
     // @Test
     // public void hello() {}
-    
     @Test
-    public void TestConstructor() throws Exception
-    {
+    public void TestConstructor() throws Exception {
         try {
             Parser myParser = new Parser();
         } catch (Exception ex) {
             fail(ex.getMessage());
-            NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
-            
+            NarvisLogger.logException(ex);
+
             throw ex;
         }
     }
-    
+
     @Test
-    public void TestParser() throws Exception
-    {
+    public void TestParser() throws Exception {
         /* Input values */
         String sentence = "Give me the weather in London";
         /**/
-            
+
         /* Expected results */
         List<String> expectedParsedSentence = new LinkedList<>();
         expectedParsedSentence.add("give");
@@ -95,16 +92,44 @@ public class TestParser {
         expectedParsedSentence.add("in");
         expectedParsedSentence.add("london");
         /**/
-            
+
         try {
             Parser myParser = new Parser();
-            List<String> parsedSentence = myParser.Parse(sentence);
+            List<String> parsedSentence = myParser.parse(sentence);
             
             assertArrayEquals(parsedSentence.toArray(), expectedParsedSentence.toArray());
         } catch (Exception ex) {
             fail(ex.getMessage());
             NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
             
+            throw ex;
+        }
+
+    }
+    
+    @Test
+    public void TestParserWithQuotes() throws Exception
+    {
+        /* Input values */
+        String inputSentence = "\"Give someone weather\" mean \"what is the weather\"";
+        /**/
+            
+        /* Expected results */
+        List<String> expectedParsedSentence = new LinkedList<>();
+        expectedParsedSentence.add("give someone weather");
+        expectedParsedSentence.add("mean");
+        expectedParsedSentence.add("what is the weather");
+        /**/
+            
+        try {
+            Parser myParser = new Parser();
+            List<String> parsedSentence = myParser.parse(inputSentence);
+            
+            assertArrayEquals(parsedSentence.toArray(), expectedParsedSentence.toArray());
+        } catch (Exception ex) {
+            fail(ex.getMessage());
+            NarvisLogger.logException(ex);
+
             throw ex;
         }
 

@@ -10,5 +10,5 @@ package com.narvis.dataaccess.models.cities;
  * @author Nakou
  */
 public class City {
-    
+
 }

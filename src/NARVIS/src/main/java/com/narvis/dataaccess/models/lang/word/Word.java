@@ -34,64 +34,56 @@ import org.simpleframework.xml.Root;
  *
  * @author Zack
  */
-@Root(name="Word")
+@Root(name = "Word")
 public class Word {
-    @Attribute(name="IsIgnored", required = false, empty = "false")
-    private boolean isIgnored;    
-    
-    @Element(name="Value", type = String.class)
+
+    @Attribute(name = "IsIgnored", required = false, empty = "false")
+    private boolean isIgnored;
+
+    @Element(name = "Value", type = String.class)
     private String value;
-    
-    @ElementList (name="InformationTypes", type = String.class, required = false)
+
+    @ElementList(name = "InformationTypes", type = String.class, required = false)
     private List<String> informationTypes;
-    
-    @ElementList (name="Hint", type = String.class, required = false)
+
+    @ElementList(name = "Hint", type = String.class, required = false)
     private List<String> hints;
-    
-    public Word()
-    {
+
+    public Word() {
         informationTypes = new LinkedList<>();
         hints = new LinkedList<>();
     }
-    
-    public boolean isIgnored()
-    {
+
+    public boolean isIgnored() {
         return this.isIgnored;
     }
-    
-    public String getValue()
-    {
+
+    public String getValue() {
         return this.value;
     }
-    
-    public List<String> getInformationTypes()
-    {
+
+    public List<String> getInformationTypes() {
         return this.informationTypes;
     }
-    
-    public List<String> getHints()
-    {
+
+    public List<String> getHints() {
         return this.hints;
     }
-    
-    public boolean containInformationType(String informationType)
-    {
+
+    public boolean containInformationType(String informationType) {
         informationType.toLowerCase();
         return informationTypes.contains(informationType);
     }
-    
-    public void setValue(String value)
-    {
-        this.value = value;        
+
+    public void setValue(String value) {
+        this.value = value;
     }
-    
-    public void addInformationType(String informationType)
-    {
+
+    public void addInformationType(String informationType) {
         this.informationTypes.add(informationType);
     }
-    
-    public void addHint(String hint)
-    {
+
+    public void addHint(String hint) {
         this.hints.add(hint);
     }
 }
