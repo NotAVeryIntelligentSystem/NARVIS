@@ -29,7 +29,6 @@ import com.narvis.dataaccess.interfaces.IDataModelProvider;
 import com.narvis.dataaccess.models.route.RouteNode;
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 import java.util.logging.Level;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;

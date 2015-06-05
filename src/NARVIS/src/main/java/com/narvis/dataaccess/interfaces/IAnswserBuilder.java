@@ -23,7 +23,7 @@
  */
 package com.narvis.dataaccess.interfaces;
 
-import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
+import com.narvis.dataaccess.models.layouts.ModulesAnswers;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +39,7 @@ public interface IAnswserBuilder {
      * @param command the command 
      * @return The Answer from the XML file 
      */
-    String readAnswerForCommand(ModuleConfigurationDataProvider providerConf, String command);
+    String readAnswerForCommand(ModulesAnswers providerConf, String command);
     
     /**
      * Retrieve all the params needed to fulfill the answer
