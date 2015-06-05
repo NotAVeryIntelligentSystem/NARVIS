@@ -18,15 +18,16 @@ import twitter4j.TwitterException;
  *
  * @author Alban
  */
-public class Output  implements IOutput{
+public class Output implements IOutput {
+
     public String nameAPI = "Twitter";
     public String internalName = "nakJarvis";
     private final Twitter twitterLink;
-    
-    public Output(Twitter twitter){
+
+    public Output(Twitter twitter) {
         this.twitterLink = twitter;
     }
-    
+
     @Override
     public void setOuput(MessageInOut m) {
         try {
@@ -35,17 +36,17 @@ public class Output  implements IOutput{
             Logger.getLogger(Output.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public String constructTweetResponse(MessageInOut m){
+
+    public String constructTweetResponse(MessageInOut m) {
         String response = "";
         String answerTo = m.getAnswerTo().split(";")[0];
         response += "@" + answerTo + " " + m.getContent();
-        if(m.getAnswerTo().split(";").length > 1){
+        if (m.getAnswerTo().split(";").length > 1) {
             response += " cc ";
         }
-        for(String s : m.getAnswerTo().split(";")){
-            if(!s.equals(m.getAnswerTo().split(";")[0] )){
-                if(response.length() + s.length() + 2 < 140){
+        for (String s : m.getAnswerTo().split(";")) {
+            if (!s.equals(m.getAnswerTo().split(";")[0])) {
+                if (response.length() + s.length() + 2 < 140) {
                     response += " @" + s;
                 }
             }

@@ -42,22 +42,22 @@ import static org.junit.Assert.*;
  * @author Zack
  */
 public class TestDetailsAnalyser {
-    
+
     public TestDetailsAnalyser() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -67,49 +67,44 @@ public class TestDetailsAnalyser {
     //
     // @Test
     // public void hello() {}
-    
-    
     @Test
-    public void TestConstructor()
-    {
+    public void TestConstructor() {
         try {
             DetailsAnalyser myDetailsAnalyser = new DetailsAnalyser();
         } catch (Exception ex) {
             fail(ex.getMessage());
         }
     }
-    
+
     @Test
-    public void TestGetDetailsTypes()
-    {
+    public void TestGetDetailsTypes() {
         /* Input values */
         List<String> details = new LinkedList<>();
         details.add("me");
         details.add("in");
         details.add("london");
         /**/
-        
+
         /* Expected results */
         Map<String, String> expectedDetailsTypes = new HashMap<>();
         expectedDetailsTypes.put("in", "preposition");
         expectedDetailsTypes.put("london", "location");
         /**/
-        
+
         try {
             DetailsAnalyser myDetailsAnalyser = new DetailsAnalyser();
-            
+
             Map<String, String> myDetailsTypes = myDetailsAnalyser.getDetailsTypes(details);
-            
-            if(!myDetailsTypes.isEmpty())
-            {
+
+            if (!myDetailsTypes.isEmpty()) {
                 assertTrue(myDetailsTypes.containsKey("in"));
                 assertEquals(myDetailsTypes.get("in"), expectedDetailsTypes.get("in"));
-                
+
                 assertTrue(myDetailsTypes.containsKey("london"));
                 assertEquals(myDetailsTypes.get("london"), expectedDetailsTypes.get("london"));
-                
+
                 assertFalse(myDetailsTypes.containsKey("me"));
-            }else{
+            } else {
                 fail("Entry expected in 'myDetailsTypes'");
             }
             assertEquals(details, details);

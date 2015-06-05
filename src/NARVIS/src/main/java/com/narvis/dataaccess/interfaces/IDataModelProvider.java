@@ -23,12 +23,17 @@
  */
 package com.narvis.dataaccess.interfaces;
 
+import com.narvis.dataaccess.exception.NoDataException;
+import com.narvis.dataaccess.exception.PersistException;
+
 /**
  *
  * @author uwy
  * @param <T>
  */
 public interface IDataModelProvider<T> extends IDataProvider {
-    public T getModel(String... keywords);
-    public void persist();
+
+    public T getModel(String... keywords) throws NoDataException;
+
+    public void persist() throws PersistException;
 }

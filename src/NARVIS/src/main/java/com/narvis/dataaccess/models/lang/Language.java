@@ -28,16 +28,16 @@ package com.narvis.dataaccess.models.lang;
  * @author uwy
  */
 /*
-@Root(name = "Language")
-public class Language {
-    @Element(name = "Name")
-    private String name;
-<<<<<<< HEAD
+ @Root(name = "Language")
+ public class Language {
+ @Element(name = "Name")
+ private String name;
+ <<<<<<< HEAD
     
     
-=======
+ =======
 
-    @ElementList()
->>>>>>> 7c3d03eb4cca7562e63a12ad178014bd6d023929
-    private List<String> ignoreWords; 
-}*/
+ @ElementList()
+ >>>>>>> 7c3d03eb4cca7562e63a12ad178014bd6d023929
+ private List<String> ignoreWords; 
+ }*/

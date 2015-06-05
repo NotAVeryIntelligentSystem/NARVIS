@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 puma.
+ * Copyright 2015 uwy.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,22 +25,26 @@ package com.narvis.dataaccess.exception;
 
 /**
  *
- * @author puma
+ * @author uwy
  */
-public class CanNotAccessDataException extends ProviderException {
+public class IllegalKeywordException extends ProviderException {
 
-    public CanNotAccessDataException(String providerName, String string) {
-        super(providerName, string);
+    /**
+     * Constructs an instance of <code>IllegalKeywordException</code> with the
+     * specified detail message.
+     *
+     * @param msg the detail message.
+     */
+    public IllegalKeywordException(String msg) {
+        super(msg);
     }
 
-    public CanNotAccessDataException(Throwable thrwbl) {
-        super(thrwbl);
+    public IllegalKeywordException(Class<?> providerName, String[] keywords, String desc) {
+        super(providerName, desc + " " + String.join(",", keywords));
     }
 
-    public CanNotAccessDataException(String providerName, String string, Throwable thrwbl) {
-        super(providerName, string, thrwbl);
+    public IllegalKeywordException(Class<?> providerName, String[] keywords, String desc, Throwable thrwbl) {
+        super(providerName, desc + " " + String.join(",", keywords), thrwbl);
     }
-    
-    
-    
+
 }

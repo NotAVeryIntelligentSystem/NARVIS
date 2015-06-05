@@ -16,16 +16,16 @@ import com.narvis.frontend.interfaces.IOutput;
  *
  * @author Nakou
  */
-public class AccessConsole implements IFrontEnd{
+public class AccessConsole implements IFrontEnd {
 
-    private final FrontEndConfigurationDataProvider conf; 
+    private final FrontEndConfigurationDataProvider conf;
     private IInput input;
     private IOutput output;
-    
+
     public AccessConsole(FrontEndConfigurationDataProvider conf) {
         this.conf = conf;
     }
-    
+
     @Override
     public void start() {
         this.input = new Input();
@@ -46,5 +46,5 @@ public class AccessConsole implements IFrontEnd{
     public IOutput getOutput() {
         return this.output;
     }
-    
+
 }

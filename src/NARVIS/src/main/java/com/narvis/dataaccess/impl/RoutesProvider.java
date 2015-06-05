@@ -25,6 +25,8 @@ package com.narvis.dataaccess.impl;
 
 import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.common.debug.NarvisLogger;
+import com.narvis.dataaccess.exception.IllegalKeywordException;
+import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.interfaces.IDataModelProvider;
 import com.narvis.dataaccess.models.route.RouteNode;
 import java.io.File;
@@ -38,17 +40,18 @@ import org.xml.sax.SAXException;
  * @author Zack
  */
 public class RoutesProvider implements IDataModelProvider<RouteNode> {
+
     //private final static String ROUTESPATH = "src\\test\\java\\com\\narvis\\test\\dataaccess\\models\\route\\routes.xml"; // Le chemin d'accès au fichier XML contenant les routes
     private final RouteNode routes;
     private final ModuleConfigurationDataProvider conf;
-    
-    public RoutesProvider(ModuleConfigurationDataProvider conf) throws ParserConfigurationException, SAXException, IOException, Exception{
+
+    public RoutesProvider(ModuleConfigurationDataProvider conf) throws ParserConfigurationException, SAXException, IOException, Exception {
         this.conf = conf;
         this.routes = XmlFileAccess.fromFile(RouteNode.class, new File(this.conf.getDataFolder(), this.getRoutesDataPath()));
-        
+
     }
-    
-    private String getRoutesDataPath() {
+
+    private String getRoutesDataPath() throws IllegalKeywordException, NoDataException {
         return this.conf.getData("Conf", "RoutesDataPath");
     }
 

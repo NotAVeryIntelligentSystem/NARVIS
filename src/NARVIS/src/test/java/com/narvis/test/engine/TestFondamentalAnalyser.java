@@ -43,33 +43,31 @@ import org.xml.sax.SAXException;
  * @author Zack
  */
 public class TestFondamentalAnalyser {
-    
+
     public TestFondamentalAnalyser() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
 
-    
     @Test
-    public void TestConstructor()
-    {
+    public void TestConstructor() {
         try {
             FondamentalAnalyser myFondamentalAnalyser = new FondamentalAnalyser();
-            
+
         } catch (SAXException ex) {
             fail(ex.getMessage());
         } catch (IOException ex) {
@@ -78,10 +76,9 @@ public class TestFondamentalAnalyser {
             fail(ex.getMessage());
         }
     }
-    
+
     @Test
-    public void TestSearchPath()
-    {
+    public void TestSearchPath() {
         /* Input Values */
         List<String> parsedSentence = new LinkedList<>();
         parsedSentence.add("give");
@@ -89,48 +86,48 @@ public class TestFondamentalAnalyser {
         parsedSentence.add("weather");
         parsedSentence.add("in");
         parsedSentence.add("london");
-        
+
         List<String> wrongParsedSentence = new LinkedList<>();
         wrongParsedSentence.add("this");
         wrongParsedSentence.add("is");
         wrongParsedSentence.add("sparta");
         /**/
-        
+
         /* Expected Result */
         String expectedProviderName = "weather";
-        
+
         List<String> expectedDetails = new LinkedList<>();
         expectedDetails.add("me");
         expectedDetails.add("in");
         expectedDetails.add("london");
-        
+
         List<String> expectedAskFor = new LinkedList<>();
         /**/
-        
+
         Action myAction;
-        
+
         try {
-            
+
             /* Test with sentence that match a route */
             FondamentalAnalyser myFondamentalAnalyser = new FondamentalAnalyser();
             myAction = myFondamentalAnalyser.findAction(parsedSentence);
-            
+
             assertEquals(myAction.getProviderName(), expectedProviderName);
             assertArrayEquals(myAction.getDetails().toArray(), expectedDetails.toArray());
             assertArrayEquals(myAction.getPrecisions().toArray(), expectedAskFor.toArray());
-            
+
             /* Test with a sentence that match no route */
             myAction = myFondamentalAnalyser.findAction(wrongParsedSentence);
             assertNull(myAction);
-            
+
             /* Test with a NULL value */
             myAction = myFondamentalAnalyser.findAction(null);
             assertNull(myAction);
-            
+
             /* Test with an empty sentence */
             myAction = myFondamentalAnalyser.findAction(new LinkedList<String>());
             assertNull(myAction);
-            
+
         } catch (SAXException ex) {
             fail(ex.getMessage());
         } catch (IOException ex) {
@@ -141,46 +138,45 @@ public class TestFondamentalAnalyser {
     }
 
     @Test
-    public void TestCreateSimilarityBetween()
-    {
+    public void TestCreateSimilarityBetween() {
         /* Input Values */
         List<List<String>> parsedSentences = new LinkedList<>();
-        
+
         List<String> knownParsedSentence = new LinkedList<>();
         knownParsedSentence.add("give");
         knownParsedSentence.add("someone");
         knownParsedSentence.add("weather");
         parsedSentences.add(knownParsedSentence);
-        
+
         List<String> newParsedSentence = new LinkedList<>();
         newParsedSentence.add("bring");
         newParsedSentence.add("someone");
         newParsedSentence.add("weather");
         parsedSentences.add(newParsedSentence);
         /**/
-        
+
         /* Expected Result */
         String expectedProviderName = "weather";
         /**/
-        
+
         Action myAction;
-        
-        try {            
+
+        try {
             FondamentalAnalyser myFondamentalAnalyser = new FondamentalAnalyser();
-            
+
             myAction = myFondamentalAnalyser.findAction(newParsedSentence);
             assertNull(myAction); // La route ne doit pas être trouvée
-            
+
             /* Ajoute la nouvelle route */
             myFondamentalAnalyser.createSimilarityBetween(parsedSentences);
-            
+
             myAction = myFondamentalAnalyser.findAction(newParsedSentence);
             assertNotNull(myAction); // La route doit être trouvée
-            
+
             assertEquals(myAction.getProviderName(), expectedProviderName);
             assertTrue(myAction.getDetails().isEmpty());
             assertTrue(myAction.getPrecisions().isEmpty());
-            
+
         } catch (SAXException ex) {
             fail(ex.getMessage());
         } catch (IOException ex) {

@@ -16,32 +16,28 @@ import org.simpleframework.xml.Root;
  */
 @Root(name = "Route")
 public class RouteNode {
-    @ElementList(name="Words", type = WordNode.class, required = false)
+
+    @ElementList(name = "Words", type = WordNode.class, required = false)
     private List<WordNode> words;
-    
-    public RouteNode()
-    {
+
+    public RouteNode() {
         words = new LinkedList<>();
     }
-    
-    public RouteNode(@ElementList(name="Words") List<WordNode> words)
-    {
-        this.words = words;
-    }
-    
-    public List<WordNode> getWords() 
-    {
-        return words;
-    }
-    
-    public void setWords(List<WordNode> words) 
-    {
+
+    public RouteNode(@ElementList(name = "Words") List<WordNode> words) {
         this.words = words;
     }
 
-    public void addWord(WordNode newWord) 
-    {
+    public List<WordNode> getWords() {
+        return words;
+    }
+
+    public void setWords(List<WordNode> words) {
+        this.words = words;
+    }
+
+    public void addWord(WordNode newWord) {
         words.add(newWord);
     }
-    
+
 }

@@ -31,19 +31,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Execute 
+ * Execute
+ *
  * @author uwy
  */
 public class Executer implements AutoCloseable {
+
     private final BlockingQueue<Runnable> toExecute;
     private final Thread executionLoop;
-    
+
     public Executer(String name) {
         this.toExecute = new LinkedBlockingQueue<>();
-        this.executionLoop = new Thread(name){
+        this.executionLoop = new Thread(name) {
             @Override
             public void run() {
-                while(!Thread.currentThread().isInterrupted()) {
+                while (!Thread.currentThread().isInterrupted()) {
                     try {
                         // Automatically interrupted when this thread is interrupted so we shouldn't worry much
                         toExecute.take().run();
@@ -54,12 +56,12 @@ public class Executer implements AutoCloseable {
             }
         };
     }
-    
+
     public void start() {
         this.executionLoop.start();
-        
+
     }
-    
+
     public <T> T addToExecute(RunnableFuture<T> executable) throws ExecuterException {
         try {
             this.toExecute.put(executable);
@@ -68,7 +70,7 @@ public class Executer implements AutoCloseable {
             throw new ExecuterException(ex);
         }
     }
-    
+
     public void addToExecute(Runnable executable) throws ExecuterException {
         try {
             this.toExecute.put(executable);
@@ -81,5 +83,5 @@ public class Executer implements AutoCloseable {
     public void close() throws Exception {
         this.executionLoop.interrupt();
     }
-    
+
 }

@@ -33,48 +33,62 @@ import java.util.logging.*;
  *
  * @author Zack
  */
-public class NarvisLogger extends Logger 
-{
+public class NarvisLogger extends Logger {
+
     private static NarvisLogger INSTANCE = null;
-    
-    
-    /** Constructeur privé */
-    private NarvisLogger() 
-    {
+
+    /**
+     * Constructeur privé
+     */
+    private NarvisLogger() {
         super(NarvisLogger.class.getName(), null);
     }
- 
+
+    public static void logInfo(String msg) {
+        getInstance().log(Level.INFO, msg);
+    }
+
+    public static void logException(Throwable ex) {
+        getInstance().log(Level.SEVERE, "Nothing provided", ex);
+    }
+
+    public static void logException(Level level, Throwable ex) {
+        getInstance().log(level, "Nothing provided", ex);
+    }
+
+    public static void logException(Level level, String msg, Throwable ex) {
+        getInstance().log(level, msg, ex);
+    }
+
     /**
      * Retourne l'instance unique du logger
+     *
      * @return L'instance du logger
      */
-    public static synchronized NarvisLogger getInstance()
-    {			
-    	if (INSTANCE == null)
-	{ 	
+    public static synchronized NarvisLogger getInstance() {
+        if (INSTANCE == null) {
             INSTANCE = new NarvisLogger();
-            
-            INSTANCE.addHandler(new ConsoleHandler()); 
+
+            INSTANCE.addHandler(new ConsoleHandler());
 
             try {
                 String logDirectoryPath = System.getProperty("user.home");
-                
+
                 File logDirectory = new File(logDirectoryPath, "narvis-logs");
 
-                if(!logDirectory.isDirectory() && !logDirectory.mkdirs())
-                {
+                if (!logDirectory.isDirectory() && !logDirectory.mkdirs()) {
                     INSTANCE.warning("Can't create logs directory...");
-                }else{
-                    Date date= new Date();
-                    File logPath = new File(logDirectory.getAbsolutePath(), "narvis-log."+date.getTime()+".txt");
-                    
+                } else {
+                    Date date = new Date();
+                    File logPath = new File(logDirectory.getAbsolutePath(), "narvis-log." + date.getTime() + ".txt");
+
                     INSTANCE.addHandler(new FileHandler(logPath.getAbsolutePath()));
                 }
 
             } catch (IOException | SecurityException ex) {
                 INSTANCE.warning(ex.getMessage());
             }
-	}
-	return INSTANCE;
+        }
+        return INSTANCE;
     }
 }

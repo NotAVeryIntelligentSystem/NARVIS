@@ -19,10 +19,10 @@ import java.util.logging.Logger;
  */
 public class Input implements IInput {
 
-    private MessageInOut getMessage(String s){
-        return new MessageInOut("Console",s,"localhost");
+    private MessageInOut getMessage(String s) {
+        return new MessageInOut("Console", s, "localhost");
     }
-    
+
     @Override
     public void start() {
         Scanner sc = new Scanner(System.in);
@@ -37,7 +37,7 @@ public class Input implements IInput {
 
     @Override
     public void close() throws Exception {
-        
+
     }
-    
+
 }

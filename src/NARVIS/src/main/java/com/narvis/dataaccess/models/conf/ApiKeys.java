@@ -31,14 +31,15 @@ import org.simpleframework.xml.*;
  *
  * @author uwy
  */
-@Root(name="ApiKeys")
+@Root(name = "ApiKeys")
 public class ApiKeys implements IDataProvider {
-    public static final String NAME_KEYWORD = "Name";
-    
-    @Element(name = "Name")
-    private String name;  
 
-    @ElementMap(entry="ApiKey", key="Name", attribute=true, inline=true, required = false)
+    public static final String NAME_KEYWORD = "Name";
+
+    @Element(name = "Name")
+    private String name;
+
+    @ElementMap(entry = "ApiKey", key = "Name", attribute = true, inline = true, required = false)
     @SuppressWarnings("FieldMayBeFinal")
     private Map<String, String> apiKeys;
 
@@ -49,7 +50,7 @@ public class ApiKeys implements IDataProvider {
     public ApiKeys() {
         this.apiKeys = new HashMap<>();
     }
-    
+
     public String getName() {
         return this.name;
     }
@@ -61,17 +62,14 @@ public class ApiKeys implements IDataProvider {
     // NAME constant to get this object name
     // Otherwise returns the key value from the name an ApiKey is associated with
     @Override
-    public String getData(String... keywords) {        
-        if(keywords.length != 1 || !this.apiKeys.containsKey(keywords[0])) {
+    public String getData(String... keywords) {
+        if (keywords.length != 1 || !this.apiKeys.containsKey(keywords[0])) {
             throw new IllegalArgumentException("Invalid number of argument or wrong ApiKey name in keywords");
         }
-        if(ApiKeys.NAME_KEYWORD.equals(keywords[0])) {
+        if (ApiKeys.NAME_KEYWORD.equals(keywords[0])) {
             return this.name;
         }
         return this.apiKeys.get(keywords[0]);
     }
 
-
-   
-   
 }

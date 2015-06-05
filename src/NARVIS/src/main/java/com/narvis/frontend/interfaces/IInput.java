@@ -9,6 +9,8 @@ package com.narvis.frontend.interfaces;
  *
  * @author Alban
  */
-public interface IInput extends AutoCloseable {;
+public interface IInput extends AutoCloseable {
+
+    ;
     public void start();
 }

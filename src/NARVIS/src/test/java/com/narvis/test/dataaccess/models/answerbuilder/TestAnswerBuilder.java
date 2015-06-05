@@ -23,8 +23,8 @@
  */
 package com.narvis.test.dataaccess.models.answerbuilder;
 
-import com.narvis.dataaccess.impl.AnswerBuilder;
-import com.narvis.dataaccess.interfaces.IAnswserBuilder;
+import com.narvis.engine.AnswerBuilder;
+import com.narvis.engine.interfaces.IAnswserBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,44 +37,41 @@ import static org.junit.Assert.*;
  * @author puma
  */
 public class TestAnswerBuilder {
-    
+
     public TestAnswerBuilder() {
     }
 
-    
     @Test
     public void TestAnswer() {
-        
+
         IAnswserBuilder builder = new AnswerBuilder();
-        
+
         String message = "The temperature is [temperature]°C";
-        Map<String,String> paramToValue = new HashMap();
-        
+        Map<String, String> paramToValue = new HashMap();
+
         paramToValue.put("temperature", "25.3");
-        
-                
+
         String answer = builder.buildAnswer(paramToValue, message);
-        
+
         assertEquals("The temperature is 25.3°C", answer);
-        
+
     }
-    
-    
+
     @Test
     public void testRequiredParameters() {
-        
+
         IAnswserBuilder builder = new AnswerBuilder();
-        
+
         String message = "The temperature in [city] is [temperature]°C and the cloud percentage is [cloud]%";
-        
+
         List<String> expectedParameters = new ArrayList<>();
         expectedParameters.add("city");
         expectedParameters.add("temperature");
         expectedParameters.add("cloud");
-        
+
         List<String> actuals = builder.getListOfRequiredParams(message);
-        
+
         assertArrayEquals(expectedParameters.toArray(), actuals.toArray());
-        
+
     }
 }

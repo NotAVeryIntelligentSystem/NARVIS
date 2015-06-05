@@ -28,25 +28,27 @@ import java.util.List;
 
 /**
  * Représente une action devant être réalisée.
+ *
  * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class Action {
+
     private String providerName; // Le nom du provider correspondant à l'action
     private List<String> precisions; // Les éventuels précisions sur les types de données attendus
     private List<String> details; // La liste des mots de détail de la phrase
-    
-    public Action(){
+
+    public Action() {
         providerName = "";
         precisions = new LinkedList<>();
         details = new LinkedList<>();
     }
-    
-    public Action(String pProviderName, List<String> pPrecisions, List<String> pDetails){
+
+    public Action(String pProviderName, List<String> pPrecisions, List<String> pDetails) {
         providerName = pProviderName;
         precisions = pPrecisions;
         details = pDetails;
     }
-    
+
     public String getProviderName() {
         return providerName;
     }

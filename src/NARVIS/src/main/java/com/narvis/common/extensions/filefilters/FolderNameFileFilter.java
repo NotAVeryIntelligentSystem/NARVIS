@@ -31,7 +31,9 @@ import java.io.FileFilter;
  * @author uwy
  */
 public class FolderNameFileFilter implements FileFilter {
+
     private final String folderName;
+
     public FolderNameFileFilter(String folderName) {
         assert folderName != null && !folderName.isEmpty() : "Folder name given is null or empty";
         this.folderName = folderName;
@@ -41,5 +43,5 @@ public class FolderNameFileFilter implements FileFilter {
     public boolean accept(File pathname) {
         return pathname.isDirectory() && folderName.equals(pathname.getName());
     }
-    
+
 }

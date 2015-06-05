@@ -35,7 +35,7 @@ public class XmlFileAccessException extends Exception {
      */
     public XmlFileAccessException() {
     }
-    
+
     public XmlFileAccessException(Exception ex) {
         super(ex);
     }

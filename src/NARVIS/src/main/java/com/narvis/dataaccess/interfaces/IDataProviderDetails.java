@@ -23,15 +23,16 @@
  */
 package com.narvis.dataaccess.interfaces;
 
+import com.narvis.dataaccess.exception.NoValueException;
+import com.narvis.dataaccess.exception.ProviderException;
 import java.util.Map;
 
 /**
  *
  * @author puma
  */
-public interface IDataProviderDetails extends IDataProvider{
-    
-    
-    String getDataDetails(Map<String,String> detailsToValue, String... keywords);
-    
+public interface IDataProviderDetails extends IDataProvider {
+
+    String getDataDetails(Map<String, String> detailsToValue, String... keywords) throws ProviderException, NoValueException;
+
 }

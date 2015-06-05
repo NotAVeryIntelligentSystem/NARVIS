@@ -21,16 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.narvis.dataaccess.interfaces;
+
+import com.narvis.dataaccess.exception.IllegalKeywordException;
+import com.narvis.dataaccess.exception.NoDataException;
 
 /*
  * @author uwy
  */
 public interface IDataProvider {
-    
-    
-    public String getData(String... keywords);
-    
-    
+
+    public String getData(String... keywords) throws NoDataException, IllegalKeywordException;
+
 }
