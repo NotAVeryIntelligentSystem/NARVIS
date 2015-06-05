@@ -5,6 +5,7 @@
  */
 package com.narvis.frontend.twitter.input;
 
+import com.narvis.common.debug.NarvisLogger;
 import com.narvis.common.tools.executer.Executer;
 import com.narvis.engine.NarvisEngine;
 import com.narvis.frontend.MessageInOut;
@@ -13,6 +14,8 @@ import com.narvis.frontend.twitter.AccessTwitter;
 import static java.lang.Thread.sleep;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import twitter4j.Status;
@@ -25,38 +28,18 @@ import twitter4j.TwitterException;
  */
 public class Input implements IInput {
 
-    private final Thread listenloop;
+    private final Timer listenloop;
     public String nameAPI = "Twitter";
     public String internalName = "nakJarvis";
-    private Twitter twitterLink;
+    private final Twitter twitterLink;
     private List<MessageInOut> messageList;
-    private long lastMessageId = 0; // Meh
+    private long lastMessageId; // Meh
     private long lastMessageIdMinusOne; // Meh
 
-    public Input(Twitter twit) {
+    public Input(Twitter twit, String lastId) {
         this.twitterLink = twit;
-        this.listenloop = new Thread("Twitter listen") {
-            @Override
-            public void run() {
-                MessageInOut lastMessage = null;
-                while (!Thread.currentThread().isInterrupted()) {
-                    lastMessage = getInput();
-                    if (lastMessage != null) {
-                        try {
-                            NarvisEngine.getInstance().getMessage(lastMessage);
-                        } catch (Exception ex) {
-                            Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    try {
-                        sleep(60000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-
-        };
+        this.listenloop = new Timer("Twitter listen");
+        this.lastMessageId = Long.getLong(lastId);
     }
 
     public void getMessages() throws TwitterException {
@@ -125,18 +108,30 @@ public class Input implements IInput {
                 return null;
             }
         } catch (TwitterException ex) {
-            Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
+            NarvisLogger.logException(ex);
         }
         return null;
     }
 
     @Override
     public void start() {
-        this.listenloop.start();
+        this.listenloop.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                MessageInOut lastMessage = getInput();
+                if (lastMessage != null) {
+                    try {
+                        NarvisEngine.getInstance().getMessage(lastMessage);
+                    } catch (Exception ex) {
+                        NarvisLogger.logException(ex);
+                    }
+                }
+            }
+        }, 60 * 1000, 60 * 1000);
     }
 
     @Override
     public void close() {
-        this.listenloop.interrupt();
+        this.listenloop.cancel();
     }
 }
