@@ -24,12 +24,9 @@
 package com.narvis.common.tools.serialization;
 
 import com.narvis.common.debug.NarvisLogger;
-import com.narvis.dataaccess.models.conf.NarvisConf;
 import java.io.File;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.simpleframework.xml.core.*;
 
 /**
