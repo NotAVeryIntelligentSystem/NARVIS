@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 Zack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Permet de parser une chaine de caractère en une liste de mots.
@@ -41,8 +40,6 @@ import java.util.logging.Logger;
  * @author Zack
  */
 public class Parser {
-
-    private final static Logger LOGGER = Logger.getLogger(Parser.class.getName());
 
     private final IDataModelProvider<Dictionary> dictionaryProvider;
 
@@ -53,7 +50,6 @@ public class Parser {
      */
     public Parser() throws Exception {
         // Récupération du RoutesProvider
-        IMetaDataProvider metaDataProvider = DataAccessFactory.getMetaDataProvider();
         this.dictionaryProvider = (IDataModelProvider<Dictionary>) DataAccessFactory.getMetaDataProvider().getDataProvider("Dictionary");
     }
 
