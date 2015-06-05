@@ -56,11 +56,11 @@ public class Dictionary {
         {
             if(w.getValue().equalsIgnoreCase(value))
             {
-                word = w;
                 if(word != null)
                 {
                     NarvisLogger.getInstance().log(Level.WARNING, "Word duplication : {0}", w.getValue());
                 }
+                word = w;
             }
         }
         
