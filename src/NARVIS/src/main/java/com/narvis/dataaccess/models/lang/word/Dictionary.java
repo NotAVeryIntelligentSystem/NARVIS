@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 Zack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@ package com.narvis.dataaccess.models.lang.word;
 import com.narvis.common.debug.NarvisLogger;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -53,7 +54,7 @@ public class Dictionary {
         for (Word w : this.words) {
             if (w.getValue().equalsIgnoreCase(value)) {
                 if (word != null) {
-                    NarvisLogger.logInfo("Word duplication : " + w.getValue());
+                    NarvisLogger.getInstance().log(Level.WARNING, "Word duplication : " + w.getValue());
                 }
                 word = w;
             }

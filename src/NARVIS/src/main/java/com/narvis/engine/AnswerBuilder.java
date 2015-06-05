@@ -24,7 +24,7 @@
 package com.narvis.engine;
 
 import com.narvis.engine.interfaces.IAnswserBuilder;
-import com.narvis.dataaccess.models.layouts.ModulesAnswers;
+import com.narvis.dataaccess.models.layouts.ModuleAnswers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
 public class AnswerBuilder implements IAnswserBuilder {
 
     @Override
-    public String readAnswerForCommand(ModulesAnswers providerConf, String command) {
+    public String readAnswerForCommand(ModuleAnswers providerConf, String command) {
 
         String answerFromXmlFile = providerConf.getData(command);
         return answerFromXmlFile;

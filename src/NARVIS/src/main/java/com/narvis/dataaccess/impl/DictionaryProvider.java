@@ -46,7 +46,7 @@ public class DictionaryProvider implements IDataModelProvider<Dictionary> {
             this.dictionary = XmlFileAccess.fromFile(Dictionary.class, new File(this.conf.getDataFolder(), this.getDictionaryDataPath()));
         } catch (XmlFileAccessException ex) {
             NarvisLogger.logException(ex);
-            throw new ProviderException(DictionaryProvider.class, "In constructor", ex);
+            throw new ProviderException(DictionaryProvider.class, "In constructor", ex, this.conf.getErrorsLayout().getData("general"));
         }
     }
 
@@ -57,7 +57,7 @@ public class DictionaryProvider implements IDataModelProvider<Dictionary> {
     @Override
     public Dictionary getModel(String... keywords) throws NoDataException {
         if (this.dictionary == null) {
-            throw new NoDataException("Dictionary hasn't been deserialized, this is bad");
+            throw new NoDataException("Dictionary hasn't been deserialized, this is bad", this.conf.getErrorsLayout().getData("general"));
         }
         return this.dictionary;
     }
@@ -66,9 +66,9 @@ public class DictionaryProvider implements IDataModelProvider<Dictionary> {
     public void persist() throws PersistException {
         try {
             XmlFileAccess.toFile(this.dictionary, new File(this.conf.getDataFolder(), this.getDictionaryDataPath()));
-        } catch (Exception ex) {
+        } catch (IllegalKeywordException | NoDataException | XmlFileAccessException ex) {
             NarvisLogger.logException(ex);
-            throw new PersistException(DictionaryProvider.class, "Could not persist the model, see intern exception for details", ex);
+            throw new PersistException(DictionaryProvider.class, "Could not persist the model, see intern exception for details", ex, this.conf.getErrorsLayout().getData("persist"));
         }
     }
 

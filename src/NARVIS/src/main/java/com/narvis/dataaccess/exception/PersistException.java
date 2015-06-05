@@ -34,20 +34,21 @@ public class PersistException extends ProviderException {
      * specified detail message.
      *
      * @param msg the detail message.
+     * @param narvisErrorMessage
      */
-    public PersistException(String msg) {
-        super(msg);
+    public PersistException(String msg, String narvisErrorMessage) {
+        super(msg, narvisErrorMessage);
     }
 
-    public PersistException(Throwable thrwbl) {
-        super(thrwbl);
+    public PersistException(Throwable thrwbl, String narvisErrorMessage) {
+        super(thrwbl, narvisErrorMessage);
     }
 
-    public PersistException(Class<?> providerName, String msg) {
-        super(providerName, msg);
+    public PersistException(Class<?> providerName, String msg, String narvisErrorMessage) {
+        super(providerName, msg, narvisErrorMessage);
     }
 
-    public PersistException(Class<?> providerName, String string, Throwable thrwbl) {
-        super(providerName, string, thrwbl);
+    public PersistException(Class<?> providerName, String string, Throwable thrwbl, String narvisErrorMessage) {
+        super(providerName, string, thrwbl, narvisErrorMessage);
     }
 }

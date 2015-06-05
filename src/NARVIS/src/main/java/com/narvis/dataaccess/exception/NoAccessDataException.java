@@ -29,19 +29,19 @@ package com.narvis.dataaccess.exception;
  */
 public class NoAccessDataException extends ProviderException {
 
-    public NoAccessDataException(String msg) {
-        super(msg);
+    public NoAccessDataException(String msg, String narvisErrorMessage) {
+        super(msg, narvisErrorMessage);
     }
 
-    public NoAccessDataException(Class<?> providerName, String msg) {
-        super(providerName, msg);
+    public NoAccessDataException(Class<?> providerName, String msg, String narvisErrorMessage) {
+        super(providerName, msg, narvisErrorMessage);
     }
 
-    public NoAccessDataException(Throwable thrwbl) {
-        super(thrwbl);
+    public NoAccessDataException(Throwable thrwbl, String narvisErrorMessage) {
+        super(thrwbl, narvisErrorMessage);
     }
 
-    public NoAccessDataException(Class<?> providerName, String string, Throwable thrwbl) {
-        super(providerName, string, thrwbl);
+    public NoAccessDataException(Class<?> providerName, String string, Throwable thrwbl, String narvisErrorMessage) {
+        super(providerName, string, thrwbl, narvisErrorMessage);
     }
 }

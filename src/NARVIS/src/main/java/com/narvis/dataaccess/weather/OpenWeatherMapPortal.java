@@ -22,9 +22,6 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.aksingh.owmjapis.CurrentWeather;
 import net.aksingh.owmjapis.OpenWeatherMap;
 import org.json.JSONException;
@@ -76,7 +73,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
 
         //Early out
         if (this._currentWeather == null || !this._currentWeather.hasMainInstance() || !this._currentWeather.getMainInstance().hasMaxTemperature()) {
-            throw new NoAccessDataException(OpenWeatherMapPortal.class, "Can not find temperature");
+            throw new NoAccessDataException(OpenWeatherMapPortal.class, "Can not find temperature", this._confProvider.getErrorsLayout().getData("temperature"));
         }
 
         float farenheitTemperature = this._currentWeather.getMainInstance().getTemperature();
@@ -96,7 +93,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
 
         //Early out
         if (this._currentWeather == null || !this._currentWeather.hasCloudsInstance() || !this._currentWeather.getCloudsInstance().hasPercentageOfClouds()) {
-            throw new NoAccessDataException(OpenWeatherMapPortal.class, "Can not find clouds percentage");
+            throw new NoAccessDataException(OpenWeatherMapPortal.class, "Can not find clouds percentage", this._confProvider.getErrorsLayout().getData("cloud"));
         }
 
         float cloudPercentage = this._currentWeather.getCloudsInstance().getPercentageOfClouds();
@@ -176,7 +173,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
             this._currentWeather = owm.currentWeatherByCityName(this._tempDetails.get("city"));
         } catch (IOException | JSONException ex) {
             NarvisLogger.logException(ex);
-            throw new ProviderException(OpenWeatherMapPortal.class, "Woops, this is (really really) bad.");
+            throw new ProviderException(OpenWeatherMapPortal.class, "Woops, this is (really really) bad.", this._confProvider.getData("general"));
         }
 
         IAnswserBuilder answerBuilder = new AnswerBuilder();
@@ -184,7 +181,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
 
         //Can not find the answer from the xml something went wrong we quit
         if (answerFromXml == null) {
-            throw new NoValueException(OpenWeatherMapPortal.class, "Command not supported");
+            throw new NoValueException(OpenWeatherMapPortal.class, "Command not supported", this._confProvider.getErrorsLayout().getData("noanswers"));
         }
 
         List<String> listOfParams = answerBuilder.getListOfRequiredParams(answerFromXml);
@@ -209,7 +206,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
 
                 String value = CallMethodByCommand(param);
                 if (value == null) {
-                    throw new NoValueException(OpenWeatherMapPortal.class, param);
+                    throw new NoValueException(OpenWeatherMapPortal.class, param, this._confProvider.getErrorsLayout().getData("general"));
 
                 } else {
 

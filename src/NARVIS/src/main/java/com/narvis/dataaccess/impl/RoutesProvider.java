@@ -49,7 +49,7 @@ public class RoutesProvider implements IDataModelProvider<RouteNode> {
             this.routes = XmlFileAccess.fromFile(RouteNode.class, new File(this.conf.getDataFolder(), this.getRoutesDataPath()));
         } catch (XmlFileAccessException | IllegalKeywordException | NoDataException ex) {
             NarvisLogger.logException(ex);
-            throw new ProviderException(RoutesProvider.class, "In constructor, could not deserialize");
+            throw new ProviderException(RoutesProvider.class, "In constructor, could not deserialize", this.conf.getErrorsLayout().getData("general"));
         }
     }
 
@@ -63,14 +63,14 @@ public class RoutesProvider implements IDataModelProvider<RouteNode> {
             XmlFileAccess.toFile(this.routes, new File(this.conf.getDataFolder(), this.getRoutesDataPath()));
         } catch (IllegalKeywordException | NoDataException | XmlFileAccessException ex) {
             NarvisLogger.logException(ex);
-            throw new PersistException(RoutesProvider.class, "Could not persist file, see details in exception", ex);
+            throw new PersistException(RoutesProvider.class, "Could not persist file, see details in exception", ex, this.conf.getErrorsLayout().getData("persist"));
         }
     }
 
     @Override
     public String getData(String... keywords) throws NoDataException {
         if(this.routes == null) {
-            throw new NoDataException(RoutesProvider.class, "Routes hasn't been deserialized !");
+            throw new NoDataException(RoutesProvider.class, "Routes hasn't been deserialized !", this.conf.getErrorsLayout().getData("data"));
         }
         return this.routes.toString();
     }
@@ -78,7 +78,7 @@ public class RoutesProvider implements IDataModelProvider<RouteNode> {
     @Override
     public RouteNode getModel(String... keywords) throws NoDataException {
         if(this.routes == null) {
-            throw new NoDataException(RoutesProvider.class, "Routes hasn't been deserialized !");
+            throw new NoDataException(RoutesProvider.class, "Routes hasn't been deserialized !", this.conf.getErrorsLayout().getData("data"));
         }
         return this.routes;
     }

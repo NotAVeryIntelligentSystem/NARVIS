@@ -24,6 +24,7 @@
 package com.narvis.dataaccess.models.layouts;
 
 import com.narvis.dataaccess.interfaces.IDataProvider;
+import java.util.HashMap;
 import java.util.Map;
 import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
@@ -34,27 +35,28 @@ import org.simpleframework.xml.Root;
  * @author puma
  */
 @Root(name = "Answers")
-public class ModulesAnswers implements IDataProvider {
-
+public class ModuleAnswers implements IDataProvider {
     @ElementMap(entry = "Sentence", key = "command", attribute = true, inline = true)
+    @SuppressWarnings("FieldMayBeFinal")
     private Map<String, String> map;
+    
+    
+    public ModuleAnswers() {
+        this.map = new HashMap<>();
+    }
+    
+
 
     public Map<String, String> getMap() {
         return map;
     }
 
-    public void setMap(Map<String, String> map) {
-        this.map = map;
-    }
-
     @Override
     public String getData(String... keywords) {
-        if (map != null && map.containsKey(keywords[0])) {
+        if (this.map.containsKey(keywords[0])) {
             return map.get(keywords[0]);
-        } else {
-            return null;
-        }
-
+        } 
+        return null;
     }
 
 }
