@@ -153,7 +153,7 @@ public class TestFondamentalAnalyser {
         newParsedSentence.add("someone");
         newParsedSentence.add("weather");
         parsedSentences.add(newParsedSentence);
-        
+
         List<String> newParsedSentence2 = new LinkedList<>();
         newParsedSentence2.add("bring");
         newParsedSentence2.add("someone");
@@ -176,7 +176,7 @@ public class TestFondamentalAnalyser {
 
             /* Ajoute la nouvelle route */
             myFondamentalAnalyser.createSimilarityBetween(parsedSentences);
-            
+
             myAction = myFondamentalAnalyser.findAction(newParsedSentence2);
             assertNotNull(myAction); // La route doit être trouvée
 

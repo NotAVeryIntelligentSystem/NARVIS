@@ -36,16 +36,14 @@ import org.simpleframework.xml.Root;
  */
 @Root(name = "Answers")
 public class ModuleAnswers implements IDataProvider {
+
     @ElementMap(entry = "Sentence", key = "command", attribute = true, inline = true)
     @SuppressWarnings("FieldMayBeFinal")
     private Map<String, String> map;
-    
-    
+
     public ModuleAnswers() {
         this.map = new HashMap<>();
     }
-    
-
 
     public Map<String, String> getMap() {
         return map;
@@ -55,7 +53,7 @@ public class ModuleAnswers implements IDataProvider {
     public String getData(String... keywords) {
         if (this.map.containsKey(keywords[0])) {
             return map.get(keywords[0]);
-        } 
+        }
         return null;
     }
 

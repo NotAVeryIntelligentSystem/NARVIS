@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 Zack.
+ * Copyright 2015 puma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,36 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.layouts;
+package com.narvis.test.dataaccess.conf.news;
 
-import com.narvis.dataaccess.interfaces.IDataProvider;
-import java.util.HashMap;
-import java.util.Map;
-import org.simpleframework.xml.ElementMap;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * @author Zack
+ * @author puma
  */
-public class ModuleErrors implements IDataProvider {
+public class TestNewsProvider {
 
-    @ElementMap(entry = "ErrorSentence", key = "command", attribute = true, inline = true)
-    @SuppressWarnings("FieldMayBeFinal")
-    private Map<String, String> map;
-
-    public ModuleErrors() {
-        this.map = new HashMap<>();
+    public TestNewsProvider() {
     }
 
-    public Map<String, String> getMap() {
-        return map;
-    }
+    @Test
+    public void testNewsForCity() {
 
-    @Override
-    public String getData(String... keywords) {
-        if (map.containsKey(keywords[0])) {
-            return map.get(keywords[0]);
-        }
-        return null;
     }
 }

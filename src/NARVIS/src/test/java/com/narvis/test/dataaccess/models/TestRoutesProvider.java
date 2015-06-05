@@ -47,22 +47,22 @@ import static org.junit.Assert.*;
  * @author Zack
  */
 public class TestRoutesProvider {
-    
+
     public TestRoutesProvider() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -72,11 +72,8 @@ public class TestRoutesProvider {
     //
     // @Test
     // public void hello() {}
-    
-    
     @Test
-    public void testInstanciation() throws Exception
-    {
+    public void testInstanciation() throws Exception {
         try {
             IDataModelProvider<RouteNode> myRoutesProvider = (IDataModelProvider<RouteNode>) DataAccessFactory.getMetaDataProvider().getDataProvider("Routes");
         } catch (Exception ex) {
@@ -84,48 +81,45 @@ public class TestRoutesProvider {
             throw ex;
         }
     }
-    
+
     @Test
-    public void testGetDataDetails() throws Exception
-    {
+    public void testGetDataDetails() throws Exception {
         /* Input data */
         String inputSentence = "\"Give someone weather\" mean \"what is the weather\"";
-        
+
         List<String> testParsedSentence = new LinkedList<>();
         testParsedSentence.add("what");
         testParsedSentence.add("is");
         testParsedSentence.add("weather");
         /**/
-        
+
         /* Expected results */
         /**/
-        
         Action myAction;
         try {
             Parser myParser = new Parser();
             List<String> myParsedSentence = myParser.parse(inputSentence);
-            
+
             FondamentalAnalyser myFondamentalAnalyser = new FondamentalAnalyser();
-            
+
             myAction = myFondamentalAnalyser.findAction(testParsedSentence);
             assertNull(myAction);
-            
+
             myAction = myFondamentalAnalyser.findAction(myParsedSentence);
-            
+
             DetailsAnalyser myDetailsAnalyser = new DetailsAnalyser();
             Map<String, String> myDetails = myDetailsAnalyser.getDetailsTypes(myAction.getDetails());
-            
+
             IDataModelProvider<RouteNode> myRoutesProvider = (IDataModelProvider<RouteNode>) DataAccessFactory.getMetaDataProvider().getDataProvider("Routes");
-            
+
             String[] askFor = new String[1];
             askFor[0] = myAction.getPrecisions().get(0);
-            
-            String answer = ((IDataProviderDetails)myRoutesProvider).getDataDetails(myDetails, askFor);
-            
-            
+
+            String answer = ((IDataProviderDetails) myRoutesProvider).getDataDetails(myDetails, askFor);
+
             myAction = myFondamentalAnalyser.findAction(testParsedSentence);
             assertEquals(myAction.getProviderName(), "weather");
-            
+
         } catch (Exception ex) {
             NarvisLogger.logException(ex);
             throw ex;

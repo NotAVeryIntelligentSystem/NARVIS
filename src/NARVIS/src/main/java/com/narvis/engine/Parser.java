@@ -69,14 +69,13 @@ public class Parser {
         List<String> parsedMessage = new ArrayList<>();
         sentence = sentence.toLowerCase();
 
-
         sentence = transformSpaceInQuoteWithUnderscore(sentence);
-        
+
         parsedMessage.addAll(Arrays.asList(sentence.split(" ")));
-        
+
         List<Word> ignoredWords = dictionaryProvider.getModel().getIgnoredWords();
         parsedMessage.removeAll(wordsToStrings(ignoredWords));
-        
+
         parsedMessage = replaceUndescoreBySpace(parsedMessage);
         return parsedMessage;
     }
@@ -95,29 +94,28 @@ public class Parser {
         for (int i = 0; i < sentenceChar.length; i++) {
             if (sentenceChar[i] == '"') {
                 replaceSpace = !replaceSpace;
-            }else if (replaceSpace && sentenceChar[i] == ' ')
-            {
+            } else if (replaceSpace && sentenceChar[i] == ' ') {
                 sentenceChar[i] = '_';
             }
         }
 
         sentence = String.copyValueOf(sentenceChar);
-        
+
         sentence = sentence.replaceAll("\"", "");
-        
+
         return sentence;
     }
 
     /**
-     * Remplace dans tous les mots d'une liste de mots les underscore par des espaces
-     * @param parsedSentence  : La liste de mot à traiter
+     * Remplace dans tous les mots d'une liste de mots les underscore par des
+     * espaces
+     *
+     * @param parsedSentence : La liste de mot à traiter
      * @return
      */
-    private List<String> replaceUndescoreBySpace(List<String> parsedSentence)
-    {
+    private List<String> replaceUndescoreBySpace(List<String> parsedSentence) {
         List<String> newParsedSentence = new LinkedList<>();
-        for(String word : parsedSentence)
-        {
+        for (String word : parsedSentence) {
             word = word.replace("_", " ");
             newParsedSentence.add(word);
         }
@@ -133,9 +131,8 @@ public class Parser {
      */
     private List<String> wordsToStrings(List<Word> words) {
         List<String> strings = new ArrayList<>();
-        
-        for(Word word : words)
-        {
+
+        for (Word word : words) {
             strings.add(word.getValue());
         }
 

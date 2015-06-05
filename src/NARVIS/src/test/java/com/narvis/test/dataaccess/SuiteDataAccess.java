@@ -35,7 +35,7 @@ import org.junit.runners.Suite;
  * @author Zack
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ ApiKeyProviderTest.class, TestAnswerBuilder.class, TestWeatherProvider.class, TestRoutesProvider.class})
+@Suite.SuiteClasses({ApiKeyProviderTest.class, TestAnswerBuilder.class, TestWeatherProvider.class, TestRoutesProvider.class})
 public class SuiteDataAccess {
 
     public SuiteDataAccess() {

@@ -69,7 +69,7 @@ public final class DetailsAnalyser {
             } else {
                 if (hintList.size() > 0) {
                     this.wordsAssociations.put(detail, hintList.get(0));
-                }else{
+                } else {
                     this.wordsAssociations.put(detail, "");
                 }
                 hintList.clear();

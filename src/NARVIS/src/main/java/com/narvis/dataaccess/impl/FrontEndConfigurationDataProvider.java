@@ -46,9 +46,8 @@ public final class FrontEndConfigurationDataProvider implements IDataProvider {
 
     public static final String API_KEY_FILE_NAME = "api.key";
     public static final String MODULE_CONF_FILE_NAME = "module.conf";
-    
-    public static final String ERRORS_FILE_NAME = "errors.xml";
 
+    public static final String ERRORS_FILE_NAME = "errors.xml";
 
     public static final String API_KEYWORD = "Api";
     public static final String CONF_KEYWORD = "Conf";
@@ -81,7 +80,7 @@ public final class FrontEndConfigurationDataProvider implements IDataProvider {
         for (File file : new File(frontendFolder, LAYOUTS_FOLDER_NAME).listFiles()) {
             switch (file.getName()) {
                 case ERRORS_FILE_NAME:
-                    if(errorFile != null) {
+                    if (errorFile != null) {
                         throw new ProviderException(FrontEndConfigurationDataProvider.class, "Errors layout file found twice !", "Ouch");
                     }
                     errorFile = file;
@@ -106,18 +105,18 @@ public final class FrontEndConfigurationDataProvider implements IDataProvider {
     public ModuleConf getConf() {
         return this.conf;
     }
-    
+
     public ModuleErrors getErrorsLayout() {
         return this.errorsLayout;
     }
 
     @Override
     public String getData(String... keywords) throws IllegalKeywordException {
-        if(keywords.length < 1) {
+        if (keywords.length < 1) {
             throw new IllegalKeywordException(FrontEndConfigurationDataProvider.class, keywords, "keywords.length < 1", this.errorsLayout.getData("engine"));
         }
         String[] nextkeywords = Arrays.skipFirst(keywords, 1);
-        switch(keywords[0]) {
+        switch (keywords[0]) {
             case API_KEY_FILE_NAME:
                 return this.apiKeys.getData(nextkeywords);
             case MODULE_CONF_FILE_NAME:

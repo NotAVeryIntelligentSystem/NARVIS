@@ -37,91 +37,77 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Apply the final construction of the answer. Get Data need
- * 1: The level of politness
- * In details accepted parameters are : 
- * sentence -> sentence
+ * Apply the final construction of the answer. Get Data need 1: The level of
+ * politness In details accepted parameters are : sentence -> sentence
+ *
  * @author puma
  */
 public class AnswersProvider implements IDataProviderDetails, IAnswerProvider {
 
-    
     private ModuleConfigurationDataProvider _confProvider;
-    private int _maxLeverOfPolitness;   
-    
+    private int _maxLeverOfPolitness;
+
     private String paramSentence = "sentence";
-    
-    private Map<String,String> _details = new HashMap<>();
-    
-    
+
+    private Map<String, String> _details = new HashMap<>();
+
     public AnswersProvider(ModuleConfigurationDataProvider confProvider) {
-        
+
         this._confProvider = confProvider;
         this._maxLeverOfPolitness = 3;
     }
-    
-    
+
     @Override
-    public String getDataDetails(Map<String,String> details, String... keywords) throws IllegalKeywordException, ProviderException{
-    
-        if( keywords.length < 1 || keywords[0] == null ) {
+    public String getDataDetails(Map<String, String> details, String... keywords) throws IllegalKeywordException, ProviderException {
+
+        if (keywords.length < 1 || keywords[0] == null) {
             throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "Not enough keywords", this._confProvider.getErrorsLayout().getData("engine"));
         }
-        
-        if( !details.containsKey(this.paramSentence) ) {
+
+        if (!details.containsKey(this.paramSentence)) {
             throw new IllegalKeywordException("Details not supported", this._confProvider.getErrorsLayout().getData("engine"));
         }
-        
+
         this._details = details;
-    
+
         IAnswerBuilder builder = new AnswerBuilder();
-        String brutAnswer = builder.readAnswerForCommand(this._confProvider.getAnswersLayout(), keywords[0] );
-        
-        if( brutAnswer == null ) {
+        String brutAnswer = builder.readAnswerForCommand(this._confProvider.getAnswersLayout(), keywords[0]);
+
+        if (brutAnswer == null) {
             throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "", this._confProvider.getErrorsLayout().getData("engine"));
         }
-        
-        List<String> listOfRequiredParams = builder.getListOfRequiredParams(brutAnswer);     
-        Map<String,String> paramsToValue = buildParamsToValueMap(listOfRequiredParams);
-        
+
+        List<String> listOfRequiredParams = builder.getListOfRequiredParams(brutAnswer);
+        Map<String, String> paramsToValue = buildParamsToValueMap(listOfRequiredParams);
+
         return builder.buildAnswer(paramsToValue, brutAnswer);
 
-        
     }
 
     @Override
     public Map<String, String> buildParamsToValueMap(List<String> listOfParams) throws NoValueException {
-        
-        
-        Map<String,String> paramsToValue = new HashMap<>();
-        
-        paramsToValue.putAll(_details);
-        
-        
-        for( String param : listOfParams ) {
 
-            
-            if( !paramsToValue.containsKey(param) ) {
-                
+        Map<String, String> paramsToValue = new HashMap<>();
+
+        paramsToValue.putAll(_details);
+
+        for (String param : listOfParams) {
+
+            if (!paramsToValue.containsKey(param)) {
+
                 throw new NoValueException("No Value for this param", this._confProvider.getErrorsLayout().getData("data"));
-    
+
             }
-            
+
         }
-        
+
         return paramsToValue;
-        
+
     }
-    
+
     @Override
     public String getData(String... keywords) throws NoDataException, IllegalKeywordException {
         throw new UnsupportedOperationException("Not supported ");
     }
-    
-    
-   
-    
-    
-    
-    
+
 }

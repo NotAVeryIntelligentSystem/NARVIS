@@ -39,10 +39,10 @@ import java.io.File;
  * @author Zack
  */
 public class RoutesProvider implements IDataModelProvider<RouteNode> {
+
     private final RouteNode routes;
     private final ModuleConfigurationDataProvider conf;
-    
-    
+
     public RoutesProvider(ModuleConfigurationDataProvider conf) throws ProviderException {
         this.conf = conf;
         try {
@@ -69,7 +69,7 @@ public class RoutesProvider implements IDataModelProvider<RouteNode> {
 
     @Override
     public String getData(String... keywords) throws NoDataException {
-        if(this.routes == null) {
+        if (this.routes == null) {
             throw new NoDataException(RoutesProvider.class, "Routes hasn't been deserialized !", this.conf.getErrorsLayout().getData("data"));
         }
         return this.routes.toString();
@@ -77,11 +77,10 @@ public class RoutesProvider implements IDataModelProvider<RouteNode> {
 
     @Override
     public RouteNode getModel(String... keywords) throws NoDataException {
-        if(this.routes == null) {
+        if (this.routes == null) {
             throw new NoDataException(RoutesProvider.class, "Routes hasn't been deserialized !", this.conf.getErrorsLayout().getData("data"));
         }
         return this.routes;
     }
 
-   
 }

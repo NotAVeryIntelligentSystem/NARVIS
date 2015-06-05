@@ -104,15 +104,13 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
         return Float.toString(cloudPercentage);
 
     }
-    
-    @Command(CommandName = "city") 
-    public String getCity() {
-        
-        return _city;
-        
-    }
-    
 
+    @Command(CommandName = "city")
+    public String getCity() {
+
+        return _city;
+
+    }
 
     /**
      * Call the method wich provide the answer for the given method
@@ -162,28 +160,26 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
      */
     @Override
     public String getDataDetails(Map<String, String> detailsToValue, String... keywords) throws NoValueException, ProviderException {
-       
-         
+
         //Problem we give weather in nimesquit
-        if ( !detailsToValue.containsKey(LOCATION_STRING) ) {
-            
+        if (!detailsToValue.containsKey(LOCATION_STRING)) {
+
             _city = lookForValueLocation(detailsToValue);
-            
-            if( _city == null )
+
+            if (_city == null) {
                 throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "Not enough keywords", this._confProvider.getErrorsLayout().getData("engine"));
-        }else {
-            
+            }
+        } else {
+
             _city = detailsToValue.get(this.LOCATION_STRING);
-            
+
         }
-        
-        if( this._confProvider == null || this._confProvider.getAnswersLayout() == null) {
-            
+
+        if (this._confProvider == null || this._confProvider.getAnswersLayout() == null) {
+
             throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "Not enough keywords", this._confProvider.getErrorsLayout().getData("engine"));
         }
-        
-        
-        
+
         String key = this.weatherApiKeys.getData(KEY_TAG);
 
         if (key == null) {
@@ -193,12 +189,12 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
         String wantedAnswer = "";
         //If the user asked for nothing special, we pick the default answer
         if (keywords.length == 0) {
-            
+
             wantedAnswer = DEFAULT_ANSWER;
-        }else if( keywords[0] != null ) {
-            
+        } else if (keywords[0] != null) {
+
             wantedAnswer = keywords[0];
-            
+
         }
 
         this._tempDetails = detailsToValue;
@@ -260,19 +256,17 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
         throw new UnsupportedOperationException("Not supported");
     }
 
-    
-    private String lookForValueLocation( Map<String,String> details ) {
-        
-        for( Map.Entry<String, String> entry : details.entrySet() ) {
+    private String lookForValueLocation(Map<String, String> details) {
 
-            if( entry.getValue().equals(LOCATION_STRING) ) {
+        for (Map.Entry<String, String> entry : details.entrySet()) {
+
+            if (entry.getValue().equals(LOCATION_STRING)) {
                 return entry.getKey();
             }
         }
-        
+
         return null;
-        
-        
+
     }
-    
+
 }

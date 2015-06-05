@@ -57,7 +57,6 @@ public final class ModuleConfigurationDataProvider implements IDataProvider {
     public static final String ANSWERS_KEYWORD = "Answer";
     public static final String ERRORS_KEYWORD = "Error";
 
-
     private final ApiKeys apiKeys;
     private final ModuleConf conf;
     private final ModuleAnswers answersLayout;
@@ -94,7 +93,7 @@ public final class ModuleConfigurationDataProvider implements IDataProvider {
                     answerFile = file;
                     break;
                 case ERRORS_FILE_NAME:
-                    if(errorFile != null) {
+                    if (errorFile != null) {
                         throw new ProviderException(ModuleConfigurationDataProvider.class, "Errors layout file found twice !", "Ouch");
                     }
                     errorFile = file;
@@ -129,7 +128,7 @@ public final class ModuleConfigurationDataProvider implements IDataProvider {
     public ModuleAnswers getAnswersLayout() {
         return this.answersLayout;
     }
-    
+
     public ModuleErrors getErrorsLayout() {
         return this.errorsLayout;
     }

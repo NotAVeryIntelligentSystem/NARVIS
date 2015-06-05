@@ -34,50 +34,52 @@ public class Output implements IOutput {
     @Override
     public void setOuput(MessageInOut m) {
         try {
-            for(String s : this.getTweetList(m)){
+            for (String s : this.getTweetList(m)) {
                 Status status = this.twitterLink.updateStatus(s);
             }
         } catch (TwitterException ex) {
             Logger.getLogger(Output.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private String returnNameAndCCToString(MessageInOut tweetOut){
+
+    private String returnNameAndCCToString(MessageInOut tweetOut) {
         String retVal = "";
         String answerTo = tweetOut.getAnswerTo().split(";")[0];
         retVal += " @" + answerTo;
-        if(tweetOut.getAnswerTo().split(";").length > 1){
+        if (tweetOut.getAnswerTo().split(";").length > 1) {
             retVal += " cc ";
         }
-        for(String s : tweetOut.getAnswerTo().split(";")){
-            if(!s.equals(tweetOut.getAnswerTo().split(";")[0] )){
-                if((retVal + s).length() <= 140)
+        for (String s : tweetOut.getAnswerTo().split(";")) {
+            if (!s.equals(tweetOut.getAnswerTo().split(";")[0])) {
+                if ((retVal + s).length() <= 140) {
                     retVal += " @" + s;
-                else
+                } else {
                     break;
+                }
             }
         }
         return retVal;
     }
-    
-    public List<String> getWordList(MessageInOut tweetOut){
+
+    public List<String> getWordList(MessageInOut tweetOut) {
         List<String> retVal = Arrays.asList(tweetOut.getContent().split(" "));
         return retVal;
     }
-    
-    public List<String> getTweetList(MessageInOut tweetOut){
+
+    public List<String> getTweetList(MessageInOut tweetOut) {
         List<String> wordList = this.getWordList(tweetOut);
         List<String> tweetList = new ArrayList<>();
         String tweet = "";
         boolean putNameOnIt = false;
         int i = 0;
-        while(i < wordList.size() || !tweet.equals("")){
-            if((tweet + this.returnNameAndCCToString(tweetOut)).length() < 140 && !putNameOnIt){
-                if((tweet + this.returnNameAndCCToString(tweetOut) + wordList.get(i) + 1).length() < 140){
-                    if(tweet.equals(""))
+        while (i < wordList.size() || !tweet.equals("")) {
+            if ((tweet + this.returnNameAndCCToString(tweetOut)).length() < 140 && !putNameOnIt) {
+                if ((tweet + this.returnNameAndCCToString(tweetOut) + wordList.get(i) + 1).length() < 140) {
+                    if (tweet.equals("")) {
                         tweet += wordList.get(i);
-                    else
+                    } else {
                         tweet += " " + wordList.get(i);
+                    }
                 } else {
                     tweet += this.returnNameAndCCToString(tweetOut);
                     putNameOnIt = true;

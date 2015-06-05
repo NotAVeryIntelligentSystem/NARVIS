@@ -83,36 +83,36 @@ public class NarvisEngine {
                 } catch (ProviderException ex) {
                     NarvisLogger.logException(ex);
                     onError();
-                } 
+                }
             }
         });
     }
-    
+
     private void onError() {
         // todo
     }
 
-    private void brainProcess(MessageInOut message) throws NoDataException, ProviderException{
+    private void brainProcess(MessageInOut message) throws NoDataException, ProviderException {
         List<String> parsedSentence = parser.parse(message.getContent());
         Action action = fondamental.findAction(parsedSentence);
-        
+
         Map<String, String> detailsTypes = detailAnalyser.getDetailsTypes(action.getDetails());
         IDataProvider provider = this.metaDataProviderAction.getDataProvider(action.getProviderName());
         String protoAnswer = "";
-        
+
         String[] askForArray = (String[]) action.getPrecisions().toArray(new String[action.getPrecisions().size()]);
         if (provider instanceof IDataProviderDetails) {
             protoAnswer = ((IDataProviderDetails) provider).getDataDetails(detailsTypes, askForArray);
         } else {
             protoAnswer = ((IDataProvider) provider).getData(askForArray);
         }
-        Map<String,String> answerParams = new HashMap<>();
+        Map<String, String> answerParams = new HashMap<>();
         answerParams.put("sentence", protoAnswer);
         IDataProvider answerBuilder = this.metaDataProviderAnswer.getDataProvider("Answers");
         String[] bullshit = new String[1];
         bullshit[0] = "polite3";
         String finalAnswer = ((IDataProviderDetails) answerBuilder).getDataDetails(answerParams, bullshit);
-        this.metaDataProviderAction.getFrontEnd(IOname).getOutput().setOuput(new MessageInOut(message.getInputAPI(),finalAnswer,message.getAnswerTo()));
+        this.metaDataProviderAction.getFrontEnd(IOname).getOutput().setOuput(new MessageInOut(message.getInputAPI(), finalAnswer, message.getAnswerTo()));
     }
 
 }

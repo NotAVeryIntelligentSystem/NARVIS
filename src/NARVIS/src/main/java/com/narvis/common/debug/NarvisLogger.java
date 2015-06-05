@@ -40,11 +40,12 @@ public class NarvisLogger {
      * Constructeur privé
      */
     private final Logger logger;
+
     private NarvisLogger() {
         this.logger = Logger.getGlobal();
 
     }
-    
+
     public Logger getLogger() {
         return this.logger;
     }
