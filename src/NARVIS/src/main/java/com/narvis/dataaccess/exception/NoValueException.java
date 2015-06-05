@@ -29,20 +29,20 @@ package com.narvis.dataaccess.exception;
  */
 public class NoValueException extends ProviderException {
 
-    public NoValueException(String msg) {
-        super(msg);
+    public NoValueException(String msg, String narvisErrorMessage) {
+        super(msg, narvisErrorMessage);
     }
 
-    public NoValueException(Throwable thrwbl) {
-        super(thrwbl);
+    public NoValueException(Throwable thrwbl, String narvisErrorMessage) {
+        super(thrwbl, narvisErrorMessage);
     }
 
-    public NoValueException(Class<?> providerName, String msg) {
-        super(providerName, msg);
+    public NoValueException(Class<?> providerName, String msg, String narvisErrorMessage) {
+        super(providerName, msg, narvisErrorMessage);
     }
 
-    public NoValueException(Class<?> providerName, String string, Throwable thrwbl) {
-        super(providerName, string, thrwbl);
+    public NoValueException(Class<?> providerName, String string, Throwable thrwbl, String narvisErrorMessage) {
+        super(providerName, string, thrwbl, narvisErrorMessage);
     }
 
 }

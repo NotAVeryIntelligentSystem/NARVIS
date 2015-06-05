@@ -28,21 +28,33 @@ package com.narvis.dataaccess.exception;
  * @author puma
  */
 public class ProviderException extends Exception {
+    private final String narvisErrorMessage;
 
-    public ProviderException(String msg) {
+    public String getNarvisErrorMessage() {
+        return narvisErrorMessage;
+    }
+    
+    public ProviderException(String msg, String narvisErrorMessage) {
         super(msg);
+        this.narvisErrorMessage = narvisErrorMessage;
     }
 
-    public ProviderException(Class<?> providerName, String msg) {
+    public ProviderException(Class<?> providerName, String msg, String narvisErrorMessage) {
         super("Provider : " + providerName.getCanonicalName() + " " + msg);
+        this.narvisErrorMessage = narvisErrorMessage;
+
     }
 
-    public ProviderException(Throwable thrwbl) {
+    public ProviderException(Throwable thrwbl, String narvisErrorMessage) {
         super(thrwbl);
+        this.narvisErrorMessage = narvisErrorMessage;
+
     }
 
-    public ProviderException(Class<?> providerName, String string, Throwable thrwbl) {
+    public ProviderException(Class<?> providerName, String string, Throwable thrwbl, String narvisErrorMessage) {
         super("Provider : " + providerName.getCanonicalName() + " " + string, thrwbl);
+        this.narvisErrorMessage = narvisErrorMessage;
+
     }
 
 }

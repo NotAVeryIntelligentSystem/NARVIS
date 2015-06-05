@@ -28,6 +28,7 @@ import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.common.tools.reflection.Factory;
 import com.narvis.common.tools.reflection.FactoryException;
 import com.narvis.common.tools.serialization.XmlFileAccessException;
+import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.models.conf.*;
@@ -106,9 +107,9 @@ public class ConfigurationDataProvider implements IDataProvider {
                 return this.frontEndConfs.get(keywords[0]).getData(nextKeywords);
             }
             return this.modulesConfs.get(keywords[0]).getData(nextKeywords);
-        } catch (Exception ex) {
+        } catch (IllegalKeywordException | NoDataException ex) {
             NarvisLogger.logException(ex);
-            throw new NoDataException(ConfigurationDataProvider.class, "Could not find data from keywords : " + String.join(", ", keywords), ex);
+            throw new NoDataException(ConfigurationDataProvider.class, "Could not find data from keywords : " + String.join(", ", keywords), "I am in a deep pain.");
         }
     }
 

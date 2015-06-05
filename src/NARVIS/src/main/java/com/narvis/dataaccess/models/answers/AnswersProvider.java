@@ -65,11 +65,11 @@ public class AnswersProvider implements IDataProviderDetails, IAnswerProvider {
     public String getDataDetails(Map<String,String> details, String... keywords) throws IllegalKeywordException, ProviderException{
     
         if( keywords.length < 2 || keywords[0] == null && keywords[1] == null ) {
-            throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "Not enough keywords");
+            throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "Not enough keywords", this._confProvider.getErrorsLayout().getData("engine"));
         }
         
         if( !details.containsKey(this.paramSentence) ) {
-            throw new IllegalKeywordException("Details not supported");
+            throw new IllegalKeywordException("Details not supported", this._confProvider.getErrorsLayout().getData("engine"));
         }
         
         this._details = details;
@@ -78,7 +78,7 @@ public class AnswersProvider implements IDataProviderDetails, IAnswerProvider {
         String brutAnswer = builder.readAnswerForCommand(this._confProvider.getAnswersLayout(), keywords[0] );
         
         if( brutAnswer == null ) {
-            throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "");
+            throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "", this._confProvider.getErrorsLayout().getData("engine"));
         }
         
         List<String> listOfRequiredParams = builder.getListOfRequiredParams(brutAnswer);     
@@ -103,7 +103,7 @@ public class AnswersProvider implements IDataProviderDetails, IAnswerProvider {
             
             if( !paramsToValue.containsKey(param) ) {
                 
-                throw new NoValueException("No Value for this param");
+                throw new NoValueException("No Value for this param", this._confProvider.getErrorsLayout().getData("data"));
     
             }
             

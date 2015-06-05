@@ -34,21 +34,22 @@ public class NoDataException extends ProviderException {
      * detail message.
      *
      * @param msg the detail message.
+     * @param narvisErrorMessage
      */
-    public NoDataException(String msg) {
-        super(msg);
+    public NoDataException(String msg, String narvisErrorMessage) {
+        super(msg, narvisErrorMessage);
     }
 
-    public NoDataException(Throwable thrwbl) {
-        super(thrwbl);
+    public NoDataException(Throwable thrwbl, String narvisErrorMessage) {
+        super(thrwbl, narvisErrorMessage);
     }
 
-    public NoDataException(Class<?> providerName, String msg) {
-        super(providerName, msg);
+    public NoDataException(Class<?> providerName, String msg, String narvisErrorMessage) {
+        super(providerName, msg, narvisErrorMessage);
     }
 
-    public NoDataException(Class<?> providerName, String string, Throwable thrwbl) {
-        super(providerName, string, thrwbl);
+    public NoDataException(Class<?> providerName, String string, Throwable thrwbl, String narvisErrorMessage) {
+        super(providerName, string, thrwbl, narvisErrorMessage);
     }
 
 }

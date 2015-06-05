@@ -23,52 +23,79 @@
  */
 package com.narvis.dataaccess.impl;
 
-import com.narvis.common.extensions.filefilters.FolderNameFileFilter;
+import com.narvis.common.debug.NarvisLogger;
 import com.narvis.common.tools.Arrays;
 import com.narvis.common.tools.serialization.XmlFileAccess;
+import com.narvis.common.tools.serialization.XmlFileAccessException;
 import com.narvis.dataaccess.exception.IllegalKeywordException;
+import com.narvis.dataaccess.exception.ProviderException;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.models.conf.ApiKeys;
 import com.narvis.dataaccess.models.conf.ModuleConf;
+import com.narvis.dataaccess.models.layouts.ModuleErrors;
 import java.io.File;
 
 /**
  *
  * @author uwy
  */
-public class FrontEndConfigurationDataProvider implements IDataProvider {
+public final class FrontEndConfigurationDataProvider implements IDataProvider {
 
     public static final String CONF_FOLDER_NAME = "conf";
+    public static final String LAYOUTS_FOLDER_NAME = "layouts";
+
     public static final String API_KEY_FILE_NAME = "api.key";
     public static final String MODULE_CONF_FILE_NAME = "module.conf";
+    
+    public static final String ERRORS_FILE_NAME = "errors.xml";
+
 
     public static final String API_KEYWORD = "Api";
     public static final String CONF_KEYWORD = "Conf";
+    public static final String ERRORS_KEYWORD = "Error";
 
     private final ApiKeys apiKeys;
     private final ModuleConf conf;
+    private final ModuleErrors errorsLayout;
 
-    public FrontEndConfigurationDataProvider(File frontendFolder) throws Exception {
+    public FrontEndConfigurationDataProvider(File frontendFolder) throws ProviderException {
         File apiFile = null;
         File confFile = null;
-        for (File file : frontendFolder.listFiles(new FolderNameFileFilter(CONF_FOLDER_NAME))[0].listFiles()) {
+        File errorFile = null;
+        for (File file : new File(frontendFolder, CONF_FOLDER_NAME).listFiles()) {
             switch (file.getName()) {
                 case API_KEY_FILE_NAME:
                     if (apiFile != null) {
-                        throw new IllegalArgumentException("Api key file found twice !");
+                        throw new ProviderException(FrontEndConfigurationDataProvider.class, "Api key file found twice !", "Ouch");
                     }
                     apiFile = file;
                     break;
                 case MODULE_CONF_FILE_NAME:
                     if (confFile != null) {
-                        throw new IllegalArgumentException("Module conf file found twice !");
+                        throw new ProviderException(FrontEndConfigurationDataProvider.class, "Module conf file found twice !", "Ouch");
                     }
                     confFile = file;
                     break;
             }
         }
-        this.apiKeys = apiFile == null ? null : XmlFileAccess.fromFile(ApiKeys.class, apiFile);
-        this.conf = confFile == null ? null : XmlFileAccess.fromFile(ModuleConf.class, confFile);
+        for (File file : new File(frontendFolder, LAYOUTS_FOLDER_NAME).listFiles()) {
+            switch (file.getName()) {
+                case ERRORS_FILE_NAME:
+                    if(errorFile != null) {
+                        throw new ProviderException(FrontEndConfigurationDataProvider.class, "Errors layout file found twice !", "Ouch");
+                    }
+                    errorFile = file;
+                    break;
+            }
+        }
+        try {
+            this.apiKeys = apiFile == null ? null : XmlFileAccess.fromFile(ApiKeys.class, apiFile);
+            this.conf = confFile == null ? null : XmlFileAccess.fromFile(ModuleConf.class, confFile);
+            this.errorsLayout = errorFile == null ? null : XmlFileAccess.fromFile(ModuleErrors.class, errorFile);
+        } catch (XmlFileAccessException ex) {
+            NarvisLogger.logException(ex);
+            throw new ProviderException(FrontEndConfigurationDataProvider.class, "Can not deserialize some files !", "Ouch");
+        }
 
     }
 
@@ -79,20 +106,24 @@ public class FrontEndConfigurationDataProvider implements IDataProvider {
     public ModuleConf getConf() {
         return this.conf;
     }
+    
+    public ModuleErrors getErrorsLayout() {
+        return this.errorsLayout;
+    }
 
     @Override
     public String getData(String... keywords) throws IllegalKeywordException {
         if(keywords.length < 1) {
-            throw new IllegalKeywordException(FrontEndConfigurationDataProvider.class, keywords, "keywords.length < 1");
+            throw new IllegalKeywordException(FrontEndConfigurationDataProvider.class, keywords, "keywords.length < 1", this.errorsLayout.getData("engine"));
         }
-        String[] nextkeywords = Arrays.SkipFirst(keywords, 1);
+        String[] nextkeywords = Arrays.skipFirst(keywords, 1);
         switch(keywords[0]) {
             case API_KEY_FILE_NAME:
                 return this.apiKeys.getData(nextkeywords);
             case MODULE_CONF_FILE_NAME:
                 return this.conf.getData(nextkeywords);
         }
-        throw new IllegalKeywordException(FrontEndConfigurationDataProvider.class, keywords, keywords[0] + " does not match " + String.join(", ", API_KEY_FILE_NAME, MODULE_CONF_FILE_NAME));
+        throw new IllegalKeywordException(FrontEndConfigurationDataProvider.class, keywords, keywords[0] + " does not match " + String.join(", ", API_KEY_FILE_NAME, MODULE_CONF_FILE_NAME), this.errorsLayout.getData("engine"));
     }
 
 }

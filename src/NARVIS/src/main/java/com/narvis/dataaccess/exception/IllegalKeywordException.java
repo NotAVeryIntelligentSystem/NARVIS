@@ -34,17 +34,18 @@ public class IllegalKeywordException extends ProviderException {
      * specified detail message.
      *
      * @param msg the detail message.
+     * @param narvisErrorMessage
      */
-    public IllegalKeywordException(String msg) {
-        super(msg);
+    public IllegalKeywordException(String msg, String narvisErrorMessage) {
+        super(msg, narvisErrorMessage);
     }
 
-    public IllegalKeywordException(Class<?> providerName, String[] keywords, String desc) {
-        super(providerName, desc + " " + String.join(",", keywords));
+    public IllegalKeywordException(Class<?> providerName, String[] keywords, String desc, String narvisErrorMessage) {
+        super(providerName, desc + " " + String.join(",", keywords), narvisErrorMessage);
     }
 
-    public IllegalKeywordException(Class<?> providerName, String[] keywords, String desc, Throwable thrwbl) {
-        super(providerName, desc + " " + String.join(",", keywords), thrwbl);
+    public IllegalKeywordException(Class<?> providerName, String[] keywords, String desc, Throwable thrwbl, String narvisErrorMessage) {
+        super(providerName, desc + " " + String.join(",", keywords), thrwbl, narvisErrorMessage);
     }
 
 }

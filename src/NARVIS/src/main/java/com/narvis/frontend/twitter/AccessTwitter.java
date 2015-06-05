@@ -64,7 +64,7 @@ public class AccessTwitter implements IFrontEnd {
             this.input = null;
             this.output = null;
         } catch (Exception ex) {
-            NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
+            NarvisLogger.getInstance().logException(ex);
         }
     }
 

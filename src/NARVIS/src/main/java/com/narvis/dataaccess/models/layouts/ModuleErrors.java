@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 puma.
+ * Copyright 2015 Zack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,28 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.exception;
+package com.narvis.dataaccess.models.layouts;
+
+import com.narvis.dataaccess.interfaces.IDataProvider;
+import java.util.HashMap;
+import java.util.Map;
+import org.simpleframework.xml.ElementMap;
 
 /**
  *
- * @author puma
+ * @author Zack
  */
-public class NoAnswerException extends ProviderException {
-
-    public NoAnswerException(String msg, String narvisErrorMessage) {
-        super(msg, narvisErrorMessage);
+public class ModuleErrors implements IDataProvider {
+    @ElementMap(entry = "ErrorSentence", key = "command", attribute = true, inline = true)
+    @SuppressWarnings("FieldMayBeFinal")
+    private Map<String, String> map;
+    
+    public ModuleErrors() {
+        this.map = new HashMap<>();
     }
 
-    public NoAnswerException(Throwable thrwbl, String narvisErrorMessage) {
-        super(thrwbl, narvisErrorMessage);
+    public Map<String, String> getMap() {
+        return map;
     }
 
-    public NoAnswerException(Class<?> providerName, String msg, String narvisErrorMessage) {
-        super(providerName, msg, narvisErrorMessage);
-    }
 
-    public NoAnswerException(Class<?> providerName, String string, Throwable thrwbl, String narvisErrorMessage) {
-        super(providerName, string, thrwbl, narvisErrorMessage);
+    @Override
+    public String getData(String... keywords) {
+        if (map.containsKey(keywords[0])) {
+            return map.get(keywords[0]);
+        }
+        return null;
     }
-
 }

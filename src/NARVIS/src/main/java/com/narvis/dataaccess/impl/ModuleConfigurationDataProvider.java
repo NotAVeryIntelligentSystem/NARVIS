@@ -24,74 +24,94 @@
 package com.narvis.dataaccess.impl;
 
 import com.narvis.common.debug.NarvisLogger;
-import com.narvis.common.extensions.filefilters.FolderNameFileFilter;
 import com.narvis.common.tools.Arrays;
 import com.narvis.common.tools.serialization.XmlFileAccess;
+import com.narvis.common.tools.serialization.XmlFileAccessException;
 import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoDataException;
+import com.narvis.dataaccess.exception.ProviderException;
 import com.narvis.dataaccess.interfaces.IDataProvider;
 import com.narvis.dataaccess.models.conf.*;
-import com.narvis.dataaccess.models.layouts.ModulesAnswers;
+import com.narvis.dataaccess.models.layouts.ModuleAnswers;
+import com.narvis.dataaccess.models.layouts.ModuleErrors;
 import java.io.File;
 
 /**
  *
  * @author uwy
  */
-public class ModuleConfigurationDataProvider implements IDataProvider {
+public final class ModuleConfigurationDataProvider implements IDataProvider {
 
     public static final String CONF_FOLDER_NAME = "conf";
     public static final String LAYOUTS_FOLDER_NAME = "layouts";
     public static final String DATA_FOLDER_NAME = "data";
 
     public static final String ANSWERS_FILE_NAME = "answers.xml";
+    public static final String ERRORS_FILE_NAME = "errors.xml";
+
     public static final String API_KEY_FILE_NAME = "api.key";
     public static final String MODULE_CONF_FILE_NAME = "module.conf";
 
     public static final String API_KEYWORD = "Api";
     public static final String CONF_KEYWORD = "Conf";
     public static final String ANSWERS_KEYWORD = "Answer";
+    public static final String ERRORS_KEYWORD = "Error";
+
 
     private final ApiKeys apiKeys;
     private final ModuleConf conf;
-    private final ModulesAnswers answersLayout;
+    private final ModuleAnswers answersLayout;
+    private final ModuleErrors errorsLayout;
     private final File moduleDataFolder;
 
-    public ModuleConfigurationDataProvider(File moduleFolder) throws Exception {
+    public ModuleConfigurationDataProvider(File moduleFolder) throws ProviderException {
         File apiFile = null;
         File confFile = null;
         File answerFile = null;
-        for (File file : moduleFolder.listFiles(new FolderNameFileFilter(CONF_FOLDER_NAME))[0].listFiles()) {
+        File errorFile = null;
+        for (File file : new File(moduleFolder, CONF_FOLDER_NAME).listFiles()) {
             switch (file.getName()) {
                 case API_KEY_FILE_NAME:
                     if (apiFile != null) {
-                        throw new IllegalArgumentException("Api key file found twice !");
+                        throw new ProviderException(ModuleConfigurationDataProvider.class, "Api key file found twice !", "Ouch");
                     }
                     apiFile = file;
                     break;
                 case MODULE_CONF_FILE_NAME:
                     if (confFile != null) {
-                        throw new IllegalArgumentException("Module conf file found twice !");
+                        throw new ProviderException(ModuleConfigurationDataProvider.class, "Module conf file found twice !", "Ouch");
                     }
                     confFile = file;
                     break;
             }
         }
-        
-        for (File file : moduleFolder.listFiles(new FolderNameFileFilter(LAYOUTS_FOLDER_NAME))[0].listFiles()) {
+        for (File file : new File(moduleFolder, LAYOUTS_FOLDER_NAME).listFiles()) {
             switch (file.getName()) {
                 case ANSWERS_FILE_NAME:
                     if (answerFile != null) {
-                        throw new IllegalArgumentException("Api key files found twice !");
+                        throw new ProviderException(ModuleConfigurationDataProvider.class, "Answers layout file found twice !", "Ouch");
                     }
                     answerFile = file;
+                    break;
+                case ERRORS_FILE_NAME:
+                    if(errorFile != null) {
+                        throw new ProviderException(ModuleConfigurationDataProvider.class, "Errors layout file found twice !", "Ouch");
+                    }
+                    errorFile = file;
                     break;
             }
         }
         this.moduleDataFolder = new File(moduleFolder, DATA_FOLDER_NAME);
-        this.apiKeys = apiFile == null ? null : XmlFileAccess.fromFile(ApiKeys.class, apiFile);
-        this.conf = confFile == null ? null : XmlFileAccess.fromFile(ModuleConf.class, confFile);
-        this.answersLayout = answerFile == null ? null : XmlFileAccess.fromFile(ModulesAnswers.class, answerFile);
+        try {
+            this.apiKeys = apiFile == null ? null : XmlFileAccess.fromFile(ApiKeys.class, apiFile);
+            this.conf = confFile == null ? null : XmlFileAccess.fromFile(ModuleConf.class, confFile);
+            this.answersLayout = answerFile == null ? null : XmlFileAccess.fromFile(ModuleAnswers.class, answerFile);
+            this.errorsLayout = errorFile == null ? null : XmlFileAccess.fromFile(ModuleErrors.class, errorFile);
+        } catch (XmlFileAccessException ex) {
+            NarvisLogger.logException(ex);
+            throw new ProviderException(ModuleConfigurationDataProvider.class, "Could not deserialize a file, more info in intern exception", ex, this.getErrorsLayout().getData("data"));
+        }
+
     }
 
     public File getDataFolder() {
@@ -106,31 +126,36 @@ public class ModuleConfigurationDataProvider implements IDataProvider {
         return this.conf;
     }
 
-    public ModulesAnswers getAnswersLayout() {
+    public ModuleAnswers getAnswersLayout() {
         return this.answersLayout;
+    }
+    
+    public ModuleErrors getErrorsLayout() {
+        return this.errorsLayout;
     }
 
     @Override
     public String getData(String... keywords) throws IllegalKeywordException, NoDataException {
         if (keywords.length < 1) {
-            throw new IllegalKeywordException(ModuleConfigurationDataProvider.class, keywords, "keywords.length < 1");
+            throw new IllegalKeywordException(ModuleConfigurationDataProvider.class, keywords, "keywords.length < 1", this.getErrorsLayout().getData("engine"));
         }
-        String[] nextKeywords = Arrays.SkipFirst(keywords, 1);
+        String[] nextKeywords = Arrays.skipFirst(keywords, 1);
         try {
             switch (keywords[0]) {
                 case API_KEYWORD:
                     return this.apiKeys.getData(nextKeywords);
                 case CONF_KEYWORD:
                     return this.conf.getData(nextKeywords);
-
                 case ANSWERS_KEYWORD:
                     return this.answersLayout.getData(nextKeywords);
+                case ERRORS_KEYWORD:
+                    return this.errorsLayout.getData(nextKeywords);
             }
         } catch (NullPointerException ex) {
             NarvisLogger.logException(ex);
-            throw new NoDataException(ModuleConfigurationDataProvider.class, "Keyword matches, but conf could not be loaded.", ex);
+            throw new NoDataException(ModuleConfigurationDataProvider.class, "Keyword matches, but conf could not be loaded.", ex, this.getErrorsLayout().getData("engine"));
         }
-        throw new IllegalKeywordException(FrontEndConfigurationDataProvider.class, keywords, keywords[0] + " does not match " + String.join(", ", API_KEY_FILE_NAME, MODULE_CONF_FILE_NAME));
+        throw new IllegalKeywordException(FrontEndConfigurationDataProvider.class, keywords, keywords[0] + " does not match " + String.join(", ", API_KEY_FILE_NAME, MODULE_CONF_FILE_NAME), this.getErrorsLayout().getData("engine"));
     }
 
 }

@@ -33,7 +33,7 @@ public class Arrays {
 
     }
 
-    public static String[] SkipFirst(String[] items, int count) {
+    public static String[] skipFirst(String[] items, int count) {
         String[] retVal = new String[items.length - count];
         for (int i = count; i < items.length; i++) {
             retVal[i - count] = items[i];
