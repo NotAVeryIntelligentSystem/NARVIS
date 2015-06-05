@@ -13,13 +13,12 @@ import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.exception.ProviderException;
 import com.narvis.dataaccess.interfaces.*;
-import com.narvis.dataaccess.models.answers.AnswersProvider;
+import com.narvis.engine.exception.NoActionException;
+import com.narvis.engine.exception.NoSentenceException;
 import com.narvis.frontend.MessageInOut;
-import com.narvis.frontend.interfaces.IOutput;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.RunnableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,6 +37,7 @@ public class NarvisEngine {
     private IMetaDataProvider metaDataProviderAction;
     private IMetaDataProvider metaDataProviderAnswer;
     private final Executer executer;
+    private MessageInOut lastMessage;
 
     private NarvisEngine() throws Exception {
         this.executer = new Executer("Narvis engine");
@@ -76,23 +76,27 @@ public class NarvisEngine {
                     brainProcess(lastMessage);
                 } catch (IllegalKeywordException ex) {
                     NarvisLogger.logException(ex);
-                    onError();
+                    onError(ex.getNarvisErrorMessage());
                 } catch (NoDataException ex) {
                     NarvisLogger.logException(ex);
-                    onError();
+                    onError(ex.getNarvisErrorMessage());
                 } catch (ProviderException ex) {
                     NarvisLogger.logException(ex);
-                    onError();
+                    onError(ex.getNarvisErrorMessage());
+                } catch (NoActionException | NoSentenceException ex) {
+                    Logger.getLogger(NarvisEngine.class.getName()).log(Level.SEVERE, null, ex);
                 } 
             }
         });
     }
     
-    private void onError() {
+    private void onError(String message) {
         // todo
+        this.metaDataProviderAction.getFrontEnd(IOname).getOutput().setOuput(new MessageInOut(this.lastMessage.getInputAPI(),message,this.lastMessage.getAnswerTo()));
     }
 
-    private void brainProcess(MessageInOut message) throws NoDataException, ProviderException{
+    private void brainProcess(MessageInOut message) throws NoDataException, ProviderException, NoActionException, NoSentenceException{
+        this.lastMessage = message;
         List<String> parsedSentence = parser.parse(message.getContent());
         Action action = fondamental.findAction(parsedSentence);
         
