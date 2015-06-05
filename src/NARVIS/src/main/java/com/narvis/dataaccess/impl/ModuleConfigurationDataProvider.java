@@ -77,6 +77,7 @@ public class ModuleConfigurationDataProvider implements IDataProvider {
                     break;
             }
         }
+        
         for (File file : moduleFolder.listFiles(new FolderNameFileFilter(LAYOUTS_FOLDER_NAME))[0].listFiles()) {
             switch (file.getName()) {
                 case ANSWERS_FILE_NAME:
