@@ -31,7 +31,7 @@ import java.util.logging.Logger;
  */
 public class NarvisEngine {
 
-    private static String IOname = "Console"; // TODO : Change by load from conf files
+    private static String IOname = "Twitter"; // TODO : Change by load from conf files
     private static NarvisEngine narvis;
 
     private Parser parser;
@@ -87,7 +87,8 @@ public class NarvisEngine {
                     NarvisLogger.logException(ex);
                     onError(ex.getNarvisErrorMessage());
                 } catch (NoActionException | NoSentenceException ex) {
-                    Logger.getLogger(NarvisEngine.class.getName()).log(Level.SEVERE, null, ex);
+                    NarvisLogger.logException(ex);
+                    onError(ex.getNarvisErrorMessage());
                 } 
             }
         });
