@@ -131,8 +131,7 @@ public class Parser {
      * @param words : Liste de mots (Word) à convertir
      * @return Liste de String correspondante
      */
-    private List<String> wordsToStrings(List<Word> words)
-    {
+    private List<String> wordsToStrings(List<Word> words) {
         List<String> strings = new ArrayList<>();
         
         for(Word word : words)
