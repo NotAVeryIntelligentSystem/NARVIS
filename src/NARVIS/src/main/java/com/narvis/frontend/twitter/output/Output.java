@@ -8,6 +8,9 @@ package com.narvis.frontend.twitter.output;
 import com.narvis.frontend.MessageInOut;
 import com.narvis.frontend.interfaces.IOutput;
 import com.narvis.frontend.twitter.AccessTwitter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import twitter4j.Status;
@@ -31,26 +34,61 @@ public class Output implements IOutput {
     @Override
     public void setOuput(MessageInOut m) {
         try {
-            Status status = this.twitterLink.updateStatus(constructTweetResponse(m));
+            for(String s : this.getTweetList(m)){
+                Status status = this.twitterLink.updateStatus(s);
+            }
         } catch (TwitterException ex) {
             Logger.getLogger(Output.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public String constructTweetResponse(MessageInOut m) {
-        String response = "";
-        String answerTo = m.getAnswerTo().split(";")[0];
-        response += "@" + answerTo + " " + m.getContent();
-        if (m.getAnswerTo().split(";").length > 1) {
-            response += " cc ";
+    
+    private String returnNameAndCCToString(MessageInOut tweetOut){
+        String retVal = "";
+        String answerTo = tweetOut.getAnswerTo().split(";")[0];
+        retVal += " @" + answerTo;
+        if(tweetOut.getAnswerTo().split(";").length > 1){
+            retVal += " cc ";
         }
-        for (String s : m.getAnswerTo().split(";")) {
-            if (!s.equals(m.getAnswerTo().split(";")[0])) {
-                if (response.length() + s.length() + 2 < 140) {
-                    response += " @" + s;
-                }
+        for(String s : tweetOut.getAnswerTo().split(";")){
+            if(!s.equals(tweetOut.getAnswerTo().split(";")[0] )){
+                if((retVal + s).length() <= 140)
+                    retVal += " @" + s;
+                else
+                    break;
             }
         }
-        return response;
+        return retVal;
+    }
+    
+    public List<String> getWordList(MessageInOut tweetOut){
+        List<String> retVal = Arrays.asList(tweetOut.getContent().split(" "));
+        return retVal;
+    }
+    
+    public List<String> getTweetList(MessageInOut tweetOut){
+        List<String> wordList = this.getWordList(tweetOut);
+        List<String> tweetList = new ArrayList<>();
+        String tweet = "";
+        boolean putNameOnIt = false;
+        int i = 0;
+        while(i < wordList.size() || !tweet.equals("")){
+            if((tweet + this.returnNameAndCCToString(tweetOut)).length() < 140 && !putNameOnIt){
+                if((tweet + this.returnNameAndCCToString(tweetOut) + wordList.get(i) + 1).length() < 140){
+                    if(tweet.equals(""))
+                        tweet += wordList.get(i);
+                    else
+                        tweet += " " + wordList.get(i);
+                } else {
+                    tweet += this.returnNameAndCCToString(tweetOut);
+                    putNameOnIt = true;
+                }
+            } else {
+                tweetList.add(tweet);
+                tweet = "";
+                putNameOnIt = false;
+            }
+            i++;
+        }
+        return tweetList;
     }
 }
