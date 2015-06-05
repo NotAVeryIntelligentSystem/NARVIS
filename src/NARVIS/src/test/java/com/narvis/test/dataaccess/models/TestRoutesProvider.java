@@ -49,9 +49,9 @@ import static org.junit.Assert.*;
  *
  * @author Zack
  */
-public class RoutesProviderTest {
+public class TestRoutesProvider {
     
-    public RoutesProviderTest() {
+    public TestRoutesProvider() {
     }
     
     @BeforeClass
@@ -98,13 +98,6 @@ public class RoutesProviderTest {
         testParsedSentence.add("what");
         testParsedSentence.add("is");
         testParsedSentence.add("weather");
-        
-        /*
-        Map<String, String> details = new HashMap<>();
-        details.put("give someone weather", "");
-        details.put("what is weather", "");
-        */
-        
         /**/
         
         /* Expected results */
@@ -126,7 +119,11 @@ public class RoutesProviderTest {
             Map<String, String> myDetails = myDetailsAnalyser.getDetailsTypes(myAction.getDetails());
             
             IDataModelProvider<RouteNode> myRoutesProvider = (IDataModelProvider<RouteNode>) DataAccessFactory.getMetaDataProvider().getDataProvider("Routes");
-            ((IDataProviderDetails)myRoutesProvider).getDataDetails(myDetails, "similarity");
+            
+            String[] askFor = new String[1];
+            askFor[0] = myAction.getPrecisions().get(0);
+            
+            String answer = ((IDataProviderDetails)myRoutesProvider).getDataDetails(myDetails, askFor);
             
             
             myAction = myFondamentalAnalyser.findAction(testParsedSentence);

@@ -25,6 +25,9 @@ package com.narvis.dataaccess.impl;
 
 import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.common.debug.NarvisLogger;
+import com.narvis.dataaccess.exception.CanNotFindValueForParamException;
+import com.narvis.dataaccess.interfaces.IAnswerProvider;
+import com.narvis.dataaccess.interfaces.IAnswserBuilder;
 import com.narvis.dataaccess.interfaces.IDataModelProvider;
 import com.narvis.dataaccess.interfaces.IDataProviderDetails;
 import com.narvis.dataaccess.models.route.ActionNode;
@@ -41,7 +44,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
@@ -50,7 +52,12 @@ import org.xml.sax.SAXException;
  * @author Zack
  */
 public class RoutesProvider implements IDataProviderDetails, IDataModelProvider<RouteNode> {
-    //private final static String ROUTESPATH = "src\\test\\java\\com\\narvis\\test\\dataaccess\\models\\route\\routes.xml"; // Le chemin d'accès au fichier XML contenant les routes
+    
+    private final String ERROR_ANSWER = "error";
+    private final String ERROR_NOCOMMANDE_ANSWER = "errornocommand";
+    private final String SUCCESS = "success";
+    private final String SUCCESS_SIMILARITY = "successsimilarity";
+    
     private final RouteNode routes;
     private final ModuleConfigurationDataProvider conf;
     
@@ -92,9 +99,12 @@ public class RoutesProvider implements IDataProviderDetails, IDataModelProvider<
     @Override
     public String getDataDetails(Map<String, String> detailsToValue, String... keywords) {
 
+        IAnswserBuilder answerBuilder = new AnswerBuilder();
+        String returnMsg = "";
+        
         if(keywords.length == 0)
         {
-            return "Fuck fuck fuck...";
+            return answerBuilder.readAnswerForCommand(this.conf, ERROR_NOCOMMANDE_ANSWER );
         }
         
         if(this.fondamentalAnalyser == null || this.parser == null)
@@ -105,7 +115,7 @@ public class RoutesProvider implements IDataProviderDetails, IDataModelProvider<
                 
             } catch (Exception ex) {
                 NarvisLogger.getInstance().log(Level.SEVERE, ex.getMessage());
-                return "Fuck fuck fuck...";
+                return answerBuilder.readAnswerForCommand(this.conf, ERROR_ANSWER );
             }
         }
         
@@ -118,12 +128,13 @@ public class RoutesProvider implements IDataProviderDetails, IDataModelProvider<
                 break;
             case "similarity":
                 createSimilarityBetween(getParsedSentencesFromDetails(detailsToValue));
+                returnMsg = answerBuilder.readAnswerForCommand(this.conf, SUCCESS_SIMILARITY );
                 break;
             default:
-                return "Fuck fuck fuck...";
+                returnMsg = answerBuilder.readAnswerForCommand(this.conf, ERROR_NOCOMMANDE_ANSWER );
         }
         
-        return "";
+        return returnMsg;
     }
 
     /**
