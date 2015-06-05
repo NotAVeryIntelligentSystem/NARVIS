@@ -98,7 +98,7 @@ public class Parser {
         
         sentence = String.copyValueOf(sentenceChar);
         
-        sentence.replaceAll("\"", "");
+        sentence = sentence.replaceAll("\"", "");
     }
     
     /**
@@ -109,7 +109,7 @@ public class Parser {
     {
         for(String word : parsedSentence)
         {
-            word.replace("_", " ");
+            word = word.replace("_", " ");
         }
     }
     

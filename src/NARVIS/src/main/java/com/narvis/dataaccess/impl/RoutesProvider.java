@@ -26,6 +26,7 @@ package com.narvis.dataaccess.impl;
 import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.common.debug.NarvisLogger;
 import com.narvis.dataaccess.interfaces.IDataModelProvider;
+import com.narvis.dataaccess.interfaces.IDataProviderDetails;
 import com.narvis.dataaccess.models.route.RouteNode;
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +39,7 @@ import org.xml.sax.SAXException;
  *
  * @author Zack
  */
-public class RoutesProvider implements IDataModelProvider<RouteNode> {
+public class RoutesProvider implements IDataProviderDetails, IDataModelProvider<RouteNode> {
     //private final static String ROUTESPATH = "src\\test\\java\\com\\narvis\\test\\dataaccess\\models\\route\\routes.xml"; // Le chemin d'accès au fichier XML contenant les routes
     private final RouteNode routes;
     private final ModuleConfigurationDataProvider conf;
@@ -70,6 +71,15 @@ public class RoutesProvider implements IDataModelProvider<RouteNode> {
     @Override
     public RouteNode getModel(String... keywords) {
         return this.routes;
+    }
+
+    
+    @Override
+    public String getDataDetails(Map<String, String> detailsToValue, String... keywords) {
+        
+        
+        
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
