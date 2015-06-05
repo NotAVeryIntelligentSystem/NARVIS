@@ -10,7 +10,7 @@
                      <Words class="java.util.LinkedList"/>
                      <Actions class="java.util.LinkedList">
                         <Action>
-                           <Provider>weather</Provider>
+                           <Provider>OpenWeatherMap</Provider>
                            <AskFor class="java.util.LinkedList"/>
                         </Action>
                      </Actions>
@@ -31,7 +31,7 @@
                      <Words class="java.util.LinkedList"/>
                      <Actions class="java.util.LinkedList">
                         <Action>
-                           <Provider>weather</Provider>
+                           <Provider>OpenWeatherMap</Provider>
                            <AskFor class="java.util.LinkedList"/>
                         </Action>
                      </Actions>

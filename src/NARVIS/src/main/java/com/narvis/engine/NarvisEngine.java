@@ -13,7 +13,10 @@ import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.exception.ProviderException;
 import com.narvis.dataaccess.interfaces.*;
+import com.narvis.dataaccess.models.answers.AnswersProvider;
 import com.narvis.frontend.MessageInOut;
+import com.narvis.frontend.interfaces.IOutput;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.RunnableFuture;
@@ -26,7 +29,7 @@ import java.util.logging.Logger;
  */
 public class NarvisEngine {
 
-    private static String IOname = "console"; // TODO : Change by load from conf files
+    private static String IOname = "Console"; // TODO : Change by load from conf files
     private static NarvisEngine narvis;
 
     private Parser parser;
@@ -54,11 +57,11 @@ public class NarvisEngine {
 
     public void start() {
         this.executer.start();
-        this.metaDataProvider.getFrontEnd("Console").start();
+        this.metaDataProvider.getFrontEnd(IOname).start();
     }
 
     public void close() throws Exception {
-        this.metaDataProvider.getFrontEnd("Console").close();
+        this.metaDataProvider.getFrontEnd(IOname).close();
         this.executer.close();
     }
 
@@ -68,7 +71,7 @@ public class NarvisEngine {
             @Override
             public void run() {
                 try {
-                    brainProcess(lastMessage.getContent());
+                    brainProcess(lastMessage);
                 } catch (IllegalKeywordException ex) {
                     NarvisLogger.logException(ex);
                     onError();
@@ -87,18 +90,24 @@ public class NarvisEngine {
         // todo
     }
 
-    private void brainProcess(String message) throws NoDataException, ProviderException{
-        List<String> parsedSentence = parser.parse(message);
+    private void brainProcess(MessageInOut message) throws NoDataException, ProviderException{
+        List<String> parsedSentence = parser.parse(message.getContent());
         Action action = fondamental.findAction(parsedSentence);
         Map<String, String> detailsTypes = detailAnalyser.getDetailsTypes(action.getDetails());
         IDataProvider provider = this.metaDataProvider.getDataProvider(action.getProviderName());
+        String protoAnswer = "";
+        
+        String[] askForArray = (String[]) action.getPrecisions().toArray();
         if (provider instanceof IDataProviderDetails) {
-            String protoAnswer = ((IDataProviderDetails) provider).getDataDetails(detailsTypes, (String[]) action.getPrecisions().toArray());
+            protoAnswer = ((IDataProviderDetails) provider).getDataDetails(detailsTypes, askForArray);
         } else {
-            String protoAnswer = ((IDataProvider) provider).getData((String[]) action.getPrecisions().toArray());
+            protoAnswer = ((IDataProvider) provider).getData(askForArray);
         }
-        // AnswerBuilder;
-
+        Map<String,String> answerParams = new HashMap<>();
+        answerParams.put("sentence", protoAnswer);
+        IDataProvider answerBuilder = this.metaDataProvider.getDataProvider("Answers");
+        String finalAnswer = ((IDataProviderDetails) answerBuilder).getDataDetails(answerParams, (String[]) action.getPrecisions().toArray());
+        this.metaDataProvider.getFrontEnd(IOname).getOutput().setOuput(new MessageInOut(message.getInputAPI(),finalAnswer,message.getAnswerTo()));
     }
 
 }

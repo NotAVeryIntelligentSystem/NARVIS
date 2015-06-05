@@ -31,7 +31,7 @@ import java.util.Map;
  *
  * @author puma
  */
-public interface IAnswserBuilder {
+public interface IAnswerBuilder {
 
     /**
      * Read the XML answer file to retrieve the answer attached to the given

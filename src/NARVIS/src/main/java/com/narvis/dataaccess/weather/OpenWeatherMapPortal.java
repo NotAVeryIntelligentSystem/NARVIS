@@ -6,11 +6,12 @@
 package com.narvis.dataaccess.weather;
 
 import com.narvis.common.debug.NarvisLogger;
+import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoAccessDataException;
 import com.narvis.engine.AnswerBuilder;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.dataaccess.interfaces.IAnswerProvider;
-import com.narvis.engine.interfaces.IAnswserBuilder;
+import com.narvis.engine.interfaces.IAnswerBuilder;
 import com.narvis.dataaccess.interfaces.IDataProviderDetails;
 import com.narvis.dataaccess.models.conf.ApiKeys;
 import com.narvis.dataaccess.weather.annotations.Command;
@@ -22,9 +23,6 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.aksingh.owmjapis.CurrentWeather;
 import net.aksingh.owmjapis.OpenWeatherMap;
 import org.json.JSONException;
@@ -155,7 +153,8 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
     public String getDataDetails(Map<String, String> detailsToValue, String... keywords) throws NoValueException, ProviderException {
         //Problem we quit
         if (keywords.length < 1 || !detailsToValue.containsKey("city") || this._confProvider == null || this._confProvider.getAnswersLayout() == null) {
-            return null;
+            
+            throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "Not enough keywords");
         }
 
         String key = this.weatherApiKeys.getData(KEY_TAG);
@@ -179,7 +178,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
             throw new ProviderException(OpenWeatherMapPortal.class, "Woops, this is (really really) bad.");
         }
 
-        IAnswserBuilder answerBuilder = new AnswerBuilder();
+        IAnswerBuilder answerBuilder = new AnswerBuilder();
         String answerFromXml = answerBuilder.readAnswerForCommand(this._confProvider.getAnswersLayout(), keywords[0]);
 
         //Can not find the answer from the xml something went wrong we quit

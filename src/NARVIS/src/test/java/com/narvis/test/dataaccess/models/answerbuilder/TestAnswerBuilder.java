@@ -24,7 +24,7 @@
 package com.narvis.test.dataaccess.models.answerbuilder;
 
 import com.narvis.engine.AnswerBuilder;
-import com.narvis.engine.interfaces.IAnswserBuilder;
+import com.narvis.engine.interfaces.IAnswerBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +44,7 @@ public class TestAnswerBuilder {
     @Test
     public void TestAnswer() {
 
-        IAnswserBuilder builder = new AnswerBuilder();
+        IAnswerBuilder builder = new AnswerBuilder();
 
         String message = "The temperature is [temperature]°C";
         Map<String, String> paramToValue = new HashMap();
@@ -60,7 +60,7 @@ public class TestAnswerBuilder {
     @Test
     public void testRequiredParameters() {
 
-        IAnswserBuilder builder = new AnswerBuilder();
+        IAnswerBuilder builder = new AnswerBuilder();
 
         String message = "The temperature in [city] is [temperature]°C and the cloud percentage is [cloud]%";
 

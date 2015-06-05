@@ -16,7 +16,13 @@
          </InformationTypes>
          <Hint class="java.util.LinkedList"/>
       </Word>
-      
+      <Word IsIgnored="false">
+         <Value>nimes</Value>
+         <InformationTypes class="java.util.LinkedList">
+            <string>city</string>
+         </InformationTypes>
+         <Hint class="java.util.LinkedList"/>
+      </Word>
       <Word IsIgnored="true">
          <Value>the</Value>
          <InformationTypes class="java.util.LinkedList"/>
