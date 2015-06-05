@@ -32,12 +32,9 @@ import com.narvis.engine.Action;
 import com.narvis.engine.DetailsAnalyser;
 import com.narvis.engine.FondamentalAnalyser;
 import com.narvis.engine.Parser;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -83,7 +80,7 @@ public class TestRoutesProvider {
         try {
             IDataModelProvider<RouteNode> myRoutesProvider = (IDataModelProvider<RouteNode>) DataAccessFactory.getMetaDataProvider().getDataProvider("Routes");
         } catch (Exception ex) {
-            NarvisLogger.getInstance().log(Level.SEVERE, ex.getMessage());
+            NarvisLogger.getInstance().logException(ex);
             throw ex;
         }
     }
@@ -130,7 +127,7 @@ public class TestRoutesProvider {
             assertEquals(myAction.getProviderName(), "weather");
             
         } catch (Exception ex) {
-            NarvisLogger.getInstance().log(Level.SEVERE, ex.getMessage());
+            NarvisLogger.getInstance().logException(ex);
             throw ex;
         }
     }

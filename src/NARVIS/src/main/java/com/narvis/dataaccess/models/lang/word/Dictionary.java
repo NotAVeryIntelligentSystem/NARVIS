@@ -54,7 +54,7 @@ public class Dictionary {
         for (Word w : this.words) {
             if (w.getValue().equalsIgnoreCase(value)) {
                 if (word != null) {
-                    NarvisLogger.getInstance().log(Level.WARNING, "Word duplication : " + w.getValue());
+                    NarvisLogger.getInstance().getLogger().log(Level.WARNING, "Word duplication : " + w.getValue());
                 }
                 word = w;
             }

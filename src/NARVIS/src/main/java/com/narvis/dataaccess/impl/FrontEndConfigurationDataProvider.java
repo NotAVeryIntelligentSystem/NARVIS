@@ -116,7 +116,7 @@ public final class FrontEndConfigurationDataProvider implements IDataProvider {
         if(keywords.length < 1) {
             throw new IllegalKeywordException(FrontEndConfigurationDataProvider.class, keywords, "keywords.length < 1", this.errorsLayout.getData("engine"));
         }
-        String[] nextkeywords = Arrays.SkipFirst(keywords, 1);
+        String[] nextkeywords = Arrays.skipFirst(keywords, 1);
         switch(keywords[0]) {
             case API_KEY_FILE_NAME:
                 return this.apiKeys.getData(nextkeywords);

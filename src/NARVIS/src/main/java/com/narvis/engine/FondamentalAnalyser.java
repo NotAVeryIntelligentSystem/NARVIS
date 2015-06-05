@@ -204,7 +204,7 @@ public class FondamentalAnalyser {
             
             /* Si une action a déjà été trouvée ET qu'on trouve une nouvelle, il y a ERREUR */
             }else if(findedAction != null && currentAction != null){
-                NarvisLogger.getInstance().warning("Plusieurs phrases correspondent déjà à une action...");
+                NarvisLogger.getInstance().getLogger().warning("Plusieurs phrases correspondent déjà à une action...");
                 return;
             }
             iSentence++;
@@ -213,7 +213,7 @@ public class FondamentalAnalyser {
         /* Si aucune action n'est trouvée, il y a ERREUR */
         if(findedAction == null)
         {
-            NarvisLogger.getInstance().warning("Aucune phrase n'est déjà connue...");
+            NarvisLogger.getInstance().getLogger().warning("Aucune phrase n'est déjà connue...");
             return;
         }
         

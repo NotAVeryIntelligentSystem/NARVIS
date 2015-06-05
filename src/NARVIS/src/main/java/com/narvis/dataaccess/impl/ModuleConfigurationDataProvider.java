@@ -139,7 +139,7 @@ public final class ModuleConfigurationDataProvider implements IDataProvider {
         if (keywords.length < 1) {
             throw new IllegalKeywordException(ModuleConfigurationDataProvider.class, keywords, "keywords.length < 1", this.getErrorsLayout().getData("engine"));
         }
-        String[] nextKeywords = Arrays.SkipFirst(keywords, 1);
+        String[] nextKeywords = Arrays.skipFirst(keywords, 1);
         try {
             switch (keywords[0]) {
                 case API_KEYWORD:

@@ -59,6 +59,6 @@ public class TestNarvisLogger {
     public void TestGetInstance() {
         NarvisLogger instance = NarvisLogger.getInstance();
 
-        instance.info("TestGetInstance");
+        instance.getLogger().info("TestGetInstance");
     }
 }

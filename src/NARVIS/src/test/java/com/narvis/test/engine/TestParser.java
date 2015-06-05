@@ -71,7 +71,6 @@ public class TestParser {
         try {
             Parser myParser = new Parser();
         } catch (Exception ex) {
-            fail(ex.getMessage());
             NarvisLogger.logException(ex);
 
             throw ex;
@@ -99,8 +98,7 @@ public class TestParser {
             
             assertArrayEquals(parsedSentence.toArray(), expectedParsedSentence.toArray());
         } catch (Exception ex) {
-            fail(ex.getMessage());
-            NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
+            NarvisLogger.getInstance().logException(ex);
             
             throw ex;
         }

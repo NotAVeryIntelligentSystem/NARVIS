@@ -33,11 +33,11 @@ public class Arrays {
 
     }
 
-    public static <T extends Object> T[] SkipFirst(T[] items, int count) {
-        Object[] retVal = new Object[items.length - count];
+    public static String[] skipFirst(String[] items, int count) {
+        String[] retVal = new String[items.length - count];
         for (int i = count; i < items.length; i++) {
             retVal[i - count] = items[i];
         }
-        return (T[]) retVal;
+        return retVal;
     }
 }
