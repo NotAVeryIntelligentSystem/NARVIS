@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 Zack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  *
@@ -41,10 +40,11 @@ import java.util.Map.Entry;
 public final class DetailsAnalyser {
 
     private final IDataModelProvider<Dictionary> dictionary;
-    Map<String, String> wordsAssociations = new HashMap<>();
+    private final Map<String, String> wordsAssociations;
 
     public DetailsAnalyser() throws Exception {
         this.dictionary = (IDataModelProvider<Dictionary>) DataAccessFactory.getMetaDataProvider().getDataProvider("Dictionary");
+        wordsAssociations = new HashMap<>();
     }
 
     public Map<String, String> getDetailsTypes(List<String> details) throws NoDataException {

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 Zack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,6 +32,9 @@ import com.narvis.dataaccess.interfaces.IMetaDataProvider;
 import com.narvis.dataaccess.models.route.ActionNode;
 import com.narvis.dataaccess.models.route.RouteNode;
 import com.narvis.dataaccess.models.route.WordNode;
+import com.narvis.engine.exception.AmbigousException;
+import com.narvis.engine.exception.NoActionException;
+import com.narvis.engine.exception.NoSentenceException;
 import java.io.*;
 import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
@@ -74,8 +77,10 @@ public class FondamentalAnalyser {
      * @return Retourne l'action correspondant à la phrase, ou NULL si aucune
      * n'est trouvée.
      * @throws com.narvis.dataaccess.exception.NoDataException
+     * @throws com.narvis.engine.exception.NoActionException
+     * @throws com.narvis.engine.exception.NoSentenceException
      */
-    public Action findAction(List<String> pParsedSentence) throws NoDataException {
+    public Action findAction(List<String> pParsedSentence) throws NoDataException, NoActionException, NoSentenceException {
 
         RouteNode route;            // Root of the route model
         ActionNode action = null;   // Action node that correspond to the sentence
@@ -86,7 +91,7 @@ public class FondamentalAnalyser {
          Because no route could ever match an empty sentence.      
          */
         if (pParsedSentence == null || pParsedSentence.isEmpty()) {
-            return null;
+            throw new NoSentenceException("Empty sentence", "Gonna speak to me or not ?");
         }
 
         /*
@@ -163,6 +168,7 @@ public class FondamentalAnalyser {
             providerName = "";
             askFor = null;
             details = null;
+            throw new NoActionException("No action correspondance", "I don't understand what you're asking for...");
         }
 
         return implAction;
@@ -183,8 +189,10 @@ public class FondamentalAnalyser {
      * @param pParsedSentences : Liste de phrases préalablement parsées
      * @throws com.narvis.dataaccess.exception.NoDataException
      * @throws com.narvis.dataaccess.exception.PersistException
+     * @throws com.narvis.engine.exception.NoActionException
+     * @throws com.narvis.engine.exception.NoSentenceException
      */
-    public void createSimilarityBetween(List<List<String>> pParsedSentences) throws NoDataException, PersistException {
+    public void createSimilarityBetween(List<List<String>> pParsedSentences) throws NoDataException, PersistException, NoActionException, NoSentenceException, AmbigousException {
         Action findedAction = null,     // Première action trouvée
                currentAction = null;    // Action correspondant à la phrase courrante
         int iSentence = 0,              // Indice de la phrase courrante
@@ -204,8 +212,8 @@ public class FondamentalAnalyser {
             
             /* Si une action a déjà été trouvée ET qu'on trouve une nouvelle, il y a ERREUR */
             }else if(findedAction != null && currentAction != null){
-                NarvisLogger.getInstance().getLogger().warning("Plusieurs phrases correspondent déjà à une action...");
-                return;
+                NarvisLogger.getInstance().getLogger().warning("Ambigous sentences, there is more than one sentence that correspond to an action");
+                throw new AmbigousException("There is more than one sentence that correspond to an action", "I already know that...");
             }
             iSentence++;
         }
@@ -214,7 +222,7 @@ public class FondamentalAnalyser {
         if(findedAction == null)
         {
             NarvisLogger.getInstance().getLogger().warning("Aucune phrase n'est déjà connue...");
-            return;
+            throw new NoActionException("No action finded", "I don't know any of your sentences...");
         }
         
         /* On retire de la liste la phrase déjà connnue */

@@ -103,7 +103,6 @@ public class TestDetailsAnalyser {
                 assertTrue(myDetailsTypes.containsKey("london"));
                 assertEquals(myDetailsTypes.get("london"), expectedDetailsTypes.get("london"));
 
-                assertFalse(myDetailsTypes.containsKey("me"));
             } else {
                 fail("Entry expected in 'myDetailsTypes'");
             }
