@@ -10,11 +10,12 @@ package com.narvis.frontend;
  * @author Alban
  */
 public class MessageInOut {
+
     private String inputAPIClass; // "ModuleAPIName"
     private String content; // "Message"
     private String answerTo; // "recepiant1;recepiant2" ex : "nakou;uwybbq"
-    
-    public MessageInOut(String inputAPIClass, String content, String answerTo){
+
+    public MessageInOut(String inputAPIClass, String content, String answerTo) {
         this.content = content;
         this.inputAPIClass = inputAPIClass;
         this.answerTo = answerTo;
@@ -43,6 +44,5 @@ public class MessageInOut {
     public void setAnswerTo(String answerTo) {
         this.answerTo = answerTo;
     }
-    
-    
+
 }

@@ -36,7 +36,7 @@ public class FactoryException extends Exception {
     public FactoryException() {
         super();
     }
-    
+
     public FactoryException(Exception ex) {
         super(ex);
     }

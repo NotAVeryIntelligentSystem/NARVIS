@@ -24,25 +24,25 @@
 package com.narvis.dataaccess.exception;
 
 /**
- * 
+ *
  * @author puma
  */
-public class CanNotFindValueForParamException extends ProviderException {
+public class NoValueException extends ProviderException {
 
-    public CanNotFindValueForParamException(Throwable thrwbl) {
+    public NoValueException(String msg) {
+        super(msg);
+    }
+
+    public NoValueException(Throwable thrwbl) {
         super(thrwbl);
     }
 
-    public CanNotFindValueForParamException(String providerName, String string) {
-        super(providerName, string);
+    public NoValueException(Class<?> providerName, String msg) {
+        super(providerName, msg);
     }
 
-    public CanNotFindValueForParamException(String providerName, String string, Throwable thrwbl) {
+    public NoValueException(Class<?> providerName, String string, Throwable thrwbl) {
         super(providerName, string, thrwbl);
     }
 
-    
-    
-    
-    
 }

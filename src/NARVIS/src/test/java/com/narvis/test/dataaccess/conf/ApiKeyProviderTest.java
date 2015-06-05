@@ -16,19 +16,17 @@ import static org.junit.Assert.*;
  * @author puma
  */
 public class ApiKeyProviderTest {
-    
+
     public ApiKeyProviderTest() {
     }
 
-    
     @Test
-    public void TestFile() throws Exception
-    {
+    public void TestFile() throws Exception {
         String apiKeysFilePath = "../../tests/api/test_api.key";
-        
+
         File f = new File(apiKeysFilePath).getAbsoluteFile();
         ApiKeys api = XmlFileAccess.fromFile(ApiKeys.class, f);
-        
+
         String apiKey = api.getData("test");
         assertEquals("ABCDE", apiKey);
     }

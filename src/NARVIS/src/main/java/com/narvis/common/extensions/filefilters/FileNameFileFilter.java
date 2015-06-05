@@ -31,15 +31,17 @@ import java.io.FileFilter;
  * @author uwy
  */
 public class FileNameFileFilter implements FileFilter {
+
     private final String fileName;
+
     public FileNameFileFilter(String fileName) {
         assert fileName != null && !fileName.isEmpty() : "File name given is null or empty";
         this.fileName = fileName;
     }
-    
+
     @Override
     public boolean accept(File pathname) {
         return pathname.isFile() && this.fileName.equals(pathname.getName());
     }
-    
+
 }

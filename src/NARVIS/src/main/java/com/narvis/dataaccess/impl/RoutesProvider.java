@@ -23,52 +23,65 @@
  */
 package com.narvis.dataaccess.impl;
 
-import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.common.debug.NarvisLogger;
+import com.narvis.common.tools.serialization.XmlFileAccess;
+import com.narvis.common.tools.serialization.XmlFileAccessException;
+import com.narvis.dataaccess.exception.IllegalKeywordException;
+import com.narvis.dataaccess.exception.NoDataException;
+import com.narvis.dataaccess.exception.PersistException;
+import com.narvis.dataaccess.exception.ProviderException;
 import com.narvis.dataaccess.interfaces.IDataModelProvider;
 import com.narvis.dataaccess.models.route.RouteNode;
 import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 
 /**
  *
  * @author Zack
  */
 public class RoutesProvider implements IDataModelProvider<RouteNode> {
-    //private final static String ROUTESPATH = "src\\test\\java\\com\\narvis\\test\\dataaccess\\models\\route\\routes.xml"; // Le chemin d'accès au fichier XML contenant les routes
     private final RouteNode routes;
     private final ModuleConfigurationDataProvider conf;
     
-    public RoutesProvider(ModuleConfigurationDataProvider conf) throws ParserConfigurationException, SAXException, IOException, Exception{
-        this.conf = conf;
-        this.routes = XmlFileAccess.fromFile(RouteNode.class, new File(this.conf.getDataFolder(), this.getRoutesDataPath()));
-        
-    }
     
-    private String getRoutesDataPath() {
+    public RoutesProvider(ModuleConfigurationDataProvider conf) throws ProviderException {
+        this.conf = conf;
+        try {
+            this.routes = XmlFileAccess.fromFile(RouteNode.class, new File(this.conf.getDataFolder(), this.getRoutesDataPath()));
+        } catch (XmlFileAccessException | IllegalKeywordException | NoDataException ex) {
+            NarvisLogger.logException(ex);
+            throw new ProviderException(RoutesProvider.class, "In constructor, could not deserialize");
+        }
+    }
+
+    private String getRoutesDataPath() throws IllegalKeywordException, NoDataException {
         return this.conf.getData("Conf", "RoutesDataPath");
     }
 
     @Override
-    public void persist() {
+    public void persist() throws PersistException {
         try {
             XmlFileAccess.toFile(this.routes, new File(this.conf.getDataFolder(), this.getRoutesDataPath()));
-        } catch (Exception ex) {
-            NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
+        } catch (IllegalKeywordException | NoDataException | XmlFileAccessException ex) {
+            NarvisLogger.logException(ex);
+            throw new PersistException(RoutesProvider.class, "Could not persist file, see details in exception", ex);
         }
     }
 
     @Override
-    public String getData(String... keywords) {
+    public String getData(String... keywords) throws NoDataException {
+        if(this.routes == null) {
+            throw new NoDataException(RoutesProvider.class, "Routes hasn't been deserialized !");
+        }
         return this.routes.toString();
     }
 
     @Override
-    public RouteNode getModel(String... keywords) {
+    public RouteNode getModel(String... keywords) throws NoDataException {
+        if(this.routes == null) {
+            throw new NoDataException(RoutesProvider.class, "Routes hasn't been deserialized !");
+        }
         return this.routes;
     }
 
+   
 }

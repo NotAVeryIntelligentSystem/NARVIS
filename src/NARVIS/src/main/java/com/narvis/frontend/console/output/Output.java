@@ -12,11 +12,11 @@ import com.narvis.frontend.interfaces.IOutput;
  *
  * @author Nakou
  */
-public class Output implements IOutput{
+public class Output implements IOutput {
 
     @Override
     public void setOuput(MessageInOut m) {
         System.out.println(m.getContent());
     }
-    
+
 }

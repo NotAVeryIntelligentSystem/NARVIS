@@ -23,7 +23,7 @@
  */
 package com.narvis.dataaccess.interfaces;
 
-import com.narvis.dataaccess.exception.CanNotFindValueForParamException;
+import com.narvis.dataaccess.exception.NoValueException;
 import java.util.List;
 import java.util.Map;
 
@@ -32,12 +32,14 @@ import java.util.Map;
  * @author puma
  */
 public interface IAnswerProvider {
-    
+
     /**
      * Build a map which link each param with its value
+     *
      * @param listOfParams the list of param needed to fulfill the answer
      * @return A Map containing the params and their values
+     * @throws com.narvis.dataaccess.exception.CanNotFindValueForParamException
      */
-    Map<String, String> buildParamsToValueMap(List<String> listOfParams) throws CanNotFindValueForParamException;
-    
+    Map<String, String> buildParamsToValueMap(List<String> listOfParams) throws NoValueException;
+
 }

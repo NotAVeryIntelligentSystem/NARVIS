@@ -32,37 +32,37 @@ import org.simpleframework.xml.*;
  *
  * @author uwy
  */
-@Root(name="ModuleConf")
+@Root(name = "ModuleConf")
 public class ModuleConf implements IDataProvider {
+
     @Element(name = "ModuleClassPath")
     private String moduleClassPath;
-    
-    @ElementMap(entry="entry", key="key", attribute=true, inline=true, required = false)
+
+    @ElementMap(entry = "entry", key = "key", attribute = true, inline = true, required = false)
     @SuppressWarnings("FieldMayBeFinal")
     private Map<String, String> entries;
-  
+
     public static String MODULE_CLASS_PATH_KEYWORD = "ModuleClassPath";
-        
+
     public ModuleConf() {
         this.entries = new HashMap<>();
     }
-    
+
     public String getModuleClassPath() {
         return this.moduleClassPath;
     }
-    
+
     public void setModuleClassPath(String val) {
         this.moduleClassPath = val;
     }
-    
+
     public Map<String, String> getEntries() {
         return this.entries;
     }
 
-    
     @Override
     public String getData(String... keywords) {
-        if(keywords[0].equals(MODULE_CLASS_PATH_KEYWORD)) {
+        if (keywords[0].equals(MODULE_CLASS_PATH_KEYWORD)) {
             return this.moduleClassPath;
         }
         return this.entries.get(keywords[0]);

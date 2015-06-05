@@ -26,7 +26,6 @@ package com.narvis.dataaccess.models.lang.word;
 import com.narvis.common.debug.NarvisLogger;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -34,74 +33,63 @@ import org.simpleframework.xml.Root;
  *
  * @author Zack
  */
-@Root(name="Dictionary")
+@Root(name = "Dictionary")
 public class Dictionary {
-    @ElementList(name="Words", required = false)
+
+    @ElementList(name = "Words", required = false)
+    @SuppressWarnings("FieldMayBeFinal")
     private List<Word> words;
-    
-    public Dictionary()
-    {
+
+    public Dictionary() {
         words = new LinkedList<>();
     }
-    
-    public List<Word> getWords()
-    {
+
+    public List<Word> getWords() {
         return this.words;
     }
-    
-    public Word getWordByValue(String value)
-    {
+
+    public Word getWordByValue(String value) {
         Word word = null;
-        for(Word w : this.words)
-        {
-            if(w.getValue().equalsIgnoreCase(value))
-            {
-                word = w;
-                if(word != null)
-                {
-                    NarvisLogger.getInstance().log(Level.WARNING, "Word duplication : {0}", w.getValue());
+        for (Word w : this.words) {
+            if (w.getValue().equalsIgnoreCase(value)) {
+                if (word != null) {
+                    NarvisLogger.logInfo("Word duplication : " + w.getValue());
                 }
+                word = w;
             }
         }
-        
+
         return word;
     }
-    
-    public List<Word> getWordsByInformationType(String informationType)
-    {
+
+    public List<Word> getWordsByInformationType(String informationType) {
         List<Word> returnWords;
         returnWords = new LinkedList<>();
-        informationType.toLowerCase();
-        
-        for(Word w : this.words)
-        {
-            if(w.getInformationTypes().contains(informationType))
-            {
+        informationType = informationType.toLowerCase();
+
+        for (Word w : this.words) {
+            if (w.getInformationTypes().contains(informationType)) {
                 returnWords.add(w);
             }
         }
-        
+
         return returnWords;
     }
-    
-    public List<Word> getIgnoredWords()
-    {
+
+    public List<Word> getIgnoredWords() {
         List<Word> returnWord;
         returnWord = new LinkedList<>();
-        
-        for(Word w : this.words)
-        {
-            if(w.isIgnored())
-            {
+
+        for (Word w : this.words) {
+            if (w.isIgnored()) {
                 returnWord.add(w);
             }
         }
-        
+
         return returnWord;
     }
-    
-    public void addWord(Word word)
-    {
+
+    public void addWord(Word word) {
         words.add(word);
     }
 }

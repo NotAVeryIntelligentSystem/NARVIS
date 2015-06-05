@@ -31,16 +31,17 @@ import com.narvis.dataaccess.interfaces.IMetaDataProvider;
  * @author uwy
  */
 public class DataAccessFactory {
+
     private final IMetaDataProvider metaDataProvider;
-    
+
     private DataAccessFactory() throws Exception {
         this.metaDataProvider = new MetaDataProvider();
     }
-    
+
     private static DataAccessFactory instance = null;
-    
-    public static synchronized IMetaDataProvider getMetaDataProvider() throws Exception{
-        if(DataAccessFactory.instance == null) {
+
+    public static synchronized IMetaDataProvider getMetaDataProvider() throws Exception {
+        if (DataAccessFactory.instance == null) {
             DataAccessFactory.instance = new DataAccessFactory();
         }
         return DataAccessFactory.instance.metaDataProvider;

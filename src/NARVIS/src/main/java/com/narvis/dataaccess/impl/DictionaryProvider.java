@@ -25,44 +25,50 @@ package com.narvis.dataaccess.impl;
 
 import com.narvis.common.debug.NarvisLogger;
 import com.narvis.common.tools.serialization.XmlFileAccess;
-import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
+import com.narvis.common.tools.serialization.XmlFileAccessException;
+import com.narvis.dataaccess.exception.*;
 import com.narvis.dataaccess.interfaces.IDataModelProvider;
 import com.narvis.dataaccess.models.lang.word.Dictionary;
 import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 
 /**
  *
  * @author Zack
  */
 public class DictionaryProvider implements IDataModelProvider<Dictionary> {
-    
+
     private final Dictionary dictionary;
     private final ModuleConfigurationDataProvider conf;
 
-    public DictionaryProvider(ModuleConfigurationDataProvider conf) throws ParserConfigurationException, SAXException, IOException, Exception{
+    public DictionaryProvider(ModuleConfigurationDataProvider conf) throws ProviderException {
         this.conf = conf;
-        this.dictionary = XmlFileAccess.fromFile(Dictionary.class, new File(this.conf.getDataFolder(), this.getDictionaryDataPath()));
+        try {
+            this.dictionary = XmlFileAccess.fromFile(Dictionary.class, new File(this.conf.getDataFolder(), this.getDictionaryDataPath()));
+        } catch (XmlFileAccessException ex) {
+            NarvisLogger.logException(ex);
+            throw new ProviderException(DictionaryProvider.class, "In constructor", ex);
+        }
     }
-    
-    private String getDictionaryDataPath() {
+
+    private String getDictionaryDataPath() throws IllegalKeywordException, NoDataException {
         return this.conf.getData("Conf", "DictionaryDataPath");
     }
-    
+
     @Override
-    public Dictionary getModel(String... keywords) {
+    public Dictionary getModel(String... keywords) throws NoDataException {
+        if (this.dictionary == null) {
+            throw new NoDataException("Dictionary hasn't been deserialized, this is bad");
+        }
         return this.dictionary;
     }
 
     @Override
-    public void persist() {
+    public void persist() throws PersistException {
         try {
             XmlFileAccess.toFile(this.dictionary, new File(this.conf.getDataFolder(), this.getDictionaryDataPath()));
         } catch (Exception ex) {
-            NarvisLogger.getInstance().log(Level.SEVERE, ex.toString());
+            NarvisLogger.logException(ex);
+            throw new PersistException(DictionaryProvider.class, "Could not persist the model, see intern exception for details", ex);
         }
     }
 

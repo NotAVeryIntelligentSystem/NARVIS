@@ -14,16 +14,16 @@
         
         <!-- Twitter api repository --> 
         <dependency>
-           <groupId>org.twitter4j</groupId>
-           <artifactId>twitter4j-core</artifactId>
-           <version>[4.0,)</version>
-       </dependency>       
-       <!-- Open Weather map repository -->
-       <dependency>
-           <groupId>net.aksingh</groupId>
-           <artifactId>owm-japis</artifactId>
-           <version>2.5.0.3</version>
-       </dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-core</artifactId>
+            <version>[4.0,)</version>
+        </dependency>       
+        <!-- Open Weather map repository -->
+        <dependency>
+            <groupId>net.aksingh</groupId>
+            <artifactId>owm-japis</artifactId>
+            <version>2.5.0.3</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

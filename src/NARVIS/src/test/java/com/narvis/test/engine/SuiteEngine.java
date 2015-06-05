@@ -31,9 +31,9 @@ import org.junit.runners.Suite;
  * @author Zack
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ TestParser.class, TestFondamentalAnalyser.class, TestDetailsAnalyser.class, TestNarvisEngine.class })
+@Suite.SuiteClasses({TestParser.class, TestFondamentalAnalyser.class, TestDetailsAnalyser.class, TestNarvisEngine.class})
 public class SuiteEngine {
-    
+
     public SuiteEngine() {
     }
 }

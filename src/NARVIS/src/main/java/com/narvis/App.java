@@ -23,7 +23,6 @@
  */
 package com.narvis;
 
-import com.narvis.common.tools.reflection.Factory;
 import com.narvis.engine.NarvisEngine;
 
 /**
@@ -31,8 +30,8 @@ import com.narvis.engine.NarvisEngine;
  * @author uwy
  */
 public class App {
-    public static void main(String [] args) throws Exception
-    {
+
+    public static void main(String[] args) throws Exception {
         System.out.println("  _   _            _____ __      __ _____   _____ ");
         System.out.println(" | \\ | |    /\\    |  __ \\\\ \\    / /|_   _| / ____| ");
         System.out.println(" |  \\| |   /  \\   | |__) |\\ \\  / /   | |  | (___    ");

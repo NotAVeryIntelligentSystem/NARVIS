@@ -28,9 +28,13 @@ package com.narvis.frontend.interfaces;
  * @author uwy
  */
 public interface IFrontEnd {
+
     public void start();
+
     public void close();
+
     public IInput getInput();
+
     public IOutput getOutput();
 
 }

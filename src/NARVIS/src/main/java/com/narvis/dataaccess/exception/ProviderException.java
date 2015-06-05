@@ -29,18 +29,20 @@ package com.narvis.dataaccess.exception;
  */
 public class ProviderException extends Exception {
 
-    public ProviderException(String providerName, String string) {
-        super(string);
+    public ProviderException(String msg) {
+        super(msg);
+    }
+
+    public ProviderException(Class<?> providerName, String msg) {
+        super("Provider : " + providerName.getCanonicalName() + " " + msg);
     }
 
     public ProviderException(Throwable thrwbl) {
         super(thrwbl);
     }
 
-    public ProviderException(String providerName, String string, Throwable thrwbl) {
-        super("Provider : " + providerName + " " + string, thrwbl);
+    public ProviderException(Class<?> providerName, String string, Throwable thrwbl) {
+        super("Provider : " + providerName.getCanonicalName() + " " + string, thrwbl);
     }
-    
-    
-    
+
 }

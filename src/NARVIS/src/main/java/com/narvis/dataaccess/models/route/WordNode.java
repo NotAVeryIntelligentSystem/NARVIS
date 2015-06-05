@@ -17,32 +17,32 @@ import org.simpleframework.xml.Root;
  */
 @Root(name = "Word")
 public class WordNode {
-    @Element(name="Value", type = String.class, required = false)
+
+    @Element(name = "Value", type = String.class, required = false)
     private String value;
-    @ElementList(name="Words", type = WordNode.class, required = false)
+    @ElementList(name = "Words", type = WordNode.class, required = false)
     @SuppressWarnings("FieldMayBeFinal")
     private List<WordNode> words;
-    @ElementList(name="Actions", type = ActionNode.class, required = false)
+    @ElementList(name = "Actions", type = ActionNode.class, required = false)
     @SuppressWarnings("FieldMayBeFinal")
     private List<ActionNode> actions;
-    
-    public WordNode()
-    {
+
+    public WordNode() {
         words = new LinkedList<>();
         actions = new LinkedList<>();
     }
-    
+
     /**
      * Constructeur
+     *
      * @param value : Valeur du mot
      */
-    public WordNode(String value)
-    {
+    public WordNode(String value) {
         words = new LinkedList<>();
         actions = new LinkedList<>();
         this.value = value;
     }
-    
+
     public String getValue() {
         return value;
     }
@@ -54,18 +54,16 @@ public class WordNode {
     public List<WordNode> getWords() {
         return words;
     }
-    
-    public void addWord(WordNode newWord)
-    {
+
+    public void addWord(WordNode newWord) {
         words.add(newWord);
     }
-    
-    public void addAction(ActionNode newAction)
-    {
+
+    public void addAction(ActionNode newAction) {
         actions.add(newAction);
     }
-    
-    public void setValue(String value){
+
+    public void setValue(String value) {
         this.value = value;
     }
 }

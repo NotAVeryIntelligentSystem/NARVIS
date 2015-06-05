@@ -31,17 +31,17 @@ import org.simpleframework.xml.*;
  *
  * @author uwy
  */
-@Root(name="NarvisConf")
+@Root(name = "NarvisConf")
 public class NarvisConf implements IDataProvider {
-    @ElementMap(entry="entry", key="key", attribute=true, inline=true, required = false)
+
+    @ElementMap(entry = "entry", key = "key", attribute = true, inline = true, required = false)
     @SuppressWarnings("FieldMayBeFinal")
     private Map<String, String> entries;
-    
-    
+
     public NarvisConf() {
         this.entries = new HashMap<>();
     }
-    
+
     @Override
     public String getData(String... keywords) {
         return this.entries.get(keywords[0]);

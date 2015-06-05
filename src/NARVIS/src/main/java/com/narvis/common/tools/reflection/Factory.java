@@ -36,9 +36,9 @@ import java.util.logging.Logger;
 public class Factory {
 
     private Factory() {
-        
+
     }
-    
+
     public static <T, U> T fromName(String name, U constructorParam, Class<U> paramType) throws FactoryException {
         try {
             Class<?> clazz = Class.forName(name);
@@ -47,7 +47,7 @@ public class Factory {
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             throw new FactoryException(ex);
         }
-        
+
     }
 
     public static <T, U> T fromName(String string) throws FactoryException {

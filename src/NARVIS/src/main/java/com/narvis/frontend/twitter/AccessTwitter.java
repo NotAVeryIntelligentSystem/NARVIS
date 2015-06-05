@@ -17,9 +17,11 @@ import twitter4j.auth.AccessToken;
 
 /**
  * TODO : REFACTOR AND SECURISE
+ *
  * @author Alban
  */
 public class AccessTwitter implements IFrontEnd {
+
     private final FrontEndConfigurationDataProvider conf;
     private IInput input;
     private IOutput output;
@@ -29,8 +31,8 @@ public class AccessTwitter implements IFrontEnd {
     public AccessTwitter(FrontEndConfigurationDataProvider conf) {
         this.conf = conf;
     }
-    
-    private Twitter loadAccessTwitter(String token, String tokenSecret, String consumerKey, String consumerSecret ){
+
+    private Twitter loadAccessTwitter(String token, String tokenSecret, String consumerKey, String consumerSecret) {
         AccessToken accessToken = new AccessToken(token, tokenSecret);
         TwitterFactory factory = new TwitterFactory();
         Twitter retVal = factory.getInstance();
@@ -41,7 +43,7 @@ public class AccessTwitter implements IFrontEnd {
 
     @Override
     public void start() {
-        if(this.twitter != null) {
+        if (this.twitter != null) {
             throw new IllegalArgumentException("Front end has already started !");
         }
         this.twitter = this.loadAccessTwitter(this.conf.getApiKeys().getData("token"), this.conf.getApiKeys().getData("tokenSecret"), this.conf.getApiKeys().getData("consumerKey"), this.conf.getApiKeys().getData("consumerSecret"));
@@ -49,12 +51,10 @@ public class AccessTwitter implements IFrontEnd {
         this.output = new Output(this.twitter);
         this.input.start();
     }
-    
-    
+
     public Twitter getTwitter() {
         return twitter;
     }
-    
 
     @Override
     public void close() {
