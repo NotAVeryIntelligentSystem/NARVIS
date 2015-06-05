@@ -5,13 +5,13 @@
  */
 package com.narvis.frontend.twitter.output;
 
+import com.narvis.common.debug.NarvisLogger;
 import com.narvis.frontend.MessageInOut;
 import com.narvis.frontend.interfaces.IOutput;
 import com.narvis.frontend.twitter.AccessTwitter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import twitter4j.Status;
 import twitter4j.Twitter;
@@ -38,7 +38,7 @@ public class Output implements IOutput {
                 Status status = this.twitterLink.updateStatus(s);
             }
         } catch (TwitterException ex) {
-            Logger.getLogger(Output.class.getName()).log(Level.SEVERE, null, ex);
+            NarvisLogger.logException(ex);
         }
     }
     

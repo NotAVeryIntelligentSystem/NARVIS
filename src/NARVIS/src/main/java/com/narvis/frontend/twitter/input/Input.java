@@ -6,20 +6,14 @@
 package com.narvis.frontend.twitter.input;
 
 import com.narvis.common.debug.NarvisLogger;
-import com.narvis.common.tools.executer.Executer;
 import com.narvis.dataaccess.exception.PersistException;
 import com.narvis.dataaccess.impl.FrontEndConfigurationDataProvider;
 import com.narvis.engine.NarvisEngine;
 import com.narvis.frontend.MessageInOut;
 import com.narvis.frontend.interfaces.IInput;
-import com.narvis.frontend.twitter.AccessTwitter;
-import static java.lang.Thread.sleep;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -39,6 +33,7 @@ public class Input implements IInput {
     public Input(Twitter twit, FrontEndConfigurationDataProvider conf) {
         this.twitterLink = twit;
         this.listenloop = new Timer("Twitter listen");
+        this.conf = conf;
     }
 
 
@@ -80,12 +75,17 @@ public class Input implements IInput {
     public MessageInOut getInput() throws PersistException {
         try {
             List<Status> statuses = this.twitterLink.getMentionsTimeline();
-            Status lastStatus = statuses.get(statuses.size() - 1);
-            if(lastStatus.getId() != Long.getLong(this.conf.getConf().getData("LastTwitterMessageId"))) {
+            Status lastStatus = statuses.get(0);
+            NarvisLogger.logInfo("Received following status : " + lastStatus.getText());
+            if(lastStatus.getId() != Long.parseLong(this.conf.getConf().getData("LastTwitterMessageId"))) {
                 this.conf.getConf().setData("LastTwitterMessageId", Long.toString(lastStatus.getId()));
                 this.conf.persist();
                 String[] tmp = this.tweetParser(lastStatus);
                 return new MessageInOut(this.nameAPI, tmp[0], tmp[1]);
+            }
+            else {
+                NarvisLogger.logInfo("Ignoring tweet because identical to previous one");
+
             }
         } catch (TwitterException ex) {
             NarvisLogger.logException(ex);
@@ -109,7 +109,7 @@ public class Input implements IInput {
                     NarvisLogger.logException(ex);
                 }
             }
-        }, 60 * 1000, 60 * 1000);
+        }, 0, 60 * 1000);
     }
 
     @Override
