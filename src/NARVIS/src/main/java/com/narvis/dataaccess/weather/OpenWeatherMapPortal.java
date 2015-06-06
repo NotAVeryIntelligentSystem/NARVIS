@@ -170,7 +170,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
             _city = lookForValueLocation(detailsToValue);
             
             if( _city == null )
-                throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "Not enough keywords", this._confProvider.getErrorsLayout().getData("engine"));
+                throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "No keyword correspondance", this._confProvider.getErrorsLayout().getData("wrongkeywords"));
         }else {
             
             _city = detailsToValue.get(this.LOCATION_STRING);
@@ -179,7 +179,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
         
         if( this._confProvider == null || this._confProvider.getAnswersLayout() == null) {
             
-            throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "Not enough keywords", this._confProvider.getErrorsLayout().getData("engine"));
+            throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "No configuration or answer layout found", this._confProvider.getErrorsLayout().getData("engine"));
         }
         
         

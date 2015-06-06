@@ -201,20 +201,26 @@ public class FondamentalAnalyser {
         /* Pour chaque phrase, on en recherche une correspondant à une action */
         for(List<String> parsedSentence : pParsedSentences)
         {
-            currentAction = this.findAction(parsedSentence);
+            try{
+                currentAction = this.findAction(parsedSentence);
+                
+                /* Si une action est trouvée pour la première fois */
+                if(findedAction == null && currentAction != null){
+                    /* La première action trouvée devient l'action courrante */
+                    findedAction = currentAction;
+                    /* L'indice de la phrase correspondant à l'action trouvée devient l'indice de la phrase courrante */
+                    iFindedSentence = iSentence;
+
+                /* Si une action a déjà été trouvée ET qu'on trouve une nouvelle, il y a ERREUR */
+                }else if(findedAction != null && currentAction != null){
+                    NarvisLogger.getInstance().getLogger().warning("Ambigous sentences, there is more than one sentence that correspond to an action");
+                    throw new AmbigousException("There is more than one sentence that correspond to an action", "I already know that...");
+                }
             
-            /* Si une action est trouvée pour la première fois */
-            if(findedAction == null && currentAction != null){
-                /* La première action trouvée devient l'action courrante */
-                findedAction = currentAction;
-                /* L'indice de la phrase correspondant à l'action trouvée devient l'indice de la phrase courrante */
-                iFindedSentence = iSentence;
-            
-            /* Si une action a déjà été trouvée ET qu'on trouve une nouvelle, il y a ERREUR */
-            }else if(findedAction != null && currentAction != null){
-                NarvisLogger.getInstance().getLogger().warning("Ambigous sentences, there is more than one sentence that correspond to an action");
-                throw new AmbigousException("There is more than one sentence that correspond to an action", "I already know that...");
+            }catch(NoActionException ex){
+                
             }
+            
             iSentence++;
         }
         

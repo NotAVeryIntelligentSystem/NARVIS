@@ -30,6 +30,8 @@ import com.narvis.dataaccess.models.layouts.ModuleErrors;
 import com.narvis.dataaccess.models.route.ActionNode;
 import com.narvis.dataaccess.models.route.RouteNode;
 import com.narvis.dataaccess.models.route.WordNode;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -44,6 +46,9 @@ public class RoutesConf {
 
     public RouteNode createRouteNode() {
         RouteNode retVal = new RouteNode();
+        ActionNode currentAction;
+        List<String> askFor = new LinkedList<>();
+        
         retVal.addWord(
                 createWordNode("give",
                         createWordNode(null,
@@ -52,6 +57,18 @@ public class RoutesConf {
                 createWordNode("bring",
                         createWordNode(null,
                                 createWordNode("weather", new ActionNode("OpenWeatherMap")))));
+        
+        
+        currentAction = new ActionNode("narvis");
+        askFor.clear();
+        askFor.add("learnsimilaritybetweenroutes");
+        currentAction.setAskFor(askFor);
+        
+        retVal.addWord(
+                createWordNode(null,
+                        createWordNode("mean",
+                                createWordNode(null, currentAction))));
+        
         return retVal;
     }
     

@@ -81,9 +81,11 @@ public class WeatherConf {
         ModuleErrors retVal = new ModuleErrors();
         
         retVal.getMap().put("general", "Hum... I'm sure you don't really need to know that");
-        retVal.getMap().put("engine", "");
+        retVal.getMap().put("engine", "Sorry, I get in a muddle...");
         retVal.getMap().put("data", "");
         retVal.getMap().put("noanswers", "I don't know what you're talking about...");
+        
+        retVal.getMap().put("wrongkeywords", "Please precise the location where you want the weather, I can't guess it myself...");
         retVal.getMap().put("temperature", "Sorry, I can't find the temperature...");
         retVal.getMap().put("cloud", "Sorry, I can't find the sunshine...");
         

@@ -3,6 +3,7 @@
    <ErrorSentence command="general">Hum... I&apos;m sure you don&apos;t really need to know that</ErrorSentence>
    <ErrorSentence command="noanswers">I don&apos;t know what you&apos;re talking about...</ErrorSentence>
    <ErrorSentence command="data"></ErrorSentence>
-   <ErrorSentence command="engine"></ErrorSentence>
+   <ErrorSentence command="wrongkeywords">Please precise the location where you want the weather, I can&apos;t guess it myself...</ErrorSentence>
+   <ErrorSentence command="engine">Sorry, I get in a muddle...</ErrorSentence>
    <ErrorSentence command="temperature">Sorry, I can&apos;t find the temperature...</ErrorSentence>
 </moduleErrors>
