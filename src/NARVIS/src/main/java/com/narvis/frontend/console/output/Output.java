@@ -6,6 +6,7 @@
 package com.narvis.frontend.console.output;
 
 import com.narvis.frontend.MessageInOut;
+import com.narvis.frontend.console.AccessConsole;
 import com.narvis.frontend.interfaces.IOutput;
 
 /**
@@ -14,9 +15,17 @@ import com.narvis.frontend.interfaces.IOutput;
  */
 public class Output implements IOutput {
 
+    private AccessConsole accessConsole;
+    
+    public Output(AccessConsole accessConsole)
+    {
+        this.accessConsole = accessConsole;
+    }
+    
     @Override
     public void setOuput(MessageInOut m) {
-        System.out.println(m.getContent());
+        System.out.println("NARVIS>"+m.getContent());
+        accessConsole.start();
     }
 
 }
