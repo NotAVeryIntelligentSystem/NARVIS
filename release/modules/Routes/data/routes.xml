@@ -64,5 +64,27 @@
          </Words>
          <Actions class="java.util.LinkedList"/>
       </Word>
+      <Word>
+         <Value>what</Value>
+         <Words class="java.util.LinkedList">
+            <Word>
+               <Value>is</Value>
+               <Words class="java.util.LinkedList">
+                  <Word>
+                     <Value>weather</Value>
+                     <Words class="java.util.LinkedList"/>
+                     <Actions class="java.util.LinkedList">
+                        <Action>
+                           <Provider>OpenWeatherMap</Provider>
+                           <AskFor class="java.util.LinkedList"/>
+                        </Action>
+                     </Actions>
+                  </Word>
+               </Words>
+               <Actions class="java.util.LinkedList"/>
+            </Word>
+         </Words>
+         <Actions class="java.util.LinkedList"/>
+      </Word>
    </Words>
 </Route>

@@ -65,8 +65,10 @@ public class Parser {
      */
     public List<String> parse(String sentence) throws NoDataException {
         List<String> parsedMessage = new ArrayList<>();
-        sentence = sentence.toLowerCase();
-
+        
+        /* We put the sentence to lowercase and remove all the non-alphanumeric caracters.
+           This prevents us to the differents way users can write there messages (with punctuation or not, etc.)*/
+        sentence = sentence.toLowerCase().replaceAll("[^a-z0-9 ]", "");
 
         sentence = transformSpaceInQuoteWithUnderscore(sentence);
         
