@@ -21,16 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.interfaces;
+package com.narvis.dataaccess.interfaces.dataproviders;
 
-import com.narvis.dataaccess.exception.IllegalKeywordException;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
 import com.narvis.dataaccess.exception.NoDataException;
+import com.narvis.dataaccess.exception.PersistException;
 
-/*
+/**
+ *
  * @author uwy
+ * @param <T>
  */
-public interface IDataProvider {
+public interface IDataModelProvider<T> extends IDataProvider {
 
-    public String getData(String... keywords) throws NoDataException, IllegalKeywordException;
+    public T getModel(String... keywords) throws NoDataException;
 
+    public void persist() throws PersistException;
 }

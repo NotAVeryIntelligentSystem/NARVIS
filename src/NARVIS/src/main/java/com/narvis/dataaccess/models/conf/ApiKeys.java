@@ -23,6 +23,7 @@
  */
 package com.narvis.dataaccess.models.conf;
 
+import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
 import com.narvis.dataaccess.interfaces.*;
 import java.util.*;
 import org.simpleframework.xml.*;

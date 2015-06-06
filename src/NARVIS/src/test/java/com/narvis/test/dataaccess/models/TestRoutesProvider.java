@@ -25,8 +25,8 @@ package com.narvis.test.dataaccess.models;
 
 import com.narvis.common.debug.NarvisLogger;
 import com.narvis.dataaccess.DataAccessFactory;
-import com.narvis.dataaccess.interfaces.IDataModelProvider;
-import com.narvis.dataaccess.interfaces.IDataProviderDetails;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataModelProvider;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataProviderDetails;
 import com.narvis.dataaccess.models.route.RouteNode;
 import com.narvis.engine.Action;
 import com.narvis.engine.DetailsAnalyser;

@@ -27,7 +27,7 @@ import com.narvis.common.debug.NarvisLogger;
 import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.common.tools.serialization.XmlFileAccessException;
 import com.narvis.dataaccess.exception.*;
-import com.narvis.dataaccess.interfaces.IDataModelProvider;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataModelProvider;
 import com.narvis.dataaccess.models.lang.word.Dictionary;
 import java.io.File;
 

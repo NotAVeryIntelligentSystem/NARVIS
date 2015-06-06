@@ -30,7 +30,7 @@ import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.exception.PersistException;
 import com.narvis.dataaccess.exception.ProviderException;
-import com.narvis.dataaccess.interfaces.IDataModelProvider;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataModelProvider;
 import com.narvis.dataaccess.models.route.RouteNode;
 import java.io.File;
 

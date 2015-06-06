@@ -23,6 +23,7 @@
  */
 package com.narvis.dataaccess.models.answers;
 
+import com.narvis.dataaccess.interfaces.dataproviders.IDataProviderDetails;
 import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.exception.NoValueException;

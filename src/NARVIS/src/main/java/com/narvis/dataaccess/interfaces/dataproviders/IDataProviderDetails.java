@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.interfaces;
+package com.narvis.dataaccess.interfaces.dataproviders;
 
+import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
 import com.narvis.dataaccess.exception.NoValueException;
 import com.narvis.dataaccess.exception.ProviderException;
 import java.util.Map;

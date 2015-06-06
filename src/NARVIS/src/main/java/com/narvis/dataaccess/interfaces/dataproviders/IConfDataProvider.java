@@ -21,19 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.interfaces;
+package com.narvis.dataaccess.interfaces.dataproviders;
 
-import com.narvis.dataaccess.exception.NoDataException;
-import com.narvis.dataaccess.exception.PersistException;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
 
 /**
  *
  * @author uwy
- * @param <T>
  */
-public interface IDataModelProvider<T> extends IDataProvider {
-
-    public T getModel(String... keywords) throws NoDataException;
-
-    public void persist() throws PersistException;
+public interface IConfDataProvider extends IDataProvider {
+    public void setData(String... keywords);
 }

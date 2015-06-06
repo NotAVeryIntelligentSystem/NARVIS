@@ -30,7 +30,7 @@ import com.narvis.common.tools.reflection.FactoryException;
 import com.narvis.common.tools.serialization.XmlFileAccessException;
 import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoDataException;
-import com.narvis.dataaccess.interfaces.IDataProvider;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
 import com.narvis.dataaccess.models.conf.*;
 import com.narvis.frontend.interfaces.IFrontEnd;
 import java.io.File;

@@ -23,7 +23,7 @@
  */
 package com.narvis.dataaccess.models.layouts;
 
-import com.narvis.dataaccess.interfaces.IDataProvider;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
 import java.util.HashMap;
 import java.util.Map;
 import org.simpleframework.xml.ElementMap;

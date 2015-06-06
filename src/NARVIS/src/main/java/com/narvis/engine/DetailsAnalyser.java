@@ -25,7 +25,7 @@ package com.narvis.engine;
 
 import com.narvis.dataaccess.DataAccessFactory;
 import com.narvis.dataaccess.exception.NoDataException;
-import com.narvis.dataaccess.interfaces.IDataModelProvider;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataModelProvider;
 import com.narvis.dataaccess.models.lang.word.Dictionary;
 import com.narvis.dataaccess.models.lang.word.Word;
 import java.util.ArrayList;

@@ -23,6 +23,8 @@
  */
 package com.narvis.engine;
 
+import com.narvis.dataaccess.interfaces.dataproviders.IDataProviderDetails;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
 import com.narvis.common.debug.NarvisLogger;
 import com.narvis.common.tools.executer.Executer;
 import com.narvis.common.tools.executer.ExecuterException;

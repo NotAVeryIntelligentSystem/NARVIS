@@ -23,8 +23,8 @@
  */
 package com.narvis.dataaccess.models.conf;
 
-import com.narvis.dataaccess.interfaces.IConfDataProvider;
-import com.narvis.dataaccess.interfaces.IDataProvider;
+import com.narvis.dataaccess.interfaces.dataproviders.IConfDataProvider;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
 import static com.narvis.dataaccess.models.conf.ModuleConf.MODULE_CLASS_PATH_KEYWORD;
 import java.util.*;
 import org.simpleframework.xml.*;

@@ -23,7 +23,11 @@
  */
 package com.narvis.dataaccess.interfaces;
 
+import com.narvis.common.generics.Pair;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
 import com.narvis.frontend.interfaces.IFrontEnd;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -34,4 +38,8 @@ public interface IMetaDataProvider {
     public IDataProvider getDataProvider(String... keywords);
 
     public IFrontEnd getFrontEnd(String... keywords);
+    
+    public Set<String> getAvailableDataProviders();
+    public Set<String> getAvailableFrontEnds();
+
 }

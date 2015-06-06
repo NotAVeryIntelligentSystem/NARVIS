@@ -24,14 +24,14 @@
 package com.narvis.dataaccess.impl;
 
 import com.narvis.common.debug.NarvisLogger;
-import com.narvis.common.tools.Arrays;
+import com.narvis.common.extensions.StringExts;
 import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.common.tools.serialization.XmlFileAccessException;
 import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.exception.PersistException;
 import com.narvis.dataaccess.exception.ProviderException;
-import com.narvis.dataaccess.interfaces.IDataProvider;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
 import com.narvis.dataaccess.models.conf.*;
 import com.narvis.dataaccess.models.layouts.ModuleAnswers;
 import com.narvis.dataaccess.models.layouts.ModuleErrors;
@@ -151,7 +151,7 @@ public final class ModuleConfigurationDataProvider implements IDataProvider {
         if (keywords.length < 1) {
             throw new IllegalKeywordException(ModuleConfigurationDataProvider.class, keywords, "keywords.length < 1", this.getErrorsLayout().getData("engine"));
         }
-        String[] nextKeywords = Arrays.skipFirst(keywords, 1);
+        String[] nextKeywords = StringExts.skipFirst(keywords, 1);
         try {
             switch (keywords[0]) {
                 case API_KEYWORD:

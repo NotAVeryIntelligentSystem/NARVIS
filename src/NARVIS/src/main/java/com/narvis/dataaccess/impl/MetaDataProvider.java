@@ -23,10 +23,13 @@
  */
 package com.narvis.dataaccess.impl;
 
-import com.narvis.dataaccess.interfaces.IDataProvider;
+import com.narvis.common.generics.Pair;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
 import com.narvis.dataaccess.interfaces.IMetaDataProvider;
 import com.narvis.frontend.interfaces.IFrontEnd;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -57,6 +60,16 @@ public class MetaDataProvider implements IMetaDataProvider {
     @Override
     public IFrontEnd getFrontEnd(String... keywords) {
         return this.frontEnds.get(keywords[0]);
+    }
+
+    @Override
+    public Set<String> getAvailableDataProviders() {
+        return this.frontEnds.keySet();
+    }
+
+    @Override
+    public Set<String> getAvailableFrontEnds() {
+        return this.providers.keySet();
     }
 
 }

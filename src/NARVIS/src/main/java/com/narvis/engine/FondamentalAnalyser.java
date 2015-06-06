@@ -27,7 +27,7 @@ import com.narvis.common.debug.NarvisLogger;
 import com.narvis.dataaccess.DataAccessFactory;
 import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.exception.PersistException;
-import com.narvis.dataaccess.interfaces.IDataModelProvider;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataModelProvider;
 import com.narvis.dataaccess.interfaces.IMetaDataProvider;
 import com.narvis.dataaccess.models.route.ActionNode;
 import com.narvis.dataaccess.models.route.RouteNode;
