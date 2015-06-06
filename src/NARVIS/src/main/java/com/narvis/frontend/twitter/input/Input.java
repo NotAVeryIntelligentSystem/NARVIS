@@ -108,7 +108,7 @@ public class Input implements IInput {
                     NarvisLogger.logException(ex);
                 }
             }
-        }, 0, 60 * 1000);
+        }, 0, 10 * 1000);
     }
 
     @Override
