@@ -28,7 +28,7 @@ public class AccessConsole implements IFrontEnd {
 
     @Override
     public void start() {
-        this.input = new Input();
+        this.input = new Input(this.conf.getName());
         this.output = new Output(this);
         this.input.start();
     }

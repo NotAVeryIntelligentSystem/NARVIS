@@ -18,8 +18,13 @@ import java.util.logging.Level;
  */
 public class Input implements IInput {
 
+    private final String moduleName;
+    public Input(String moduleName) {
+        this.moduleName = moduleName;
+    }
+    
     private MessageInOut getMessage(String s) {
-        return new MessageInOut("Console", s, "localhost");
+        return new MessageInOut(this.moduleName, s, "localhost");
     }
 
     @Override

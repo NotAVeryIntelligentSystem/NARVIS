@@ -76,6 +76,7 @@ public class ConfigurationDataProvider implements IDataProvider {
         }
     }
 
+
     // Returns the MODULES not the configuration 
     public Map<String, IDataProvider> createDataProviders() throws FactoryException {
         Map<String, IDataProvider> retVal = new HashMap<>();

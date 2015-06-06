@@ -64,12 +64,12 @@ public class MetaDataProvider implements IMetaDataProvider {
 
     @Override
     public Set<String> getAvailableDataProviders() {
-        return this.frontEnds.keySet();
+        return this.providers.keySet();
     }
 
     @Override
     public Set<String> getAvailableFrontEnds() {
-        return this.providers.keySet();
+        return this.frontEnds.keySet();
     }
 
 }

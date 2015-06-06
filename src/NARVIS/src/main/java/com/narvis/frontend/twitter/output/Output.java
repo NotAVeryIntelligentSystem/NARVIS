@@ -7,13 +7,10 @@ package com.narvis.frontend.twitter.output;
 
 import com.narvis.common.debug.NarvisLogger;
 import com.narvis.common.extensions.StringExts;
+import com.narvis.dataaccess.impl.FrontEndConfigurationDataProvider;
 import com.narvis.frontend.MessageInOut;
 import com.narvis.frontend.interfaces.IOutput;
-import com.narvis.frontend.twitter.AccessTwitter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -27,9 +24,12 @@ public class Output implements IOutput {
     public String nameAPI = "Twitter";
     public String internalName = "nakJarvis";
     private final Twitter twitterLink;
+    private final String moduleName;
 
-    public Output(Twitter twitter) {
+    
+    public Output(Twitter twitter, String moduleName) {
         this.twitterLink = twitter;
+        this.moduleName = moduleName;
     }
 
     @Override

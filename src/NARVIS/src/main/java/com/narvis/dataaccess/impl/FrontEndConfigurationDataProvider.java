@@ -101,6 +101,11 @@ public final class FrontEndConfigurationDataProvider implements IDataProvider {
         }
 
     }
+    
+        
+    public String getName() {
+        return this.moduleFolder.getName();
+    }
 
     public ApiKeys getApiKeys() {
         return this.apiKeys;

@@ -47,8 +47,6 @@ import java.util.Map;
  * @author Nakou
  */
 public class NarvisEngine {
-
-    private static final String IOname = "Twitter"; // TODO : Change by load from conf files (Console OR Twitter)
     private static NarvisEngine narvis;
 
     private final Parser parser;
@@ -56,7 +54,6 @@ public class NarvisEngine {
     private final DetailsAnalyser detailAnalyser;
     private final IMetaDataProvider metaDataProvider;
     private final Executer executer;
-    private MessageInOut lastMessage;
 
     private NarvisEngine() throws Exception {
         this.executer = new Executer("Narvis engine");
@@ -77,11 +74,17 @@ public class NarvisEngine {
 
     public void start() {
         this.executer.start();
-        this.metaDataProvider.getFrontEnd(IOname).start();
+        // We starts all front ends
+        for(String frontEnd : this.metaDataProvider.getAvailableFrontEnds()) {
+            this.metaDataProvider.getFrontEnd(frontEnd).start();
+        }
     }
 
     public void close() throws Exception {
-        this.metaDataProvider.getFrontEnd(IOname).close();
+        // We stop all fronts ends
+        for(String frontEnd : this.metaDataProvider.getAvailableFrontEnds()) {
+            this.metaDataProvider.getFrontEnd(frontEnd).close();
+        }
         this.executer.close();
     }
 
@@ -94,30 +97,29 @@ public class NarvisEngine {
                     brainProcess(lastMessage);
                 } catch (IllegalKeywordException ex) {
                     NarvisLogger.logException(ex);
-                    onError(ex.getNarvisErrorMessage());
+                    onError(lastMessage, ex.getNarvisErrorMessage());
                 } catch (NoDataException ex) {
                     NarvisLogger.logException(ex);
-                    onError(ex.getNarvisErrorMessage());
+                    onError(lastMessage, ex.getNarvisErrorMessage());
                 } catch (ProviderException ex) {
                     NarvisLogger.logException(ex);
-                    onError(ex.getNarvisErrorMessage());
+                    onError(lastMessage, ex.getNarvisErrorMessage());
                 } catch (NoActionException | NoSentenceException ex) {
                     NarvisLogger.logException(ex);
-                    onError(ex.getNarvisErrorMessage());
+                    onError(lastMessage, ex.getNarvisErrorMessage());
                 } catch (EngineException ex) {
                     NarvisLogger.logException(ex);
-                    onError(ex.getNarvisErrorMessage());
+                    onError(lastMessage, ex.getNarvisErrorMessage());
                 } 
             }
         });
     }
     
-    private void onError(String message) {
-        this.metaDataProvider.getFrontEnd(IOname).getOutput().setOuput(new MessageInOut(this.lastMessage.getInputAPI(),message,this.lastMessage.getAnswerTo()));
+    private void onError(MessageInOut originalMessage, String message) {
+        this.metaDataProvider.getFrontEnd(originalMessage.getInputAPI()).getOutput().setOuput(new MessageInOut(originalMessage.getInputAPI(), message, originalMessage.getAnswerTo()));
     }
 
     private void brainProcess(MessageInOut message) throws ProviderException, EngineException{
-        this.lastMessage = message;
         List<String> parsedSentence;
         Map<String, String> detailsTypes;
         
@@ -147,7 +149,7 @@ public class NarvisEngine {
         
         IDataProviderDetails answerBuilder = (IDataProviderDetails) this.metaDataProvider.getDataProvider("Answers");
         String finalAnswer = answerBuilder.getDataDetails(detailsTypes);
-        this.metaDataProvider.getFrontEnd(IOname).getOutput().setOuput(new MessageInOut(message.getInputAPI(),finalAnswer,message.getAnswerTo()));
+        this.metaDataProvider.getFrontEnd(message.getInputAPI()).getOutput().setOuput(new MessageInOut(message.getInputAPI(),finalAnswer,message.getAnswerTo()));
     }
 
     

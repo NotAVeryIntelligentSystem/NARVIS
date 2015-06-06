@@ -44,7 +44,7 @@ public class TwitterTest {
     @Test
     public void testInstance(){
         try {
-            Output out = new Output(null);
+            Output out = new Output(null, "Twitter");
         } catch (Exception ex) {
             fail(ex.getMessage());
         }
@@ -54,7 +54,7 @@ public class TwitterTest {
     public void testCut(){
         List<String> tweetsObtains = new ArrayList<>();
         MessageInOut m = new MessageInOut("Twitter","Coucouco o pjp jp jpj jopj  oj pjo o jp jj popj pjop j joop pj ojppo ojpop j opojp poop jp pojopo op jopj opjp oj j opj pj poj opoihfiooih h p in fbzefbpzefzii pzzh hzfh zihz^f hzpzhp hfzhfzpihpzhzh phphh p hphph ophpo oh  h", "nakou;uwy;lolone;true");
-        Output out = new Output(null);
+        Output out = new Output(null, "Twitter");
         tweetsObtains = out.getTweetList(m);
         assertTrue(tweetsObtains.get(0).length() <= 140);
         assertTrue(tweetsObtains.get(1).length() <= 140);

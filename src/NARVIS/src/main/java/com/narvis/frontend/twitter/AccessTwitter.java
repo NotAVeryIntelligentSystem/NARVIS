@@ -48,7 +48,7 @@ public class AccessTwitter implements IFrontEnd {
         }
         this.twitter = this.loadAccessTwitter(this.conf.getApiKeys().getData("token"), this.conf.getApiKeys().getData("tokenSecret"), this.conf.getApiKeys().getData("consumerKey"), this.conf.getApiKeys().getData("consumerSecret"));
         this.input = new Input(this.twitter, this.conf);
-        this.output = new Output(this.twitter);
+        this.output = new Output(this.twitter, this.conf.getName());
         this.input.start();
     }
 

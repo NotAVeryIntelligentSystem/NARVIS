@@ -20,7 +20,7 @@ public class MessageInOut {
         this.inputAPIClass = inputAPIClass;
         this.answerTo = answerTo;
     }
-
+    
     public String getInputAPI() {
         return inputAPIClass;
     }

@@ -24,7 +24,6 @@ import twitter4j.TwitterException;
  */
 public class Input implements IInput {
 
-    public String nameAPI = "Twitter";
     public String internalName = "nakJarvis";
     private final Timer listenloop;
     private final Twitter twitterLink;
@@ -81,7 +80,7 @@ public class Input implements IInput {
                 this.conf.getConf().setData("LastTwitterMessageId", Long.toString(lastStatus.getId()));
                 this.conf.persist();
                 String[] tmp = this.tweetParser(lastStatus);
-                return new MessageInOut(this.nameAPI, tmp[0], tmp[1]);
+                return new MessageInOut(this.conf.getName(), tmp[0], tmp[1]);
             }
             else {
                 NarvisLogger.logInfo("Ignoring tweet because identical to previous one");
