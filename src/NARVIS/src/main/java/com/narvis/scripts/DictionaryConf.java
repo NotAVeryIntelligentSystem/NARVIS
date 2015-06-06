@@ -54,6 +54,13 @@ public class DictionaryConf {
         retVal.addWord(createWord("london", informationTypes, null, false));
         retVal.addWord(createWord("nimes", informationTypes, null, false));
         
+        informationTypes[0] = "politness";
+        retVal.addWord(createWord("please", informationTypes, null, false));
+        retVal.addWord(createWord("thanks", informationTypes, null, false));
+        
+        informationTypes[0] = "insult";
+        retVal.addWord(createWord("bitch", informationTypes, null, false));
+        
         retVal.addWord(createWord("the", null, null, true));
 
         return retVal;
