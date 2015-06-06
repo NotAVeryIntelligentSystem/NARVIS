@@ -50,6 +50,10 @@ public final class DetailsAnalyser {
     public Map<String, String> getDetailsTypes(List<String> details) throws NoDataException {
         List<String> hintList = new ArrayList<>();
         boolean isTypeFinded = false;
+        
+        /* We start clear the words associations to not have the associations of the previous answer */
+        this.wordsAssociations.clear();
+        
         for (String detail : details) {
             Word w = this.dictionary.getModel().getWordByValue(detail);
             if (w != null) { // Le mot existe dans le dictionnaire
@@ -62,8 +66,10 @@ public final class DetailsAnalyser {
                 }
                 if (!isTypeFinded && hintList.size() > 0) {
                     this.wordsAssociations.put(w.getValue(), hintList.get(0));
-                } else {
+                    
+                } else if(!isTypeFinded && w.getInformationTypes().size() > 0){
                     this.wordsAssociations.put(w.getValue(), w.getInformationTypes().get(0));
+                    
                 }
                 hintList = w.getHints();
             } else {
