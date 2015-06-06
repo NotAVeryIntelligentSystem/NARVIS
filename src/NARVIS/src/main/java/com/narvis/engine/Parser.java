@@ -26,7 +26,6 @@ package com.narvis.engine;
 import com.narvis.dataaccess.DataAccessFactory;
 import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.interfaces.IDataModelProvider;
-import com.narvis.dataaccess.interfaces.IMetaDataProvider;
 import com.narvis.dataaccess.models.lang.word.Dictionary;
 import com.narvis.dataaccess.models.lang.word.Word;
 import java.util.ArrayList;
@@ -84,6 +83,7 @@ public class Parser {
      * Brows details map to find details that are sentences and parse these sentences.
      * @param detailsToValue : Details map to scan
      * @return Parsed sentences
+     * @throws com.narvis.dataaccess.exception.NoDataException
      */
     public List<List<String>> getParsedSentencesFromDetails(Map<String, String> detailsToValue) throws NoDataException
     {
