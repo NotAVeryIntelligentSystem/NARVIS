@@ -71,12 +71,17 @@ public class Word {
     }
 
     public boolean containInformationType(String informationType) {
-        informationType.toLowerCase();
+        informationType = informationType.toLowerCase();
         return informationTypes.contains(informationType);
     }
 
     public void setValue(String value) {
         this.value = value;
+    }
+    
+    public void setIsIgnored(boolean isIgnored)
+    {
+        this.isIgnored = isIgnored;
     }
 
     public void addInformationType(String informationType) {

@@ -19,7 +19,7 @@
       <Word IsIgnored="false">
          <Value>nimes</Value>
          <InformationTypes class="java.util.LinkedList">
-            <string>city</string>
+            <string>location</string>
          </InformationTypes>
          <Hint class="java.util.LinkedList"/>
       </Word>

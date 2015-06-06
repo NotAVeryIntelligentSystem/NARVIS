@@ -23,15 +23,10 @@
  */
 package com.narvis.scripts;
 
-import com.narvis.common.debug.NarvisLogger;
-import com.narvis.common.generics.*;
+import com.narvis.common.debug.*;
 import com.narvis.common.tools.serialization.*;
 import com.narvis.dataaccess.impl.*;
 import com.narvis.dataaccess.models.conf.*;
-import com.narvis.dataaccess.models.lang.word.*;
-import com.narvis.dataaccess.models.layouts.ModuleErrors;
-import com.narvis.dataaccess.models.route.*;
-import com.narvis.frontend.twitter.AccessTwitter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -41,191 +36,122 @@ import java.nio.file.Files;
  * @author uwy
  */
 public class CreateConf {
+    public static final String ROOT_FOLDER = "../../release";
 
     public static void main(String[] args) {
 
         try {
             System.out.println("Starting conf creation");
-            File baseFolder = createFolder("../../release");
+            
+            File baseFolder = createFolder(ROOT_FOLDER);
             File confFolder = createFolder(baseFolder, ConfigurationDataProvider.CONF_FOLDER_NAME);
-            //XmlFileAccess.toFile(createNarvisConf(), new File(confFolder, ConfigurationDataProvider.CONF_FILE_NAME));
+            XmlFileAccess.toFile(createNarvisConf(), new File(confFolder, ConfigurationDataProvider.CONF_FILE_NAME));
             // Modules
             File modulesFolder = createFolder(baseFolder, ConfigurationDataProvider.MODULES_FOLDER_NAME);
-            //createWeatherModuleFolder(modulesFolder);
-            //createRoutesModuleFolder(modulesFolder);
-            //createDictionaryModuleFolder(modulesFolder);
+            createAnswersModuleFolder(modulesFolder);
+            createWeatherModuleFolder(modulesFolder);
+            createRoutesModuleFolder(modulesFolder);
+            createDictionaryModuleFolder(modulesFolder);
 
             // Front ends
             File frontendsFolder = createFolder(baseFolder, ConfigurationDataProvider.FRONTENDS_FOLDER_NAME);
             createTwitterFrontEndFolder(frontendsFolder);
-            //createConsoleFrontEndFolder(frontendsFolder);
+            createConsoleFrontEndFolder(frontendsFolder);
             
             System.out.println("Finished conf creation");
-        } catch (IOException | XmlFileAccessException ex) {
+            
+        } catch (Exception ex) {
             NarvisLogger.logException(ex);
         }
-
     }
 
+    /* Twitter */
     public static void createTwitterFrontEndFolder(File frontendsFolder) throws IOException, XmlFileAccessException {
-        File twitterFolder = createFolder(frontendsFolder, "Twitter");
+        TwitterConf myTwitterConf = new TwitterConf();
+        
+        File twitterFolder = createFolder(frontendsFolder, TwitterConf.MODULE_NAME);
         File confModuleFolder = createFolder(twitterFolder, FrontEndConfigurationDataProvider.CONF_FOLDER_NAME);
         File layoutFolder = createFolder(twitterFolder, FrontEndConfigurationDataProvider.LAYOUTS_FOLDER_NAME);
         
-        /*XmlFileAccess.toFile(createErrorsLayout(
-                new Pair("general", "Hum... I'm sure you don't really need to know that"),
-                new Pair("engine", ""),
-                new Pair("data", ""),
-                new Pair("noanswers", "I don't know what you're talking about...")
-        ), new File(layoutFolder, ModuleConfigurationDataProvider.ERRORS_FILE_NAME));*/
-        XmlFileAccess.toFile(createModuleConf(AccessTwitter.class.getCanonicalName(), new Pair("LastTwitterMessageId", "0")), new File(confModuleFolder, FrontEndConfigurationDataProvider.MODULE_CONF_FILE_NAME));
-        /*XmlFileAccess.toFile(createApiKeys("Twitter",
-                new Pair("token", "askNakou"),
-                new Pair("tokenSecret", "askNakou"),
-                new Pair("consumerKey", "askNakou"),
-                new Pair("consumerSecret", "askNakou")), new File(confModuleFolder, FrontEndConfigurationDataProvider.API_KEY_FILE_NAME));*/
-
-//etData("token"), this.conf.getApiKeys().getData("tokenSecret"), this.conf.getApiKeys().getData("consumerKey"), this.conf.getApiKeys().getData("consumerSecret")
-    }
-    
-    public static ModuleErrors createErrorsLayout(Pair<String, String>... keyValues) {
-        ModuleErrors retVal = new ModuleErrors();
-        for (Pair<String, String> kvp : keyValues) {
-            retVal.getMap().put(kvp.item1, kvp.item2);
-        }
-        return retVal;
+        XmlFileAccess.toFile(myTwitterConf.createErrorsLayout(), new File(layoutFolder, ModuleConfigurationDataProvider.ERRORS_FILE_NAME));
+        XmlFileAccess.toFile(myTwitterConf.createModuleConf(), new File(confModuleFolder, FrontEndConfigurationDataProvider.MODULE_CONF_FILE_NAME));
+        XmlFileAccess.toFile(myTwitterConf.createApiKeys(), new File(confModuleFolder, FrontEndConfigurationDataProvider.API_KEY_FILE_NAME));
     }
 
+    /* Console */
     public static void createConsoleFrontEndFolder(File frontendsFolder) throws IOException, XmlFileAccessException {
-        File consoleFolder = createFolder(frontendsFolder, "Console");
+        ConsoleConf myConsoleConf = new ConsoleConf();
+        
+        File consoleFolder = createFolder(frontendsFolder, ConsoleConf.MODULE_NAME);
+        
         File confModuleFolder = createFolder(consoleFolder, FrontEndConfigurationDataProvider.CONF_FOLDER_NAME);
         File layoutFolder = createFolder(consoleFolder, FrontEndConfigurationDataProvider.LAYOUTS_FOLDER_NAME);
-        XmlFileAccess.toFile(createErrorsLayout(
-                new Pair("general", "Hum... I'm sure you don't really need to know that"),
-                new Pair("engine", ""),
-                new Pair("data", ""),
-                new Pair("noanswers", "I don't know what you're talking about...")
-        ), new File(layoutFolder, ModuleConfigurationDataProvider.ERRORS_FILE_NAME));
-        //XmlFileAccess.toFile(createModuleConf(AccessConsole.class.getCanonicalName()), new File(confModuleFolder, FrontEndConfigurationDataProvider.MODULE_CONF_FILE_NAME));
-        //XmlFileAccess.toFile(createApiKeys("Console"), new File(confModuleFolder, FrontEndConfigurationDataProvider.API_KEY_FILE_NAME));
-
-//etData("token"), this.conf.getApiKeys().getData("tokenSecret"), this.conf.getApiKeys().getData("consumerKey"), this.conf.getApiKeys().getData("consumerSecret")
+        
+        XmlFileAccess.toFile(myConsoleConf.createErrorsLayout(), new File(layoutFolder, ModuleConfigurationDataProvider.ERRORS_FILE_NAME));
+        XmlFileAccess.toFile(myConsoleConf.createModuleConf(), new File(confModuleFolder, FrontEndConfigurationDataProvider.MODULE_CONF_FILE_NAME));
+        XmlFileAccess.toFile(myConsoleConf.createApiKeys(), new File(confModuleFolder, FrontEndConfigurationDataProvider.API_KEY_FILE_NAME));
     }
 
-    /* Routes */
-    public static void createRoutesModuleFolder(File modulesFolder) throws Exception {
-        File moduleFolder = createFolder(modulesFolder, "Routes");
+    /* Answers */
+    public static void createAnswersModuleFolder(File modulesFolder) throws Exception {
+        AnswersConf myAnswersConf = new AnswersConf();
+        
+        File moduleFolder = createFolder(modulesFolder, AnswersConf.MODULE_NAME);
+        
         File confModuleFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.CONF_FOLDER_NAME);
         File layoutFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);
-        XmlFileAccess.toFile(createErrorsLayout(
-                new Pair("general", "Hum... I'm sure you don't really need to know that"),
-                new Pair("persist", "I understand, but can't remember, it's probably due to alcohol..."),
-                new Pair("engine", ""),
-                new Pair("data", ""),
-                new Pair("noanswers", "I don't know what you're talking about...")
-        ), new File(layoutFolder, ModuleConfigurationDataProvider.ERRORS_FILE_NAME));
-        //XmlFileAccess.toFile(createModuleConf(RoutesProvider.class.getCanonicalName(), new Pair<>("RoutesDataPath", "routes.xml")), new File(confModuleFolder, ModuleConfigurationDataProvider.MODULE_CONF_FILE_NAME));
-        //XmlFileAccess.toFile(createApiKeys("Routes"), new File(confModuleFolder, ModuleConfigurationDataProvider.API_KEY_FILE_NAME));
-        //XmlFileAccess.toFile(createRouteNode(), new File(dataFolder, "routes.xml"));
+        File dataFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.DATA_FOLDER_NAME);
+        
+        XmlFileAccess.toFile(myAnswersConf.createErrorsLayout(), new File(layoutFolder, ModuleConfigurationDataProvider.ERRORS_FILE_NAME));
+        XmlFileAccess.toFile(myAnswersConf.createAnswersLayout(), new File(layoutFolder, ModuleConfigurationDataProvider.ANSWERS_FILE_NAME));
+        XmlFileAccess.toFile(myAnswersConf.createModuleConf(), new File(confModuleFolder, ModuleConfigurationDataProvider.MODULE_CONF_FILE_NAME));
+        XmlFileAccess.toFile(myAnswersConf.createApiKeys(), new File(confModuleFolder, ModuleConfigurationDataProvider.API_KEY_FILE_NAME));
     }
-
-    public static RouteNode createRouteNode() {
-        RouteNode retVal = new RouteNode();
-        retVal.addWord(
-                createWordNode("give",
-                        createWordNode(null,
-                                createWordNode("weather", new ActionNode("weather")))));
-        retVal.addWord(
-                createWordNode("bring",
-                        createWordNode(null,
-                                createWordNode("weather", new ActionNode("weather")))));
-        return retVal;
-    }
-
-    public static WordNode createWordNode(String name, ActionNode... actions) {
-        WordNode retVal = new WordNode(name);
-        for (ActionNode action : actions) {
-            retVal.addAction(action);
-        }
-        return retVal;
-    }
-
-    public static WordNode createWordNode(String name, WordNode... words) {
-        WordNode retVal = new WordNode(name);
-        for (WordNode word : words) {
-            retVal.addWord(word);
-        }
-        return retVal;
+    
+    /* Routes */
+    public static void createRoutesModuleFolder(File modulesFolder) throws Exception {
+        RoutesConf myRoutesConf = new RoutesConf();
+        
+        File moduleFolder = createFolder(modulesFolder, RoutesConf.MODULE_NAME);
+        
+        File confModuleFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.CONF_FOLDER_NAME);
+        File layoutFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);
+        File dataFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.DATA_FOLDER_NAME);
+        
+        XmlFileAccess.toFile(myRoutesConf.createErrorsLayout(), new File(layoutFolder, ModuleConfigurationDataProvider.ERRORS_FILE_NAME));
+        XmlFileAccess.toFile(myRoutesConf.createModuleConf(), new File(confModuleFolder, ModuleConfigurationDataProvider.MODULE_CONF_FILE_NAME));
+        XmlFileAccess.toFile(myRoutesConf.createApiKeys(), new File(confModuleFolder, ModuleConfigurationDataProvider.API_KEY_FILE_NAME));
+        XmlFileAccess.toFile(myRoutesConf.createRouteNode(), new File(dataFolder, RoutesConf.ROUTES_DATA_PATH));
     }
 
     /* Dictionary */
     public static void createDictionaryModuleFolder(File modulesFolder) throws Exception {
-        File moduleFolder = createFolder(modulesFolder, "Dictionary");
-        File confModuleFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.CONF_FOLDER_NAME);
-        File layoutFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);
-        XmlFileAccess.toFile(createErrorsLayout(
-                new Pair("general", "Hum... I'm sure you don't really need to know that"),
-                new Pair("persist", "I understand, but can't remember, it's probably due to alcohol..."),
-                new Pair("engine", ""),
-                new Pair("data", ""),
-                new Pair("noanswers", "I don't know what you're talking about...")
-        ), new File(layoutFolder, ModuleConfigurationDataProvider.ERRORS_FILE_NAME));
-        //XmlFileAccess.toFile(createModuleConf(DictionaryProvider.class.getCanonicalName(), new Pair<>("DictionaryDataPath", "dictionary.xml")), new File(confModuleFolder, ModuleConfigurationDataProvider.MODULE_CONF_FILE_NAME));
-        //XmlFileAccess.toFile(createApiKeys("Dictionary"), new File(confModuleFolder, ModuleConfigurationDataProvider.API_KEY_FILE_NAME));
-        File dataFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.DATA_FOLDER_NAME);
-        //XmlFileAccess.toFile(createDictionary(), new File(dataFolder, "dictionary.xml"));
-        //createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);
+        DictionaryConf myDictionaryConf = new DictionaryConf();
+        
+        File moduleFolder       = createFolder(modulesFolder, DictionaryConf.MODULE_NAME);
+        File confModuleFolder   = createFolder(moduleFolder, ModuleConfigurationDataProvider.CONF_FOLDER_NAME);
+        File layoutFolder       = createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);
+        File dataFolder         = createFolder(moduleFolder, ModuleConfigurationDataProvider.DATA_FOLDER_NAME);
+        
+        XmlFileAccess.toFile(myDictionaryConf.createErrorsLayout(), new File(layoutFolder, ModuleConfigurationDataProvider.ERRORS_FILE_NAME));
+        XmlFileAccess.toFile(myDictionaryConf.createModuleConf(), new File(confModuleFolder, ModuleConfigurationDataProvider.MODULE_CONF_FILE_NAME));
+        XmlFileAccess.toFile(myDictionaryConf.createApiKeys(), new File(confModuleFolder, ModuleConfigurationDataProvider.API_KEY_FILE_NAME));
+        XmlFileAccess.toFile(myDictionaryConf.createDictionary(), new File(dataFolder, DictionaryConf.DICTIONARY_DATA_PATH));
     }
 
-    public static Dictionary createDictionary() {
-        Dictionary retVal = new Dictionary();
-
-        String[] informationTypes = new String[1];
-        String[] hints = new String[1];
-
-        informationTypes[0] = "preposition";
-        hints[0] = "location";
-        retVal.addWord(createWord("in", informationTypes, hints));
-
-        informationTypes[0] = "location";
-        retVal.addWord(createWord("london", informationTypes, null));
-
-        return retVal;
-    }
-
-    public static Word createWord(String name, String[] informationTypes, String[] hints) {
-        Word retVal = new Word();
-
-        retVal.setValue(name);
-
-        for (String informationType : informationTypes) {
-            retVal.addInformationType(informationType);
-        }
-
-        if (hints != null) {
-            for (String hint : hints) {
-                retVal.addHint(hint);
-            }
-        }
-
-        return retVal;
-    }
-
+    /* Weather */
     public static void createWeatherModuleFolder(File modulesFolder) throws Exception {
-        File moduleFolder = createFolder(modulesFolder, "OpenWeatherMap");
-        File confModuleFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.CONF_FOLDER_NAME);
-        File layoutFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);
-        XmlFileAccess.toFile(createErrorsLayout(
-                new Pair("general", "Hum... I'm sure you don't really need to know that"),
-                new Pair("engine", ""),
-                new Pair("data", ""),
-                new Pair("noanswers", "I don't know what you're talking about..."),
-                new Pair("temperature", "Sorry, I can't find the temperature..."),
-                new Pair("cloud", "Sorry, I can't find the sunshine...")
-        ), new File(layoutFolder, ModuleConfigurationDataProvider.ERRORS_FILE_NAME));
-        //XmlFileAccess.toFile(createModuleConf(OpenWeatherMapPortal.class.getCanonicalName()), new File(confModuleFolder, ModuleConfigurationDataProvider.MODULE_CONF_FILE_NAME));
-        //XmlFileAccess.toFile(createApiKeys("OpenWeatherMap", new Pair("key", "askNakou")), new File(confModuleFolder, ModuleConfigurationDataProvider.API_KEY_FILE_NAME));
-        createFolder(moduleFolder, ModuleConfigurationDataProvider.DATA_FOLDER_NAME);
+        WeatherConf myWeatherConf = new WeatherConf();
+        
+        File moduleFolder       = createFolder(modulesFolder, WeatherConf.MODULE_NAME);
+        File confModuleFolder   = createFolder(moduleFolder, ModuleConfigurationDataProvider.CONF_FOLDER_NAME);
+        File layoutFolder       = createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);
+        File dataFolder         = createFolder(moduleFolder, ModuleConfigurationDataProvider.DATA_FOLDER_NAME);
+        
+        XmlFileAccess.toFile(myWeatherConf.createErrorsLayout(), new File(layoutFolder, ModuleConfigurationDataProvider.ERRORS_FILE_NAME));
+        XmlFileAccess.toFile(myWeatherConf.createAnswerLayout(), new File(layoutFolder, ModuleConfigurationDataProvider.ANSWERS_FILE_NAME));
+        XmlFileAccess.toFile(myWeatherConf.createModuleConf(), new File(confModuleFolder, ModuleConfigurationDataProvider.MODULE_CONF_FILE_NAME));
+        XmlFileAccess.toFile(myWeatherConf.createApiKeys(), new File(confModuleFolder, ModuleConfigurationDataProvider.API_KEY_FILE_NAME));
     }
 
     public static File createFolder(String folderPath) throws IOException {
@@ -242,24 +168,6 @@ public class CreateConf {
 
     public static NarvisConf createNarvisConf() {
         NarvisConf retVal = new NarvisConf();
-        return retVal;
-    }
-
-    public static ModuleConf createModuleConf(String moduleClassPath, Pair<String, String>... keyValueEntries) {
-        ModuleConf retVal = new ModuleConf();
-        retVal.setModuleClassPath(moduleClassPath);
-        for (Pair<String, String> entry : keyValueEntries) {
-            retVal.getEntries().put(entry.item1, entry.item2);
-        }
-        return retVal;
-    }
-
-    public static ApiKeys createApiKeys(String name, Pair<String, String>... nameApiKeypairs) {
-        ApiKeys retVal = new ApiKeys();
-        retVal.setName(name);
-        for (Pair<String, String> pair : nameApiKeypairs) {
-            retVal.getApiKeys().put(pair.item1, pair.item2);
-        }
         return retVal;
     }
 }
