@@ -39,7 +39,6 @@ import com.narvis.engine.exception.NoActionException;
 import com.narvis.engine.exception.NoSentenceException;
 import com.narvis.frontend.MessageInOut;
 import java.text.ParseException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,8 +54,7 @@ public class NarvisEngine {
     private final Parser parser;
     private final FondamentalAnalyser fondamentalAnalyser;
     private final DetailsAnalyser detailAnalyser;
-    private final IMetaDataProvider metaDataProviderAction;
-    private final IMetaDataProvider metaDataProviderAnswer;
+    private final IMetaDataProvider metaDataProvider;
     private final Executer executer;
     private MessageInOut lastMessage;
 
@@ -65,8 +63,7 @@ public class NarvisEngine {
         parser = new Parser();
         fondamentalAnalyser = new FondamentalAnalyser();
         detailAnalyser = new DetailsAnalyser();
-        metaDataProviderAction = DataAccessFactory.getMetaDataProvider();
-        metaDataProviderAnswer = DataAccessFactory.getMetaDataProvider();
+        metaDataProvider = DataAccessFactory.getMetaDataProvider();
     }
 
     public static NarvisEngine getInstance() throws Exception {
@@ -80,11 +77,11 @@ public class NarvisEngine {
 
     public void start() {
         this.executer.start();
-        this.metaDataProviderAction.getFrontEnd(IOname).start();
+        this.metaDataProvider.getFrontEnd(IOname).start();
     }
 
     public void close() throws Exception {
-        this.metaDataProviderAction.getFrontEnd(IOname).close();
+        this.metaDataProvider.getFrontEnd(IOname).close();
         this.executer.close();
     }
 
@@ -116,7 +113,7 @@ public class NarvisEngine {
     }
     
     private void onError(String message) {
-        this.metaDataProviderAction.getFrontEnd(IOname).getOutput().setOuput(new MessageInOut(this.lastMessage.getInputAPI(),message,this.lastMessage.getAnswerTo()));
+        this.metaDataProvider.getFrontEnd(IOname).getOutput().setOuput(new MessageInOut(this.lastMessage.getInputAPI(),message,this.lastMessage.getAnswerTo()));
     }
 
     private void brainProcess(MessageInOut message) throws ProviderException, EngineException{
@@ -128,7 +125,7 @@ public class NarvisEngine {
         Action action = fondamentalAnalyser.findAction(parsedSentence);
         
         detailsTypes = detailAnalyser.getDetailsTypes(action.getDetails());
-        IDataProvider provider = this.metaDataProviderAction.getDataProvider(action.getProviderName());
+        IDataProvider provider = this.metaDataProvider.getDataProvider(action.getProviderName());
         String protoAnswer = "";
         
         /* If the provider is NARVIS, we execute an internal action */
@@ -144,15 +141,13 @@ public class NarvisEngine {
                 protoAnswer = ((IDataProvider) provider).getData(askForArray);
             }
         }
-        
 
-        Map<String,String> answerParams = new HashMap<>();
-        answerParams.put("sentence", protoAnswer);
-        IDataProvider answerBuilder = this.metaDataProviderAnswer.getDataProvider("Answers");
-        String[] bullshit = new String[1];
-        bullshit[0] = "polite3";
-        String finalAnswer = ((IDataProviderDetails) answerBuilder).getDataDetails(answerParams, bullshit);
-        this.metaDataProviderAction.getFrontEnd(IOname).getOutput().setOuput(new MessageInOut(message.getInputAPI(),finalAnswer,message.getAnswerTo()));
+        /* We finaly put the proto answer returne by the provider at the end of the details map */
+        detailsTypes.put("sentence", protoAnswer);
+        
+        IDataProviderDetails answerBuilder = (IDataProviderDetails) this.metaDataProvider.getDataProvider("Answers");
+        String finalAnswer = answerBuilder.getDataDetails(detailsTypes);
+        this.metaDataProvider.getFrontEnd(IOname).getOutput().setOuput(new MessageInOut(message.getInputAPI(),finalAnswer,message.getAnswerTo()));
     }
 
     

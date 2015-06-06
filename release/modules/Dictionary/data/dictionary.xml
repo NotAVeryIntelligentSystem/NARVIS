@@ -23,6 +23,27 @@
          </InformationTypes>
          <Hint class="java.util.LinkedList"/>
       </Word>
+      <Word IsIgnored="false">
+         <Value>please</Value>
+         <InformationTypes class="java.util.LinkedList">
+            <string>politness</string>
+         </InformationTypes>
+         <Hint class="java.util.LinkedList"/>
+      </Word>
+      <Word IsIgnored="false">
+         <Value>thanks</Value>
+         <InformationTypes class="java.util.LinkedList">
+            <string>politness</string>
+         </InformationTypes>
+         <Hint class="java.util.LinkedList"/>
+      </Word>
+      <Word IsIgnored="false">
+         <Value>bitch</Value>
+         <InformationTypes class="java.util.LinkedList">
+            <string>insult</string>
+         </InformationTypes>
+         <Hint class="java.util.LinkedList"/>
+      </Word>
       <Word IsIgnored="true">
          <Value>the</Value>
          <InformationTypes class="java.util.LinkedList"/>

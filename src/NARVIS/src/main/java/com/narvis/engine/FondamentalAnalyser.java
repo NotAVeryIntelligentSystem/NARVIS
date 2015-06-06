@@ -68,24 +68,20 @@ public class FondamentalAnalyser {
         IMetaDataProvider metaDataProvider = DataAccessFactory.getMetaDataProvider();
         this.routesProvider = (IDataModelProvider<RouteNode>) metaDataProvider.getDataProvider("Routes");
     }
-
+    
     /**
-     * Recherche le provider et les informations attendues en fonction de la
-     * phrase en entrée.
-     *
-     * @param pParsedSentence : La phrase ayant préalablement été parsée
-     * @return Retourne l'action correspondant à la phrase, ou NULL si aucune
-     * n'est trouvée.
-     * @throws com.narvis.dataaccess.exception.NoDataException
-     * @throws com.narvis.engine.exception.NoActionException
-     * @throws com.narvis.engine.exception.NoSentenceException
+     * Search a pattern in the routes that match the sentence
+     * @param pParsedSentence
+     * @return The action corresponding to the pattern
+     * @throws NoDataException
+     * @throws NoActionException
+     * @throws NoSentenceException 
      */
     public Action findAction(List<String> pParsedSentence) throws NoDataException, NoActionException, NoSentenceException {
-
-        RouteNode route;            // Root of the route model
         ActionNode action = null;   // Action node that correspond to the sentence
         Action implAction = null;   // Returned action that correspond to the sentence
-
+        int offsetSentence = 0;
+        
         /*
          If the sentence in params is NULL or empty, return NULL.
          Because no route could ever match an empty sentence.      
@@ -93,8 +89,8 @@ public class FondamentalAnalyser {
         if (pParsedSentence == null || pParsedSentence.isEmpty()) {
             throw new NoSentenceException("Empty sentence", "Gonna speak to me or not ?");
         }
-
-        /*
+        
+                /*
          Initialize the details with the parsed sentence.
          When an action is finded in a route, all the words that were used in
          the route are removed from details.
@@ -102,56 +98,12 @@ public class FondamentalAnalyser {
          correspond to the real details.
          */
         details = pParsedSentence;
-
-        /* Get route model */
-        route = routesProvider.getModel();
-
-        /* Get WordNodes children of the root */
-        List<WordNode> rootWords = route.getWords();
-
-        /*
-        Brows nodes of the first level of the tree before calling the recurcive
-        function (searchPath() ).
-        We have to do this because the root (RouteNode) hasn't the same type
-        as the param expected by the recurcive function, that is a WordNode.
-        */
-        WordNode jockerWordNode = null;
         
-        for(WordNode word : rootWords)
-        {
-            /* Get the first word of the sentence */
-            final String currentSentenceWord = details.get(0);
-            
-            /* If the word is empty, it's a "joker" we gonna use at the end */
-            if(word.getValue() == null || word.getValue().isEmpty())
-            {
-                jockerWordNode = word;
-            }
-            
-            /* If the word is equals the current word */
-            if(word.getValue() != null && word.getValue().equals(currentSentenceWord))
-            {
-                /* Search an action that match the sentence */
-                action = searchPath(word, 1);
-
-                /* If an action is finded */
-                if (action != null) {
-                    /* If the node isn't empty */
-                    if (word.getValue() != null || !word.getValue().isEmpty()) {
-                        /* Remove the current word in the details because he was used by the fondamental analyser */
-                        details.remove(0);
-                    }
-                    break;
-                }
-            }
+        while(offsetSentence < pParsedSentence.size() && action==null ){
+            action = this.findAction(offsetSentence);
+            offsetSentence++;
         }
         
-        /* If we didn't find any action and we have a joker, we try to find an action with it */
-        if(jockerWordNode != null && action == null)
-        {
-            action = searchPath(jockerWordNode, 1);
-        }
-
         /* If no action is found */
         if (action != null) {
             /* Récupère le nom de provider correspondant au noeud action */
@@ -170,9 +122,138 @@ public class FondamentalAnalyser {
             details = null;
             throw new NoActionException("No action correspondance", "I don't understand what you're asking for...");
         }
-
+        
+        
         return implAction;
     }
+
+    /**
+     * Recherche le provider et les informations attendues en fonction de la
+     * phrase en entrée.
+     *
+     * @param pParsedSentence : La phrase ayant préalablement été parsée
+     * @return Retourne l'action correspondant à la phrase, ou NULL si aucune
+     * n'est trouvée.
+     * @throws com.narvis.dataaccess.exception.NoDataException
+     * @throws com.narvis.engine.exception.NoActionException
+     * @throws com.narvis.engine.exception.NoSentenceException
+     */
+    private ActionNode findAction(int sentenceOffset) throws NoDataException, NoActionException, NoSentenceException {
+
+        RouteNode route;            // Root of the route model
+        ActionNode action = null;   // Action node that correspond to the sentence
+
+        /* Get route model */
+        route = routesProvider.getModel();
+
+        /* Get WordNodes children of the root */
+        List<WordNode> rootWords = route.getWords();
+        
+        /* If we still have a word to compare in the sentence */
+        if (sentenceOffset < details.size()) {
+
+            /*
+            Brows nodes of the first level of the tree before calling the recurcive
+            function (searchPath() ).
+            We have to do this because the root (RouteNode) hasn't the same type
+            as the param expected by the recurcive function, that is a WordNode.
+            */
+            WordNode jockerWordNode = null;
+
+            for(WordNode word : rootWords)
+            {
+                /* Get the first word of the sentence */
+                final String currentSentenceWord = details.get(sentenceOffset);
+
+                /* If the word is empty, it's a "joker" we gonna use at the end */
+                if(word.getValue() == null || word.getValue().isEmpty())
+                {
+                    jockerWordNode = word;
+                }
+
+                /* If the word is equals the current word */
+                if(word.getValue() != null && word.getValue().equals(currentSentenceWord))
+                {
+                    /* Search an action that match the sentence */
+                    action = searchPath(word, sentenceOffset+1);
+
+                    /* If an action is finded */
+                    if (action != null) {
+                        /* If the node isn't empty */
+                        if (word.getValue() != null || !word.getValue().isEmpty()) {
+                            /* Remove the current word in the details because he was used by the fondamental analyser */
+                            details.remove(sentenceOffset);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            /* If we didn't find any action and we have a joker, we try to find an action with it */
+            if(jockerWordNode != null && action == null)
+            {
+                action = searchPath(jockerWordNode, sentenceOffset+1);
+            }
+        }
+
+        return action;
+    }
+    
+    /**
+     * Brows the routes tree to match the words of the sentence with an action.
+     * When there is no more node that match in the tree, we get back to the last action we see.
+     *
+     * @param wordNode : The node to brows
+     * @param pParsedSentence : The sentence to match
+     * @param sentenceOffset : The index of the word we're looking for in the sentence
+     * @return An action that match the sentence, or null if none is find
+     */
+    private ActionNode searchPath(WordNode wordNode, int sentenceOffset) {
+
+        List<WordNode> wordNodeChildren;    // Les noeud mots enfant du noeud mot courrant
+        ActionNode action = null;           // Noeud action correspondant à la phrase
+
+        wordNodeChildren = wordNode.getWords();
+
+        /* Si il reste des mots à analyser dans la phrase */
+        if (sentenceOffset < details.size()) {
+            final String currentSentenceWord = details.get(sentenceOffset);
+            
+            WordNode jockerWordNode = null;
+            for (WordNode currentWordNode : wordNodeChildren) {
+                /* If the word is empty, it's a "joker" we gonna use at the end */
+                if(currentWordNode.getValue() == null || currentWordNode.getValue().isEmpty())
+                {
+                    jockerWordNode = currentWordNode;
+                }
+            
+                if(currentWordNode.getValue() != null && currentWordNode.getValue().equals(currentSentenceWord)){
+                    details.remove(sentenceOffset);
+                    action = searchPath(currentWordNode, sentenceOffset);
+                    break;
+
+                }
+            }
+            
+            /* If we didn't find any action and we have a joker, we try to find an action with it */
+            if(jockerWordNode != null && action == null)
+            {
+                action = searchPath(jockerWordNode, sentenceOffset+1);
+            }
+        }
+
+        /* Si aucune action n'a été trouvée, on recherche une action sur le noeud courrant */
+        if (action == null) {
+            final List<ActionNode> actions = wordNode.getActions();
+
+            if (actions.size() > 0) {
+                action = actions.get(0);
+            }
+        }
+
+        return action;
+    }
+
     
     /**
      * Enregistre l'état des routes dans le fichier XML
@@ -291,64 +372,6 @@ public class FondamentalAnalyser {
         
         /* On remplace avec le nouvel arbre des routes */
         routesProvider.persist();
-    }
-
-    /**
-     * Parcour l'arbre des routes en fonction des mots de la phrase. Si une
-     * action est trouvée lors du parcour des routes, elle est retournée.
-     * Lorsqu'il n'y a plus de branche à parcourir, on remonte l'arbre jusqu'à
-     * tomber sur une action.
-     *
-     * @param wordNode : La noeud de l'arbre à parcourir
-     * @param pParsedSentence : La phrase ayant préalablement été parsée
-     * @param iWord : L'indice du mot courrant de la phrase
-     * @return Un noeud de l'arbre correspondant à une action, ou NULL si aucune
-     * action n'est trouvée.
-     */
-    private ActionNode searchPath(WordNode wordNode, int iWord) {
-
-        List<WordNode> wordNodeChildren;    // Les noeud mots enfant du noeud mot courrant
-        ActionNode action = null;           // Noeud action correspondant à la phrase
-
-        wordNodeChildren = wordNode.getWords();
-
-        /* Si il reste des mots à analyser dans la phrase */
-        if (iWord < details.size()) {
-            final String currentSentenceWord = details.get(iWord);
-            
-            WordNode jockerWordNode = null;
-            for (WordNode currentWordNode : wordNodeChildren) {
-                /* If the word is empty, it's a "joker" we gonna use at the end */
-                if(currentWordNode.getValue() == null || currentWordNode.getValue().isEmpty())
-                {
-                    jockerWordNode = currentWordNode;
-                }
-            
-                if(currentWordNode.getValue() != null && currentWordNode.getValue().equals(currentSentenceWord)){
-                    details.remove(iWord);
-                    action = searchPath(currentWordNode, iWord);
-                    break;
-
-                }
-            }
-            
-            /* If we didn't find any action and we have a joker, we try to find an action with it */
-            if(jockerWordNode != null && action == null)
-            {
-                action = searchPath(jockerWordNode, iWord+1);
-            }
-        }
-
-        /* Si aucune action n'a été trouvée, on recherche une action sur le noeud courrant */
-        if (action == null) {
-            final List<ActionNode> actions = wordNode.getActions();
-
-            if (actions.size() > 0) {
-                action = actions.get(0);
-            }
-        }
-
-        return action;
     }
 
     /**

@@ -24,7 +24,6 @@
 package com.narvis.engine;
 
 
-import com.narvis.dataaccess.models.layouts.ModuleAnswers;
 import com.narvis.engine.interfaces.IAnswerBuilder;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,21 +37,6 @@ import java.util.regex.Pattern;
  */
 public class AnswerBuilder implements IAnswerBuilder {
     
-    @Override
-    public String readAnswerForCommand(ModuleAnswers providerConf, String command) {
-
-        //The caller will deal with the issue
-        if( providerConf == null ) 
-        {
-            return null;
-        }
-        
-        String answerFromXmlFile = providerConf.getData(command);
-        return answerFromXmlFile;
-        
-
-    }
-
     @Override
     public List<String> getListOfRequiredParams(String answerFromXml) {
 
@@ -129,5 +113,4 @@ public class AnswerBuilder implements IAnswerBuilder {
     private String removeBracketFromParam(String paramName) {
         return paramName.replace("[", "").replace("]", "");
     }
-
 }
