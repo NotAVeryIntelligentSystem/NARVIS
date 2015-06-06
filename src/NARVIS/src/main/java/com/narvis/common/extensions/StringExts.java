@@ -70,11 +70,13 @@ public class StringExts {
                 retVal.add(String.join(" ", current) + appendMessage); 
                 currentPacketSize = 0;
                 current = new ArrayList<>();
+                current.add(word);
                 if(word.length() > maxPacketSize) {
                     throw new IllegalArgumentException("Can't split this because a word is too large for the max packet size, word : [" + word + "] max size : " +  maxPacketSize);
                 }
             }
         }
+        retVal.add(String.join(" ", current)); // We do not append the appendmessage on the last occurence
         return retVal;
     }
     

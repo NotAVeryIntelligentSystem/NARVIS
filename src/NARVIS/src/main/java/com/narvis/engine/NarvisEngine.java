@@ -48,7 +48,7 @@ import java.util.Map;
  */
 public class NarvisEngine {
 
-    private static final String IOname = "Console"; // TODO : Change by load from conf files (Console OR Twitter)
+    private static final String IOname = "Twitter"; // TODO : Change by load from conf files (Console OR Twitter)
     private static NarvisEngine narvis;
 
     private final Parser parser;

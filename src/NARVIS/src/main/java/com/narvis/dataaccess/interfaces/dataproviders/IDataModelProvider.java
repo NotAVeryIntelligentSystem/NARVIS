@@ -23,7 +23,6 @@
  */
 package com.narvis.dataaccess.interfaces.dataproviders;
 
-import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
 import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.exception.PersistException;
 

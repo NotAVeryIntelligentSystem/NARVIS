@@ -23,8 +23,6 @@
  */
 package com.narvis.dataaccess.interfaces.dataproviders;
 
-import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
-
 /**
  *
  * @author uwy
