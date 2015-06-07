@@ -38,7 +38,7 @@ import java.nio.file.Files;
 public class CreateConf {
     public static final String ROOT_FOLDER = "../../release";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         try {
             System.out.println("Starting conf creation");
@@ -49,12 +49,11 @@ public class CreateConf {
             // Modules
             File modulesFolder = createFolder(baseFolder, ConfigurationDataProvider.MODULES_FOLDER_NAME);
             //createAnswersModuleFolder(modulesFolder);
-            //createStatusModuleFolder(modulesFolder);
+            createStatusModuleFolder(modulesFolder);
             //createWeatherModuleFolder(modulesFolder);
             //createRoutesModuleFolder(modulesFolder);
             //createDictionaryModuleFolder(modulesFolder);
-            createUsersModuleFolder(modulesFolder);
-            
+            //createUsersModuleFolder(modulesFolder);
             // Front ends
             File frontendsFolder = createFolder(baseFolder, ConfigurationDataProvider.FRONTENDS_FOLDER_NAME);
             //createTwitterFrontEndFolder(frontendsFolder);
