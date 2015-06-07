@@ -48,23 +48,25 @@ public class CreateConf {
             XmlFileAccess.toFile(createNarvisConf(), new File(confFolder, ConfigurationDataProvider.CONF_FILE_NAME));
             // Modules
             File modulesFolder = createFolder(baseFolder, ConfigurationDataProvider.MODULES_FOLDER_NAME);
-            createAnswersModuleFolder(modulesFolder);
-            createStatusModuleFolder(modulesFolder);
-            createWeatherModuleFolder(modulesFolder);
-            createRoutesModuleFolder(modulesFolder);
-            createDictionaryModuleFolder(modulesFolder);
-
+            //createAnswersModuleFolder(modulesFolder);
+            //createStatusModuleFolder(modulesFolder);
+            //createWeatherModuleFolder(modulesFolder);
+            //createRoutesModuleFolder(modulesFolder);
+            //createDictionaryModuleFolder(modulesFolder);
+            createUsersModuleFolder(modulesFolder);
+            
             // Front ends
             File frontendsFolder = createFolder(baseFolder, ConfigurationDataProvider.FRONTENDS_FOLDER_NAME);
-            createTwitterFrontEndFolder(frontendsFolder);
-            createConsoleFrontEndFolder(frontendsFolder);
+            //createTwitterFrontEndFolder(frontendsFolder);
+            //createConsoleFrontEndFolder(frontendsFolder);
             
             System.out.println("Finished conf creation");
             
-        } catch (Exception ex) {
+        } catch (IOException | XmlFileAccessException ex) {
             NarvisLogger.logException(ex);
         }
     }
+    
 
     /* Twitter */
     public static void createTwitterFrontEndFolder(File frontendsFolder) throws IOException, XmlFileAccessException {
@@ -92,12 +94,27 @@ public class CreateConf {
         XmlFileAccess.toFile(myConsoleConf.createModuleConf(), new File(confModuleFolder, FrontEndConfigurationDataProvider.MODULE_CONF_FILE_NAME));
         XmlFileAccess.toFile(myConsoleConf.createApiKeys(), new File(confModuleFolder, FrontEndConfigurationDataProvider.API_KEY_FILE_NAME));
     }
+    
+    public static void createUsersModuleFolder(File modulesFolder) throws IOException, XmlFileAccessException {
+        UsersConf myUsersConf = new UsersConf();
+        File moduleFolder = createFolder(modulesFolder, UsersConf.MODULE_NAME);
+        File confModuleFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.CONF_FOLDER_NAME);
+        File layoutFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);
+        File dataFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.DATA_FOLDER_NAME);
+        
+        XmlFileAccess.toFile(myUsersConf.createErrorsLayout(), new File(layoutFolder, ModuleConfigurationDataProvider.ERRORS_FILE_NAME));
+        XmlFileAccess.toFile(myUsersConf.createModuleConf(), new File(confModuleFolder, ModuleConfigurationDataProvider.MODULE_CONF_FILE_NAME));
+        XmlFileAccess.toFile(myUsersConf.createApiKeys(), new File(confModuleFolder, ModuleConfigurationDataProvider.API_KEY_FILE_NAME));
+        XmlFileAccess.toFile(myUsersConf.createUsersData(), new File(dataFolder, UsersConf.USERS_DATA_PATH));
+
+    }
+
 
     /* Answers */
-    public static void createAnswersModuleFolder(File modulesFolder) throws Exception {
+    public static void createAnswersModuleFolder(File modulesFolder) throws IOException, XmlFileAccessException  {
         AnswersConf myAnswersConf = new AnswersConf();
         
-        File moduleFolder = createFolder(modulesFolder, myAnswersConf.MODULE_NAME);
+        File moduleFolder = createFolder(modulesFolder, AnswersConf.MODULE_NAME);
         
         File confModuleFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.CONF_FOLDER_NAME);
         File layoutFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);
@@ -126,7 +143,7 @@ public class CreateConf {
     }
     
     /* Routes */
-    public static void createRoutesModuleFolder(File modulesFolder) throws Exception {
+    public static void createRoutesModuleFolder(File modulesFolder) throws IOException, XmlFileAccessException  {
         RoutesConf myRoutesConf = new RoutesConf();
         
         File moduleFolder = createFolder(modulesFolder, RoutesConf.MODULE_NAME);
@@ -142,10 +159,11 @@ public class CreateConf {
     }
 
     /* Dictionary */
-    public static void createDictionaryModuleFolder(File modulesFolder) throws Exception {
+    public static void createDictionaryModuleFolder(File modulesFolder) throws IOException, XmlFileAccessException  {
         DictionaryConf myDictionaryConf = new DictionaryConf();
         
         File moduleFolder       = createFolder(modulesFolder, DictionaryConf.MODULE_NAME);
+        
         File confModuleFolder   = createFolder(moduleFolder, ModuleConfigurationDataProvider.CONF_FOLDER_NAME);
         File layoutFolder       = createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);
         File dataFolder         = createFolder(moduleFolder, ModuleConfigurationDataProvider.DATA_FOLDER_NAME);
@@ -157,10 +175,11 @@ public class CreateConf {
     }
 
     /* Weather */
-    public static void createWeatherModuleFolder(File modulesFolder) throws Exception {
+    public static void createWeatherModuleFolder(File modulesFolder) throws IOException, XmlFileAccessException  {
         WeatherConf myWeatherConf = new WeatherConf();
         
         File moduleFolder       = createFolder(modulesFolder, WeatherConf.MODULE_NAME);
+        
         File confModuleFolder   = createFolder(moduleFolder, ModuleConfigurationDataProvider.CONF_FOLDER_NAME);
         File layoutFolder       = createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);
         File dataFolder         = createFolder(moduleFolder, ModuleConfigurationDataProvider.DATA_FOLDER_NAME);

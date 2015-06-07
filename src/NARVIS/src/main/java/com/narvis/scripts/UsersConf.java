@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 Zack.
+ * Copyright 2015 uwy.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,18 +23,32 @@
  */
 package com.narvis.scripts;
 
+import com.narvis.dataaccess.impl.UserDataProvider;
 import com.narvis.dataaccess.models.conf.ApiKeys;
 import com.narvis.dataaccess.models.conf.ModuleConf;
 import com.narvis.dataaccess.models.layouts.ModuleErrors;
-import com.narvis.frontend.console.AccessConsole;
+import com.narvis.dataaccess.models.user.UserData;
+import com.narvis.dataaccess.models.user.UsersData;
 
 /**
  *
- * @author Zack
+ * @author uwy
  */
-public class ConsoleConf {
-    public final static String MODULE_NAME = "Console";
-    public final static String MODULE_CLASS_PATH = AccessConsole.class.getCanonicalName();
+public class UsersConf {
+    
+    public final static String MODULE_NAME = "Users";
+    public final static String MODULE_CLASS_PATH = UserDataProvider.class.getCanonicalName();
+    
+    public final static String USERS_DATA_PATH = "usersdata.xml";
+
+    public UsersData createUsersData() {
+        UsersData retVal = new UsersData();
+        UserData uwy = retVal.addUser("UwyBBQ");
+        uwy.addData("privileges", "dev");
+        uwy.addData("location", "nimes");
+        return retVal;
+    }
+    
     
     public ModuleErrors createErrorsLayout()
     {
@@ -44,8 +58,19 @@ public class ConsoleConf {
         retVal.getMap().put("general", "Hum... I'm sure you don't really need to know that");
         retVal.getMap().put("engine", "");
         retVal.getMap().put("data", "");
+        retVal.getMap().put("persist", "I understand, but can't remember... it's probably due to alcohol");
         retVal.getMap().put("noanswers", "I don't know what you're talking about...");
-        
+
+        return retVal;
+    }
+    
+
+    public ModuleConf createModuleConf() {
+        ModuleConf retVal = new ModuleConf();
+        retVal.setModuleClassPath(MODULE_CLASS_PATH);
+
+        retVal.getEntries().put("UsersDataPath", USERS_DATA_PATH);
+            
         return retVal;
     }
     
@@ -54,14 +79,7 @@ public class ConsoleConf {
         ApiKeys retVal = new ApiKeys();
         
         retVal.setName(MODULE_NAME);
-        
-        return retVal;
-    }
-    
-    public ModuleConf createModuleConf() {
-        ModuleConf retVal = new ModuleConf();
-        retVal.setModuleClassPath(MODULE_CLASS_PATH);
-            
+                
         return retVal;
     }
 }

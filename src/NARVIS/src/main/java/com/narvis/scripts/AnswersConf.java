@@ -43,7 +43,7 @@ public class AnswersConf {
         retVal.getMap().put("general", "Hum... I'm sure you don't really need to know that");
         retVal.getMap().put("engine", "");
         retVal.getMap().put("data", "");
-        retVal.getMap().put("persis", "I understand, but can't remember... it's probably due to alcohol");
+        retVal.getMap().put("persist", "I understand, but can't remember... it's probably due to alcohol");
         retVal.getMap().put("noanswers", "I don't know what you're talking about...");
 
         return retVal;

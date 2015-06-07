@@ -28,10 +28,6 @@ import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.exception.ProviderException;
 import com.narvis.dataaccess.weather.OpenWeatherMapPortal;
-import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
-import java.lang.management.RuntimeMXBean;
-import java.text.NumberFormat;
 import java.util.Map;
 
 /**
