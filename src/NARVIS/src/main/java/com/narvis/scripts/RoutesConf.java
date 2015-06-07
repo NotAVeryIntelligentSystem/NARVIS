@@ -58,6 +58,11 @@ public class RoutesConf {
                         createWordNode(null,
                                 createWordNode("weather", new ActionNode("OpenWeatherMap")))));
         
+        retVal.addWord(
+                createWordNode("how",
+                        createWordNode("are",
+                                createWordNode("you", new ActionNode("HardwareStatus")))));
+        
         
         currentAction = new ActionNode("narvis");
         askFor.clear();

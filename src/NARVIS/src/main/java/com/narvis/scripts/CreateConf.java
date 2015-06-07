@@ -49,6 +49,7 @@ public class CreateConf {
             // Modules
             File modulesFolder = createFolder(baseFolder, ConfigurationDataProvider.MODULES_FOLDER_NAME);
             createAnswersModuleFolder(modulesFolder);
+            createStatusModuleFolder(modulesFolder);
             createWeatherModuleFolder(modulesFolder);
             createRoutesModuleFolder(modulesFolder);
             createDictionaryModuleFolder(modulesFolder);
@@ -96,7 +97,7 @@ public class CreateConf {
     public static void createAnswersModuleFolder(File modulesFolder) throws Exception {
         AnswersConf myAnswersConf = new AnswersConf();
         
-        File moduleFolder = createFolder(modulesFolder, AnswersConf.MODULE_NAME);
+        File moduleFolder = createFolder(modulesFolder, myAnswersConf.MODULE_NAME);
         
         File confModuleFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.CONF_FOLDER_NAME);
         File layoutFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);
@@ -106,6 +107,22 @@ public class CreateConf {
         XmlFileAccess.toFile(myAnswersConf.createAnswersLayout(), new File(layoutFolder, ModuleConfigurationDataProvider.ANSWERS_FILE_NAME));
         XmlFileAccess.toFile(myAnswersConf.createModuleConf(), new File(confModuleFolder, ModuleConfigurationDataProvider.MODULE_CONF_FILE_NAME));
         XmlFileAccess.toFile(myAnswersConf.createApiKeys(), new File(confModuleFolder, ModuleConfigurationDataProvider.API_KEY_FILE_NAME));
+    }
+    
+    /* Status */
+    public static void createStatusModuleFolder(File modulesFolder) throws Exception {
+        HardwareStatusConf myHardwareStatusConf = new HardwareStatusConf();
+        
+        File moduleFolder = createFolder(modulesFolder, myHardwareStatusConf.MODULE_NAME);
+        
+        File confModuleFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.CONF_FOLDER_NAME);
+        File layoutFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);
+        File dataFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.DATA_FOLDER_NAME);
+        
+        XmlFileAccess.toFile(myHardwareStatusConf.createErrorsLayout(), new File(layoutFolder, ModuleConfigurationDataProvider.ERRORS_FILE_NAME));
+        XmlFileAccess.toFile(myHardwareStatusConf.createAnswersLayout(), new File(layoutFolder, ModuleConfigurationDataProvider.ANSWERS_FILE_NAME));
+        XmlFileAccess.toFile(myHardwareStatusConf.createModuleConf(), new File(confModuleFolder, ModuleConfigurationDataProvider.MODULE_CONF_FILE_NAME));
+        XmlFileAccess.toFile(myHardwareStatusConf.createApiKeys(), new File(confModuleFolder, ModuleConfigurationDataProvider.API_KEY_FILE_NAME));
     }
     
     /* Routes */

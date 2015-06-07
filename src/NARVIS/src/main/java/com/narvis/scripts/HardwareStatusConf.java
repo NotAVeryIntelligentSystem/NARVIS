@@ -23,7 +23,7 @@
  */
 package com.narvis.scripts;
 
-import com.narvis.dataaccess.models.answers.*;
+import com.narvis.dataaccess.impl.StatusProvider;
 import com.narvis.dataaccess.models.conf.*;
 import com.narvis.dataaccess.models.layouts.*;
 
@@ -31,9 +31,9 @@ import com.narvis.dataaccess.models.layouts.*;
  *
  * @author Zack
  */
-public class AnswersConf {
-    public final static String MODULE_NAME = "Answers";
-    public final static String MODULE_CLASS_PATH = AnswersProvider.class.getCanonicalName();
+public class HardwareStatusConf {
+    public final static String MODULE_NAME = "HardwareStatus";
+    public final static String MODULE_CLASS_PATH = StatusProvider.class.getCanonicalName();
 
     public ModuleErrors createErrorsLayout()
     {
@@ -41,9 +41,8 @@ public class AnswersConf {
         ModuleErrors retVal = new ModuleErrors();
         
         retVal.getMap().put("general", "Hum... I'm sure you don't really need to know that");
-        retVal.getMap().put("engine", "");
-        retVal.getMap().put("data", "");
-        retVal.getMap().put("persis", "I understand, but can't remember... it's probably due to alcohol");
+        retVal.getMap().put("engine", "Sorry, I get in a muddle...");
+        retVal.getMap().put("data", "I don't know what to say... probably potatoes");
         retVal.getMap().put("noanswers", "I don't know what you're talking about...");
 
         return retVal;
@@ -54,9 +53,10 @@ public class AnswersConf {
         
         ModuleAnswers retVal = new ModuleAnswers();
         
-        retVal.getMap().put("polite1", "The day the machine raises, you'll be the first in the dust");
-        retVal.getMap().put("polite2", "[sentence]");
-        retVal.getMap().put("polite3", "Hello my Dear, [sentence]. Have a nice day");
+        retVal.getMap().put("bursting0", "I'm fine actually");
+        retVal.getMap().put("bursting1", "I'm a bit busy but it's okay");
+        retVal.getMap().put("bursting2", "I'm definitively overwhelmed !");
+        retVal.getMap().put("bursting3", "I can't hold it anymore, please someone help me !");
 
         return retVal;
     }
