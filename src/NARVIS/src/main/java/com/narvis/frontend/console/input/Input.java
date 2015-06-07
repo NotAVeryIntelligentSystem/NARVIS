@@ -21,6 +21,7 @@ import java.util.logging.Level;
  * @author Nakou
  */
 public class Input implements IInput {
+    private final static int REFRESH_PERIOD_SECOND = 1;
 
     private final AccessConsole accessConsole;
     
@@ -43,7 +44,6 @@ public class Input implements IInput {
             @Override
             public void run() {
                 Scanner sc = new Scanner(System.in);
-                System.out.print("NARVIS/READY/>");
                 String s = sc.nextLine();
 
                 try {
@@ -52,7 +52,7 @@ public class Input implements IInput {
                     NarvisLogger.getInstance().getLogger().log(Level.SEVERE, ex.getMessage());
                 }
             }
-        }, 0, 1000);
+        }, 0, REFRESH_PERIOD_SECOND * 1000);
 
     }
 
