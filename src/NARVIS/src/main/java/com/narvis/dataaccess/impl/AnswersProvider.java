@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.answers;
+package com.narvis.dataaccess.impl;
 
+import com.narvis.dataaccess.models.answers.*;
 import com.narvis.dataaccess.interfaces.dataproviders.IDataProviderDetails;
 import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoDataException;

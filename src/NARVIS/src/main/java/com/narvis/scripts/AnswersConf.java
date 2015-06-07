@@ -23,7 +23,7 @@
  */
 package com.narvis.scripts;
 
-import com.narvis.dataaccess.models.answers.*;
+import com.narvis.dataaccess.impl.AnswersProvider;
 import com.narvis.dataaccess.models.conf.*;
 import com.narvis.dataaccess.models.layouts.*;
 
