@@ -25,7 +25,7 @@ import twitter4j.TwitterException;
  */
 public class Input implements IInput {
 
-    private final static int REFRESH_PERIOD_SECOND = 10;
+    private final static int REFRESH_PERIOD_SECOND = 120;
     public String internalName = "nakJarvis";
     private final Timer listenloop;
     private final Twitter twitterLink;
