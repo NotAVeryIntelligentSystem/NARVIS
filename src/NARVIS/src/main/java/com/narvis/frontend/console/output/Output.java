@@ -7,6 +7,7 @@ package com.narvis.frontend.console.output;
 
 import com.narvis.frontend.MessageInOut;
 import com.narvis.frontend.console.AccessConsole;
+import com.narvis.frontend.interfaces.IFrontEnd;
 import com.narvis.frontend.interfaces.IOutput;
 
 /**
@@ -15,7 +16,7 @@ import com.narvis.frontend.interfaces.IOutput;
  */
 public class Output implements IOutput {
 
-    private AccessConsole accessConsole;
+    private IFrontEnd accessConsole;
     
     public Output(AccessConsole accessConsole)
     {

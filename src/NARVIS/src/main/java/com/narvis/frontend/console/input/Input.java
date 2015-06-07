@@ -8,6 +8,8 @@ package com.narvis.frontend.console.input;
 import com.narvis.common.debug.NarvisLogger;
 import com.narvis.engine.NarvisEngine;
 import com.narvis.frontend.MessageInOut;
+import com.narvis.frontend.console.AccessConsole;
+import com.narvis.frontend.interfaces.IFrontEnd;
 import com.narvis.frontend.interfaces.IInput;
 import java.util.Scanner;
 import java.util.Timer;
@@ -20,15 +22,19 @@ import java.util.logging.Level;
  */
 public class Input implements IInput {
 
+    private final AccessConsole accessConsole;
+    
     private final String moduleName;
-    private Timer listenloop;
-    public Input(String moduleName) {
+    private final Timer listenloop;
+    
+    public Input(String moduleName, AccessConsole accessConsole) {
         this.moduleName = moduleName;
+        this.accessConsole = accessConsole;
         this.listenloop = new Timer("Console front end");
     }
     
     private MessageInOut getMessage(String s) {
-        return new MessageInOut(this.moduleName, s, "localhost");
+        return new MessageInOut(this.moduleName, s, "localhost", accessConsole);
     }
 
     @Override
@@ -54,5 +60,9 @@ public class Input implements IInput {
     public void close() throws Exception {
 
     }
-
+    
+    @Override
+    public IFrontEnd getFrontEnd(){
+        return accessConsole;
+    }
 }

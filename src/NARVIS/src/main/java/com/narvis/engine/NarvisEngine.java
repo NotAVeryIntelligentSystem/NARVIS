@@ -74,17 +74,26 @@ public class NarvisEngine {
 
     public void start() {
         this.executer.start();
+        
+        /*
         // We starts all front ends
         for(String frontEnd : this.metaDataProvider.getAvailableFrontEnds()) {
             this.metaDataProvider.getFrontEnd(frontEnd).start();
         }
+        */
+        
+        this.metaDataProvider.getFrontEnd("Console").start();
     }
 
     public void close() throws Exception {
+        /*
         // We stop all fronts ends
         for(String frontEnd : this.metaDataProvider.getAvailableFrontEnds()) {
             this.metaDataProvider.getFrontEnd(frontEnd).close();
         }
+        */
+        this.metaDataProvider.getFrontEnd("Console").close();
+        
         this.executer.close();
     }
 
@@ -116,7 +125,7 @@ public class NarvisEngine {
     }
     
     private void onError(MessageInOut originalMessage, String message) {
-        this.metaDataProvider.getFrontEnd(originalMessage.getInputAPI()).getOutput().setOuput(new MessageInOut(originalMessage.getInputAPI(), message, originalMessage.getAnswerTo()));
+        originalMessage.sendToOutput(message);
     }
 
     private void brainProcess(MessageInOut message) throws ProviderException, EngineException{
@@ -149,7 +158,8 @@ public class NarvisEngine {
         
         IDataProviderDetails answerBuilder = (IDataProviderDetails) this.metaDataProvider.getDataProvider("Answers");
         String finalAnswer = answerBuilder.getDataDetails(detailsTypes);
-        this.metaDataProvider.getFrontEnd(message.getInputAPI()).getOutput().setOuput(new MessageInOut(message.getInputAPI(),finalAnswer,message.getAnswerTo()));
+        
+        message.sendToOutput(finalAnswer);
     }
 
     

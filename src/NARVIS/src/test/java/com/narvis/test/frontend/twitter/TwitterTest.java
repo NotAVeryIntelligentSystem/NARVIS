@@ -53,7 +53,7 @@ public class TwitterTest {
     @Test
     public void testCut(){
         List<String> tweetsObtains = new ArrayList<>();
-        MessageInOut m = new MessageInOut("Twitter","Coucouco o pjp jp jpj jopj  oj pjo o jp jj popj pjop j joop pj ojppo ojpop j opojp poop jp pojopo op jopj opjp oj j opj pj poj opoihfiooih h p in fbzefbpzefzii pzzh hzfh zihz^f hzpzhp hfzhfzpihpzhzh phphh p hphph ophpo oh  h", "nakou;uwy;lolone;true");
+        MessageInOut m = new MessageInOut("Twitter","Coucouco o pjp jp jpj jopj  oj pjo o jp jj popj pjop j joop pj ojppo ojpop j opojp poop jp pojopo op jopj opjp oj j opj pj poj opoihfiooih h p in fbzefbpzefzii pzzh hzfh zihz^f hzpzhp hfzhfzpihpzhzh phphh p hphph ophpo oh  h", "nakou;uwy;lolone;true", null);
         Output out = new Output(null, "Twitter");
         tweetsObtains = out.getTweetList(m);
         assertTrue(tweetsObtains.get(0).length() <= 140);

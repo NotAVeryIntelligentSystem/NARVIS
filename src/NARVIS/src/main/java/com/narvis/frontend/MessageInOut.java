@@ -5,6 +5,8 @@
  */
 package com.narvis.frontend;
 
+import com.narvis.frontend.interfaces.IFrontEnd;
+
 /**
  *
  * @author Alban
@@ -14,11 +16,14 @@ public class MessageInOut {
     private String inputAPIClass; // "ModuleAPIName"
     private String content; // "Message"
     private String answerTo; // "recepiant1;recepiant2" ex : "nakou;uwybbq"
+    
+    private final IFrontEnd frontEnd;
 
-    public MessageInOut(String inputAPIClass, String content, String answerTo) {
+    public MessageInOut(String inputAPIClass, String content, String answerTo, IFrontEnd frontEnd) {
         this.content = content;
         this.inputAPIClass = inputAPIClass;
         this.answerTo = answerTo;
+        this.frontEnd = frontEnd;
     }
     
     public String getInputAPI() {
@@ -44,5 +49,13 @@ public class MessageInOut {
     public void setAnswerTo(String answerTo) {
         this.answerTo = answerTo;
     }
+    
+    public IFrontEnd getFrontEnd(){
+        return this.frontEnd;
+    }
 
+    public void sendToOutput(String message){
+        this.content = message;
+        this.frontEnd.getOutput().setOuput(this);
+    }
 }
