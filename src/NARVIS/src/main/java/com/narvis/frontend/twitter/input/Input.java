@@ -51,16 +51,30 @@ public class Input implements IInput {
         return recepiantsResponse;
     }
 
+    /**
+     * Remove all specific Twitter vocabulary from the tweet to transform it in a simple sentence
+     * @param tweet : The tweet to transform
+     * @return A sentence withour Twitter specificity
+     */
     private String getCleanTweet(String tweet) {
         String cleanTweet = "";
         String[] parts = tweet.split(" ");
         for (String s : parts) {
-            if (!(s.charAt(0) == '@')) {
-                if (s.charAt(0) == '#') {
-                    cleanTweet += " " + s.replace("#", "");
-                } else {
+            switch(s.charAt(0))
+            {
+                /* If it's a @ (ex: @nakJarvis), that's mean it's a person. 
+                   To avoid abiguitie, we replace the name of the personne with "someone".
+                   The FrontEnd twitter already know who answer to. */
+                case '@':
+                    cleanTweet += " someone";
+                    break;
+                /* If it's a hashtag, we remove the # and use the it like a normal word */
+                case '#':
+                    cleanTweet += " " + s.substring(1);
+                    break;
+                /* Otherwise, we just put the word at the end of the sentence */
+                default:
                     cleanTweet += " " + s;
-                }
             }
         }
         return cleanTweet;

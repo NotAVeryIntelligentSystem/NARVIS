@@ -1,7 +1,7 @@
 <moduleErrors>
    <ErrorSentence command="general">Hum... I&apos;m sure you don&apos;t really need to know that</ErrorSentence>
-   <ErrorSentence command="persist">I understand, but can&apos;t remember... it&apos;s probably due to alcohol</ErrorSentence>
    <ErrorSentence command="noanswers">I don&apos;t know what you&apos;re talking about...</ErrorSentence>
    <ErrorSentence command="data"></ErrorSentence>
    <ErrorSentence command="engine"></ErrorSentence>
+   <ErrorSentence command="persist">I understand, but can&apos;t remember... it&apos;s probably due to alcohol</ErrorSentence>
 </moduleErrors>
