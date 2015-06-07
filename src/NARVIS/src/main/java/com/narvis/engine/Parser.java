@@ -69,6 +69,9 @@ public class Parser {
         /* We put the sentence to lowercase and remove all the non-alphanumeric caracters.
            This prevents us to the differents way users can write there messages (with punctuation or not, etc.)*/
         sentence = sentence.toLowerCase().replaceAll("[^a-z0-9 ]", "");
+        
+        /* We replace doubl-space that could be caused by the suppression of a single caracter with one space */
+        sentence = sentence.toLowerCase().replaceAll("  ", " ");
 
         sentence = transformSpaceInQuoteWithUnderscore(sentence);
         
