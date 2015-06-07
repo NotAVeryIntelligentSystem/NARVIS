@@ -32,7 +32,7 @@ import com.narvis.dataaccess.interfaces.IAnswerProvider;
 import com.narvis.engine.interfaces.IAnswerBuilder;
 import com.narvis.dataaccess.interfaces.dataproviders.IDataProviderDetails;
 import com.narvis.dataaccess.models.conf.ApiKeys;
-import com.narvis.dataaccess.weather.annotations.Command;
+import com.narvis.common.annotations.Command;
 import com.narvis.dataaccess.exception.NoValueException;
 import com.narvis.dataaccess.exception.ProviderException;
 import java.io.IOException;

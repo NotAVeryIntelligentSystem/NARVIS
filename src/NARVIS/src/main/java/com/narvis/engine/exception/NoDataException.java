@@ -21,35 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.user;
+package com.narvis.engine.exception;
 
-import java.util.HashMap;
-import java.util.Map;
-import org.simpleframework.xml.ElementMap;
+import com.narvis.dataaccess.exception.*;
 
 /**
  *
  * @author uwy
  */
-public class UserData {
-    
-    @ElementMap(entry = "DataEntry", key = "key", attribute = true, inline = true, required = false)
-    @SuppressWarnings("FieldMayBeFinal")
-    private Map<String, String> dataEntries;
-    
-    public UserData() {
-        this.dataEntries = new HashMap<>();
+public class NoDataException extends EngineException {
+
+    /**
+     * Constructs an instance of <code>NoDataException</code> with the specified
+     * detail message.
+     *
+     * @param msg the detail message.
+     * @param narvisErrorMessage
+     */
+    public NoDataException(String msg, String narvisErrorMessage) {
+        super(msg, narvisErrorMessage);
     }
-    
-    public String getData(String key) {
-        return this.dataEntries.get(key);
+
+    public NoDataException(Throwable thrwbl, String narvisErrorMessage) {
+        super(thrwbl, narvisErrorMessage);
     }
-    
-    public void addData(String key, String value) {
-        this.dataEntries.put(key, value);
+
+    public NoDataException(Class<?> providerName, String msg, String narvisErrorMessage) {
+        super(providerName, msg, narvisErrorMessage);
     }
-    
-    public Map<String, String> getAllData(){
-        return dataEntries;
+
+    public NoDataException(Class<?> providerName, String string, Throwable thrwbl, String narvisErrorMessage) {
+        super(providerName, string, thrwbl, narvisErrorMessage);
     }
+
 }

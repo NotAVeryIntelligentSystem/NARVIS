@@ -113,7 +113,7 @@ public class TestRoutesProvider {
             myAction = myFondamentalAnalyser.findAction(myParsedSentence);
             
             DetailsAnalyser myDetailsAnalyser = new DetailsAnalyser();
-            Map<String, String> myDetails = myDetailsAnalyser.getDetailsTypes(myAction.getDetails());
+            Map<String, String> myDetails = myDetailsAnalyser.getDetailsTypes(myAction.getDetails(), "nobody");
             
             IDataModelProvider<RouteNode> myRoutesProvider = (IDataModelProvider<RouteNode>) DataAccessFactory.getMetaDataProvider().getDataProvider("Routes");
             

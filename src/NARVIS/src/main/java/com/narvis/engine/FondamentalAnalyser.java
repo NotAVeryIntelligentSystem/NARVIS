@@ -23,7 +23,6 @@
  */
 package com.narvis.engine;
 
-import com.narvis.common.debug.NarvisLogger;
 import com.narvis.dataaccess.DataAccessFactory;
 import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.exception.PersistException;
@@ -32,7 +31,6 @@ import com.narvis.dataaccess.interfaces.IMetaDataProvider;
 import com.narvis.dataaccess.models.route.ActionNode;
 import com.narvis.dataaccess.models.route.RouteNode;
 import com.narvis.dataaccess.models.route.WordNode;
-import com.narvis.engine.exception.AmbigousException;
 import com.narvis.engine.exception.NoActionException;
 import com.narvis.engine.exception.NoSentenceException;
 import java.io.*;
@@ -262,180 +260,9 @@ public class FondamentalAnalyser {
     public void saveRoutes() throws PersistException {
         routesProvider.persist();
     }
-
-    /**
-     * Créé des relations de similitude entre plusieurs phrases. Pour cela, il
-     * faut qu'au moins une des phrase soit déjà connue.
-     *
-     * @param pParsedSentences : Liste de phrases préalablement parsées
-     * @throws com.narvis.dataaccess.exception.NoDataException
-     * @throws com.narvis.dataaccess.exception.PersistException
-     * @throws com.narvis.engine.exception.NoActionException
-     * @throws com.narvis.engine.exception.NoSentenceException
-     */
-    public void createSimilarityBetween(List<List<String>> pParsedSentences) throws NoDataException, PersistException, NoActionException, NoSentenceException, AmbigousException {
-        Action findedAction = null,     // Première action trouvée
-               currentAction = null;    // Action correspondant à la phrase courrante
-        int iSentence = 0,              // Indice de la phrase courrante
-            iFindedSentence = -1;       // Indice de la phrase correspondant à l'action trouvée
-        
-        /* Pour chaque phrase, on en recherche une correspondant à une action */
-        for(List<String> parsedSentence : pParsedSentences)
-        {
-            try{
-                currentAction = this.findAction(parsedSentence);
-                
-                /* Si une action est trouvée pour la première fois */
-                if(findedAction == null && currentAction != null){
-                    /* La première action trouvée devient l'action courrante */
-                    findedAction = currentAction;
-                    /* L'indice de la phrase correspondant à l'action trouvée devient l'indice de la phrase courrante */
-                    iFindedSentence = iSentence;
-
-                /* Si une action a déjà été trouvée ET qu'on trouve une nouvelle, il y a ERREUR */
-                }else if(findedAction != null && currentAction != null){
-                    NarvisLogger.getInstance().getLogger().warning("Ambigous sentences, there is more than one sentence that correspond to an action");
-                    throw new AmbigousException("There is more than one sentence that correspond to an action", "I already know that...");
-                }
-            
-            }catch(NoActionException ex){
-                
-            }
-            
-            iSentence++;
-        }
-        
-        /* Si aucune action n'est trouvée, il y a ERREUR */
-        if(findedAction == null)
-        {
-            NarvisLogger.getInstance().getLogger().warning("Aucune phrase n'est déjà connue...");
-            throw new NoActionException("No action finded", "I don't know any of your sentences...");
-        }
-        
-        /* On retire de la liste la phrase déjà connnue */
-        pParsedSentences.remove(iFindedSentence);
-
-        /* On récupère l'arbre des routes */
-        RouteNode route = routesProvider.getModel();
-        List<WordNode> words = route.getWords();
-        
-        /*
-        On parcour les noeuds du premier niveau de l'arbre avant de faire appel à la fonction récurcive (searchPath()).
-        On doit faire ça parceque la racine de l'arbre (RouteNode) n'est pas du même type que le paramètre attendu par
-        la fonction récurcive, qui est un mot (WordNode).
-        */
-        
-        /* Pour chaque phrase, on créé une route avec comme finalitée l'action connue */
-        for(List<String> parsedSentence : pParsedSentences){
-            
-            boolean isFound = false;
-        
-            if(parsedSentence.size() > 0){
-                final String currentSentenceWord = parsedSentence.get(0);
-                parsedSentence.remove(0);
-
-                WordNode jokerWordNode = null;
-                for (WordNode routesWord : words) {
-                    /* If the word is empty, it's a "joker" we gonna use at the end */
-                    if(routesWord.getValue() == null || routesWord.getValue().isEmpty())
-                    {
-                        jokerWordNode = routesWord;
-                    }
-                
-                    if(routesWord.getValue() != null && routesWord.getValue().equals(currentSentenceWord)){
-                        createPath(routesWord, parsedSentence, findedAction);
-                        isFound = true;
-                        break;
-                    }
-                }
-                
-                if(!isFound && jokerWordNode != null && isJokerWord(currentSentenceWord)){
-                    createPath(jokerWordNode, parsedSentence, findedAction);
-                }                
-                /* Si aucun noeud enfant ne correspond au mot, on créé un nouveau noeud */
-                else if(!isFound){
-                    WordNode newWordNode;
-
-                    if(!isJokerWord(currentSentenceWord)){
-                        newWordNode = new WordNode(currentSentenceWord);
-
-                    }else{
-                        newWordNode = new WordNode(null);
-                    }
-
-                    route.addWord(newWordNode);
-
-                    createPath(newWordNode, parsedSentence, findedAction);
-                }
-            }
-        }
-        
-        /* On remplace avec le nouvel arbre des routes */
-        routesProvider.persist();
-    }
-
-    /**
-     * Ajoute un nouveau chemin aux routes.
-     *
-     * @param wordNode : Le noeud de l'arbre sur lequel ajouter la route
-     * @param parsedSentence : La phrase préalablement parsée depuis laquelle
-     * doit être créée la route
-     * @param action : L'action à ajouter à la fin de la nouvelle route
-     */
-    private void createPath(WordNode wordNode, List<String> parsedSentence, Action action) {
-        final List<WordNode> routesWords = wordNode.getWords();
-        boolean isFound = false;
-        
-        if(parsedSentence.size() > 0){
-            final String currentSentenceWord = parsedSentence.get(0);
-            parsedSentence.remove(0);
-            
-            WordNode jokerWordNode = null;
-            for (WordNode routesWord : routesWords) {
-                /* If the word is empty, it's a "joker" we gonna use at the end */
-                if(routesWord.getValue() == null || routesWord.getValue().isEmpty())
-                {
-                    jokerWordNode = routesWord;
-                }
-                    
-                if(routesWord.getValue() != null && routesWord.getValue().equals(currentSentenceWord)){
-                    createPath(routesWord, parsedSentence, action);
-                    isFound = true;
-                    break;
-                }
-            }
-            
-            if(!isFound && jokerWordNode != null && isJokerWord(currentSentenceWord)){
-                createPath(jokerWordNode, parsedSentence, action);
-            }
-            
-            /* Si aucun noeud enfant ne correspond au mot, on créé un nouveau noeud */
-            else if(!isFound){
-                WordNode newWordNode;
-             
-                if(!isJokerWord(currentSentenceWord)){
-                    newWordNode = new WordNode(currentSentenceWord);
-                }else{
-                    newWordNode = new WordNode(null);
-                }
-
-                wordNode.addWord(newWordNode);
-                
-                createPath(newWordNode, parsedSentence, action);
-            }
-        }else{
-        
-            /* On fois qu'on a finit de générer le chemin, on ajoute l'action à la fin */          
-            ActionNode newActionNode = new ActionNode(action.getProviderName());
-            newActionNode.setAskFor(action.getPrecisions());
-
-            wordNode.addAction(newActionNode);
-        }
-    }
-
     
-    private boolean isJokerWord(String word)
+    public IDataModelProvider<RouteNode> getRoutesProvider()
     {
-        return word.equals("something") || word.equals("someone");
+        return this.routesProvider;
     }
 }
