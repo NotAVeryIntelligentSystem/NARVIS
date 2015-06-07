@@ -34,6 +34,7 @@ import java.util.logging.*;
  */
 public class NarvisLogger {
 
+    private final static boolean DEBUG_MOD = false; // True : use console + file log, False : use only file log
     private static NarvisLogger INSTANCE = null;
 
     /**
@@ -73,7 +74,6 @@ public class NarvisLogger {
     public static synchronized NarvisLogger getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new NarvisLogger();
-            INSTANCE.getLogger().addHandler(new ConsoleHandler());
 
             try {
                 String logDirectoryPath = System.getProperty("user.home");
@@ -85,11 +85,14 @@ public class NarvisLogger {
                 } else {
                     Date date = new Date();
                     File logPath = new File(logDirectory.getAbsolutePath(), "narvis-log." + date.getTime() + ".txt");
-
+                    
                     INSTANCE.getLogger().addHandler(new FileHandler(logPath.getAbsolutePath()));
+                    
+                    /* If the log file is correctly initialized, we disable parents logs that could be console, etc.*/
+                    INSTANCE.getLogger().setUseParentHandlers(DEBUG_MOD);
                 }
 
-            } catch (IOException | SecurityException ex) {
+            } catch (IOException | SecurityException ex) {                
                 INSTANCE.getLogger().warning(ex.getMessage());
             }
         }
