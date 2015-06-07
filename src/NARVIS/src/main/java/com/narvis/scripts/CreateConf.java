@@ -48,16 +48,16 @@ public class CreateConf {
             XmlFileAccess.toFile(createNarvisConf(), new File(confFolder, ConfigurationDataProvider.CONF_FILE_NAME));
             // Modules
             File modulesFolder = createFolder(baseFolder, ConfigurationDataProvider.MODULES_FOLDER_NAME);
-            //createAnswersModuleFolder(modulesFolder);
+            createAnswersModuleFolder(modulesFolder);
             createStatusModuleFolder(modulesFolder);
-            //createWeatherModuleFolder(modulesFolder);
-            //createRoutesModuleFolder(modulesFolder);
-            //createDictionaryModuleFolder(modulesFolder);
-            //createUsersModuleFolder(modulesFolder);
+            createWeatherModuleFolder(modulesFolder);
+            createRoutesModuleFolder(modulesFolder);
+            createDictionaryModuleFolder(modulesFolder);
+            createUsersModuleFolder(modulesFolder);
             // Front ends
             File frontendsFolder = createFolder(baseFolder, ConfigurationDataProvider.FRONTENDS_FOLDER_NAME);
-            //createTwitterFrontEndFolder(frontendsFolder);
-            //createConsoleFrontEndFolder(frontendsFolder);
+            createTwitterFrontEndFolder(frontendsFolder);
+            createConsoleFrontEndFolder(frontendsFolder);
             
             System.out.println("Finished conf creation");
             
