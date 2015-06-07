@@ -74,18 +74,27 @@ public class NarvisEngine {
 
     public void start() {
         this.executer.start();
-       
+        
+        /**/
         // We starts all front ends
         for(String frontEnd : this.metaDataProvider.getAvailableFrontEnds()) {
             this.metaDataProvider.getFrontEnd(frontEnd).start();
         }
+        /**
+        
+        this.metaDataProvider.getFrontEnd("Console").start();
+        /**/
     }
 
     public void close() throws Exception {
+        /**/
         // We stop all fronts ends
         for(String frontEnd : this.metaDataProvider.getAvailableFrontEnds()) {
             this.metaDataProvider.getFrontEnd(frontEnd).close();
         }
+        /**
+        this.metaDataProvider.getFrontEnd("Console").close();
+        /**/
         
         this.executer.close();
     }

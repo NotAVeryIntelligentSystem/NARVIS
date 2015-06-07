@@ -56,6 +56,7 @@ public final class DetailsAnalyser {
         
         for (String detail : details) {
             Word w = this.dictionary.getModel().getWordByValue(detail);
+            isTypeFinded = false;
             if (w != null) { // Le mot existe dans le dictionnaire
                 for (String hint : hintList) {
                     if (w.containInformationType(hint)) {
