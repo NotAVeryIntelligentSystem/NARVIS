@@ -61,39 +61,16 @@ public final class FrontEndConfigurationDataProvider implements IDataProvider {
 
     public FrontEndConfigurationDataProvider(File frontendFolder) throws ProviderException {
         this.moduleFolder = frontendFolder;
-        File apiFile = null;
-        File confFile = null;
-        File errorFile = null;
-        for (File file : new File(frontendFolder, CONF_FOLDER_NAME).listFiles()) {
-            switch (file.getName()) {
-                case API_KEY_FILE_NAME:
-                    if (apiFile != null) {
-                        throw new ProviderException(FrontEndConfigurationDataProvider.class, "Api key file found twice !", "Ouch");
-                    }
-                    apiFile = file;
-                    break;
-                case MODULE_CONF_FILE_NAME:
-                    if (confFile != null) {
-                        throw new ProviderException(FrontEndConfigurationDataProvider.class, "Module conf file found twice !", "Ouch");
-                    }
-                    confFile = file;
-                    break;
-            }
-        }
-        for (File file : new File(frontendFolder, LAYOUTS_FOLDER_NAME).listFiles()) {
-            switch (file.getName()) {
-                case ERRORS_FILE_NAME:
-                    if (errorFile != null) {
-                        throw new ProviderException(FrontEndConfigurationDataProvider.class, "Errors layout file found twice !", "Ouch");
-                    }
-                    errorFile = file;
-                    break;
-            }
-        }
         try {
-            this.apiKeys = apiFile == null ? null : XmlFileAccess.fromFile(ApiKeys.class, apiFile);
-            this.conf = confFile == null ? null : XmlFileAccess.fromFile(ModuleConf.class, confFile);
-            this.errorsLayout = errorFile == null ? null : XmlFileAccess.fromFile(ModuleErrors.class, errorFile);
+            File confFolder = new File(frontendFolder, CONF_FOLDER_NAME);
+            File layoutFolder = new File(frontendFolder, LAYOUTS_FOLDER_NAME);
+            File apiFile = confFolder.canRead() ? new File(confFolder, API_KEY_FILE_NAME) : null;
+            File confFile = confFolder.canRead() ? new File(confFolder, MODULE_CONF_FILE_NAME) : null;
+            File errorFile = layoutFolder.canRead() ? new File(layoutFolder, ERRORS_FILE_NAME) : null;
+
+            this.apiKeys = apiFile != null && apiFile.canRead() ? XmlFileAccess.fromFile(ApiKeys.class, apiFile) : null;
+            this.conf =  confFile != null && confFile.canRead() ? XmlFileAccess.fromFile(ModuleConf.class, confFile) : null;
+            this.errorsLayout = errorFile != null && errorFile.canRead() ? XmlFileAccess.fromFile(ModuleErrors.class, errorFile) : null;
         } catch (XmlFileAccessException ex) {
             NarvisLogger.logException(ex);
             throw new ProviderException(FrontEndConfigurationDataProvider.class, "Can not deserialize some files !", "Ouch");
