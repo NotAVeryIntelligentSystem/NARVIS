@@ -38,7 +38,6 @@ public class Output implements IOutput {
     public void setOuput(MessageInOut m) {
         try {
             for(String s : this.getTweetList(m)){
-                //Status status = this.twitterLink.updateStatus(s);
                 StatusUpdate status = new StatusUpdate(s);
                 status.setInReplyToStatusId(((TwitterMessageInOut)m).getIdResponseTo());
                 this.twitterLink.updateStatus(status);
