@@ -179,14 +179,15 @@ public class NewsProvider implements IDataProviderDetails, IAnswerProvider {
     @Override
     public String getDataDetails(Map<String, String> detailsToValue, String... keywords) throws ProviderException, NoValueException {
 
-        String askedCity = findCityInDetails(detailsToValue).toLowerCase(Locale.FRENCH);
+        String askedCity = findCityInDetails(detailsToValue);
 
-        if (detailsToValue == null || askedCity == null || keywords == null || keywords.length < 1 || keywords[0] == null) {
+        if (detailsToValue == null || askedCity == null) {
             throw new IllegalKeywordException("Incorrect parameters for getDetails methods", "engine");
         }
+        askedCity = askedCity.toLowerCase();
 
-        String wantedAnswer = "";
-        if (keywords[0].equals("")) {
+        String wantedAnswer;
+        if (keywords.length == 0) {
             wantedAnswer = DEFAULT_COMMAND;
         } else {
             wantedAnswer = keywords[0];
@@ -195,7 +196,7 @@ public class NewsProvider implements IDataProviderDetails, IAnswerProvider {
         this._news = findNewsForCity(askedCity);
 
         if (this._news == null) {
-            return this._confProvider.getAnswersLayout().getData("error");
+            return this._confProvider.getErrorsLayout().getData("error");
         }
 
         IAnswerBuilder answerBuilder = new AnswerBuilder();
@@ -203,7 +204,7 @@ public class NewsProvider implements IDataProviderDetails, IAnswerProvider {
 
         //Can not find the answer from the xml something went wrong we quit
         if (answerFromXml == null) {
-            throw new NoValueException(NewsProvider.class, "Command not supported", this._confProvider.getErrorsLayout().getData("noanswers"));
+            throw new NoValueException(NewsProvider.class, "Command not supported", this._confProvider.getErrorsLayout().getData("error"));
         }
 
         List<String> listOfParams = answerBuilder.getListOfRequiredParams(answerFromXml);

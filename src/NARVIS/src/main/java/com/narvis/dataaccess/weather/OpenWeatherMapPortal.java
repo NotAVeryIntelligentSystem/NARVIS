@@ -205,7 +205,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
 
         String wantedAnswer = "";
 
-        if (keywords[0].length() == 0) { 
+        if (keywords.length == 0) { 
             wantedAnswer = DEFAULT_ANSWER;
         } else if (keywords[0] != null) {
 

@@ -13,7 +13,9 @@ import com.narvis.frontend.interfaces.IFrontEnd;
 import com.narvis.frontend.interfaces.IInput;
 import com.narvis.frontend.twitter.AccessTwitter;
 import com.narvis.frontend.twitter.TwitterMessageInOut;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
 import twitter4j.Status;
@@ -88,24 +90,32 @@ public class Input implements IInput {
         return returnValue;
     }
 
-    public MessageInOut getInput() throws PersistException {
+    public Stack<MessageInOut> getInput() throws PersistException {
+        Stack<MessageInOut> retVal = new Stack<>();
         try {
             List<Status> statuses = this.twitterLink.getMentionsTimeline();
+            long lastMessageId = Long.parseLong(accessTwitter.getConf().getConf().getData("LastTwitterMessageId"));
             Status lastStatus = statuses.get(0);
-            NarvisLogger.logInfo("Received following status : " + lastStatus.getText());
-            if (lastStatus.getId() != Long.parseLong(accessTwitter.getConf().getConf().getData("LastTwitterMessageId"))) {
-                accessTwitter.getConf().getConf().setData("LastTwitterMessageId", Long.toString(lastStatus.getId()));
-                accessTwitter.getConf().persist();
+            this.accessTwitter.getConf().getConf().setData("LastTwitterMessageId", Long.toString(lastStatus.getId()));
+            this.accessTwitter.getConf().persist();
+            if(lastMessageId == 0) {
                 String[] tmp = this.tweetParser(lastStatus);
-                return new TwitterMessageInOut(accessTwitter.getConf().getName(), tmp[0], tmp[1], accessTwitter, lastStatus.getId());
-            } else {
-                NarvisLogger.logInfo("Ignoring tweet because identical to previous one");
-
+                retVal.add(new TwitterMessageInOut(accessTwitter.getConf().getName(), tmp[0], tmp[1], accessTwitter, lastStatus.getId()));
             }
+            else {
+                int messageIndex = 0;
+                while(lastStatus.getId() !=  lastMessageId && messageIndex < statuses.size()) {
+                    String[] tmp = this.tweetParser(lastStatus);
+                    retVal.add(new TwitterMessageInOut(accessTwitter.getConf().getName(), tmp[0], tmp[1], accessTwitter, lastStatus.getId()));
+                    messageIndex++;
+                    lastStatus = statuses.get(messageIndex);
+                }
+            }
+            return retVal;
         } catch (TwitterException ex) {
             NarvisLogger.logException(ex);
         }
-        return null;
+        return retVal;
     }
 
     @Override
@@ -114,9 +124,8 @@ public class Input implements IInput {
             @Override
             public void run() {
                 try {
-                    MessageInOut lastMessage = getInput();
-                    if (lastMessage != null) {
-
+                    List<MessageInOut> lastMessages = getInput();
+                    for(MessageInOut lastMessage : lastMessages) {
                         NarvisEngine.getInstance().getMessage(lastMessage);
                     }
                 } catch (Exception ex) {

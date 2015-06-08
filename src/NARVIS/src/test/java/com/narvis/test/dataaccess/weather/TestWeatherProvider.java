@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.narvis.test.dataaccess.models.weather;
+package com.narvis.test.dataaccess.weather;
 
 import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.exception.NoValueException;

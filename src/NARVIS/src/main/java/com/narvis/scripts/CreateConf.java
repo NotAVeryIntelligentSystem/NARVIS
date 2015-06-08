@@ -52,7 +52,7 @@ public class CreateConf {
             //createAnswersModuleFolder(modulesFolder);
             //createStatusModuleFolder(modulesFolder);
             //createWeatherModuleFolder(modulesFolder);
-            createRoutesModuleFolder(modulesFolder);
+            //createRoutesModuleFolder(modulesFolder);
             //createDictionaryModuleFolder(modulesFolder);
             //createUsersModuleFolder(modulesFolder);
             createNewsConfFolder(modulesFolder);

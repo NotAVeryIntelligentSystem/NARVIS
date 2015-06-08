@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.test.dataaccess.conf.news;
+package com.narvis.test.dataaccess.news;
 
 import com.narvis.dataaccess.exception.ProviderException;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
@@ -51,7 +51,7 @@ public class TestNewsProvider {
         Map<String, String> details = new HashMap<>();
 
         details.put("mexico", "location");
-        String response = provider.getDataDetails(details, "");
+        String response = provider.getDataDetails(details);
 
         System.out.println(response);
 
