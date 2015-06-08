@@ -57,6 +57,26 @@ public class RoutesConf {
                 createWordNode("bring",
                         createWordNode(null,
                                 createWordNode("weather", new ActionNode("OpenWeatherMap")))));
+        
+        currentAction = new ActionNode("OpenWeatherMap");
+        askFor = new LinkedList<>();
+        askFor.add("temperature");
+        currentAction.setAskFor(askFor);
+
+        retVal.addWord(
+                createWordNode("what",
+                        createWordNode("is",
+                                createWordNode("temperature", currentAction))));
+        
+        currentAction = new ActionNode("OpenWeatherMap");
+        askFor = new LinkedList<>();
+        askFor.add("cloud");
+        currentAction.setAskFor(askFor);
+
+        retVal.addWord(
+                createWordNode("is",
+                        createWordNode("it",
+                                createWordNode("cloudy", currentAction))));
 
         retVal.addWord(
                 createWordNode("how",
@@ -66,9 +86,7 @@ public class RoutesConf {
         retVal.addWord(
                 createWordNode("what",
                         createWordNode("is",
-                                createWordNode("new", new ActionNode("News")))));
-
-        
+                                createWordNode("new", new ActionNode("News")))));        
         
         currentAction = new ActionNode("narvis");
         askFor = new LinkedList<>();
