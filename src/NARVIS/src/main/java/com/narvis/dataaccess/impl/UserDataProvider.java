@@ -38,39 +38,40 @@ import java.io.File;
  *
  * @author uwy
  */
-public class UserDataProvider implements IDataModelProvider {
+public class UserDataProvider implements IDataModelProvider<UsersData> {
+
     private final ModuleConfigurationDataProvider conf;
     private final UsersData data;
+
     public UserDataProvider(ModuleConfigurationDataProvider confProvider) throws IllegalKeywordException, NoDataException, ProviderException {
-        
+
         this.conf = confProvider;
         try {
             this.data = XmlFileAccess.fromFile(UsersData.class, new File(this.conf.getDataFolder(), this.getUsersDataPath()));
         } catch (XmlFileAccessException ex) {
             NarvisLogger.logException(ex);
-            throw new ProviderException(UserDataProvider.class, "Could not deserialize data model !", ex, this.conf.getErrorsLayout().getData("general"));            
+            throw new ProviderException(UserDataProvider.class, "Could not deserialize data model !", ex, this.conf.getErrorsLayout().getData("general"));
         } catch (IllegalKeywordException | NoDataException ex) {
             NarvisLogger.logException(ex);
             throw ex;
         }
 
     }
-    
-    
+
     private String getUsersDataPath() throws IllegalKeywordException, NoDataException {
         return this.conf.getData("Conf", "UsersDataPath");
     }
-    
+
     @Override
     public String getData(String... keywords) throws NoDataException, IllegalKeywordException {
-        if(keywords.length < 2) {
+        if (keywords.length < 2) {
             throw new IllegalKeywordException("Not enough keywords to get data, check your inputs !", this.conf.getErrorsLayout().getData("engine"));
         }
         return this.data.getUser(keywords[0]).getData(keywords[1]);
     }
 
     @Override
-    public Object getModel(String... keywords) throws NoDataException {
+    public UsersData getModel(String... keywords) throws NoDataException {
         return this.data;
     }
 
@@ -83,5 +84,5 @@ public class UserDataProvider implements IDataModelProvider {
             throw new PersistException(RoutesProvider.class, "Could not persist file, see details in exception", ex, this.conf.getErrorsLayout().getData("persist"));
         }
     }
-    
+
 }

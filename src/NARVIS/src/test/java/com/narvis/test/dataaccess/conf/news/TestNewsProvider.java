@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 puma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,24 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.interfaces;
+package com.narvis.test.dataaccess.conf.news;
 
-import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
-import com.narvis.frontend.interfaces.IFrontEnd;
-import java.util.Set;
+import com.narvis.dataaccess.exception.ProviderException;
+import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
+import com.narvis.dataaccess.news.NewsProvider;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import javax.print.attribute.HashAttributeSet;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
- * @author uwy
+ * @author puma
  */
-public interface IMetaDataProvider {
+public class TestNewsProvider {
 
-    public IDataProvider getDataProvider(String... keywords);
+    public TestNewsProvider() {
+    }
 
-    public IFrontEnd getFrontEnd(String... keywords);
+    @Test
+    public void testNewsForCity() throws ProviderException {
 
-    public Set<String> getAvailableDataProviders();
+        ModuleConfigurationDataProvider confProvider = new ModuleConfigurationDataProvider(new File("../../release/modules/News"));
+        NewsProvider provider = new NewsProvider(confProvider);
 
-    public Set<String> getAvailableFrontEnds();
+        Map<String, String> details = new HashMap<>();
 
+        details.put("mexico", "location");
+        String response = provider.getDataDetails(details, "");
+
+        System.out.println(response);
+
+    }
 }

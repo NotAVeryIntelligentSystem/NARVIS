@@ -38,17 +38,17 @@ import java.util.List;
  * @author Zack
  */
 public class RoutesConf {
-    
+
     public final static String MODULE_NAME = "Routes";
     public final static String MODULE_CLASS_PATH = RoutesProvider.class.getCanonicalName();
-    
+
     public final static String ROUTES_DATA_PATH = "routes.xml";
 
     public RouteNode createRouteNode() {
         RouteNode retVal = new RouteNode();
         ActionNode currentAction;
         List<String> askFor = new LinkedList<>();
-        
+
         retVal.addWord(
                 createWordNode("give",
                         createWordNode(null,
@@ -57,26 +57,41 @@ public class RoutesConf {
                 createWordNode("bring",
                         createWordNode(null,
                                 createWordNode("weather", new ActionNode("OpenWeatherMap")))));
-        
+
         retVal.addWord(
                 createWordNode("how",
                         createWordNode("are",
                                 createWordNode("you", new ActionNode("HardwareStatus")))));
-        
-        
+
         currentAction = new ActionNode("narvis");
         askFor.clear();
         askFor.add("learnsimilaritybetweenroutes");
         currentAction.setAskFor(askFor);
-        
+
         retVal.addWord(
                 createWordNode(null,
                         createWordNode("mean",
                                 createWordNode(null, currentAction))));
-        
+
+        askFor.clear();
+        askFor.add("learnuserlocation");
+        currentAction.setAskFor(askFor);
+
+        retVal.addWord(
+                createWordNode("i",
+                        createWordNode("live", currentAction)));
+
+        askFor.clear();
+        askFor.add("forgetuserdata");
+        currentAction.setAskFor(askFor);
+
+        retVal.addWord(
+                createWordNode("forget",
+                        createWordNode("me", currentAction)));
+
         return retVal;
     }
-    
+
     private WordNode createWordNode(String name, ActionNode... actions) {
         WordNode retVal = new WordNode(name);
         for (ActionNode action : actions) {
@@ -93,12 +108,10 @@ public class RoutesConf {
         return retVal;
     }
 
-    
-    public ModuleErrors createErrorsLayout()
-    {
-        
+    public ModuleErrors createErrorsLayout() {
+
         ModuleErrors retVal = new ModuleErrors();
-        
+
         retVal.getMap().put("general", "Hum... I'm sure you don't really need to know that");
         retVal.getMap().put("engine", "");
         retVal.getMap().put("data", "");
@@ -107,13 +120,12 @@ public class RoutesConf {
 
         return retVal;
     }
-    
-    public ApiKeys createApiKeys()
-    {
+
+    public ApiKeys createApiKeys() {
         ApiKeys retVal = new ApiKeys();
-        
+
         retVal.setName(MODULE_NAME);
-        
+
         return retVal;
     }
 
@@ -122,7 +134,7 @@ public class RoutesConf {
         retVal.setModuleClassPath(MODULE_CLASS_PATH);
 
         retVal.getEntries().put("RoutesDataPath", ROUTES_DATA_PATH);
-            
+
         return retVal;
     }
 }

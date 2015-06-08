@@ -16,15 +16,14 @@ import com.narvis.frontend.interfaces.IOutput;
 public class Output implements IOutput {
 
     private AccessConsole accessConsole;
-    
-    public Output(AccessConsole accessConsole)
-    {
+
+    public Output(AccessConsole accessConsole) {
         this.accessConsole = accessConsole;
     }
-    
+
     @Override
     public void setOuput(MessageInOut m) {
-        System.out.println("NARVIS>"+m.getContent());
+        System.out.println("NARVIS>" + m.getContent());
         accessConsole.printReady();
     }
 

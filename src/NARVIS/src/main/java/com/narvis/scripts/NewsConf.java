@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 puma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,24 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.interfaces;
+package com.narvis.scripts;
 
-import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
-import com.narvis.frontend.interfaces.IFrontEnd;
-import java.util.Set;
+import com.narvis.dataaccess.models.conf.ModuleConf;
+import com.narvis.dataaccess.models.layouts.ModuleAnswers;
+import com.narvis.dataaccess.models.layouts.ModuleErrors;
+import com.narvis.dataaccess.news.NewsProvider;
 
 /**
  *
- * @author uwy
+ * @author puma
  */
-public interface IMetaDataProvider {
+public class NewsConf {
 
-    public IDataProvider getDataProvider(String... keywords);
+    public final static String MODULE_CLASS_PATH = NewsProvider.class.getCanonicalName();
 
-    public IFrontEnd getFrontEnd(String... keywords);
+    public ModuleAnswers createAnswerLayout() {
 
-    public Set<String> getAvailableDataProviders();
+        ModuleAnswers retVal = new ModuleAnswers();
 
-    public Set<String> getAvailableFrontEnds();
+        retVal.getMap().put("news", "[title] link : [link]");
+
+        return retVal;
+    }
+
+    public ModuleErrors createErrorsLayout() {
+
+        ModuleErrors retVal = new ModuleErrors();
+        retVal.getMap().put("error", "No news for your city sorry guys !");
+        return retVal;
+    }
+
+    public ModuleConf createModuleConf() {
+        ModuleConf retVal = new ModuleConf();
+        retVal.setModuleClassPath(MODULE_CLASS_PATH);
+
+        return retVal;
+    }
 
 }

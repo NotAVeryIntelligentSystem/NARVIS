@@ -23,7 +23,6 @@
  */
 package com.narvis.engine.exception;
 
-
 /**
  *
  * @author puma

@@ -33,35 +33,34 @@ import com.narvis.frontend.console.AccessConsole;
  * @author Zack
  */
 public class ConsoleConf {
+
     public final static String MODULE_NAME = "Console";
     public final static String MODULE_CLASS_PATH = AccessConsole.class.getCanonicalName();
-    
-    public ModuleErrors createErrorsLayout()
-    {
-        
+
+    public ModuleErrors createErrorsLayout() {
+
         ModuleErrors retVal = new ModuleErrors();
-        
+
         retVal.getMap().put("general", "Hum... I'm sure you don't really need to know that");
         retVal.getMap().put("engine", "");
         retVal.getMap().put("data", "");
         retVal.getMap().put("noanswers", "I don't know what you're talking about...");
-        
+
         return retVal;
     }
-    
-    public ApiKeys createApiKeys()
-    {
+
+    public ApiKeys createApiKeys() {
         ApiKeys retVal = new ApiKeys();
-        
+
         retVal.setName(MODULE_NAME);
-        
+
         return retVal;
     }
-    
+
     public ModuleConf createModuleConf() {
         ModuleConf retVal = new ModuleConf();
         retVal.setModuleClassPath(MODULE_CLASS_PATH);
-            
+
         return retVal;
     }
 }

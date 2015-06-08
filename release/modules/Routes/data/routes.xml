@@ -75,13 +75,49 @@
                         <Action>
                            <Provider>narvis</Provider>
                            <AskFor class="java.util.LinkedList">
-                              <string>learnsimilaritybetweenroutes</string>
+                              <string>forgetuserdata</string>
                            </AskFor>
                         </Action>
                      </Actions>
                   </Word>
                </Words>
                <Actions class="java.util.LinkedList"/>
+            </Word>
+         </Words>
+         <Actions class="java.util.LinkedList"/>
+      </Word>
+      <Word>
+         <Value>i</Value>
+         <Words class="java.util.LinkedList">
+            <Word>
+               <Value>live</Value>
+               <Words class="java.util.LinkedList"/>
+               <Actions class="java.util.LinkedList">
+                  <Action>
+                     <Provider>narvis</Provider>
+                     <AskFor class="java.util.LinkedList">
+                        <string>forgetuserdata</string>
+                     </AskFor>
+                  </Action>
+               </Actions>
+            </Word>
+         </Words>
+         <Actions class="java.util.LinkedList"/>
+      </Word>
+      <Word>
+         <Value>forget</Value>
+         <Words class="java.util.LinkedList">
+            <Word>
+               <Value>me</Value>
+               <Words class="java.util.LinkedList"/>
+               <Actions class="java.util.LinkedList">
+                  <Action>
+                     <Provider>narvis</Provider>
+                     <AskFor class="java.util.LinkedList">
+                        <string>forgetuserdata</string>
+                     </AskFor>
+                  </Action>
+               </Actions>
             </Word>
          </Words>
          <Actions class="java.util.LinkedList"/>

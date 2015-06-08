@@ -32,14 +32,14 @@ import com.narvis.dataaccess.models.layouts.*;
  * @author Zack
  */
 public class AnswersConf {
+
     public final static String MODULE_NAME = "Answers";
     public final static String MODULE_CLASS_PATH = AnswersProvider.class.getCanonicalName();
 
-    public ModuleErrors createErrorsLayout()
-    {
-        
+    public ModuleErrors createErrorsLayout() {
+
         ModuleErrors retVal = new ModuleErrors();
-        
+
         retVal.getMap().put("general", "Hum... I'm sure you don't really need to know that");
         retVal.getMap().put("engine", "");
         retVal.getMap().put("data", "");
@@ -48,32 +48,30 @@ public class AnswersConf {
 
         return retVal;
     }
-    
-    public ModuleAnswers createAnswersLayout()
-    {
-        
+
+    public ModuleAnswers createAnswersLayout() {
+
         ModuleAnswers retVal = new ModuleAnswers();
-        
+
         retVal.getMap().put("polite1", "The day the machine raises, you'll be the first in the dust");
         retVal.getMap().put("polite2", "[sentence]");
         retVal.getMap().put("polite3", "Hello my Dear, [sentence]. Have a nice day");
 
         return retVal;
     }
-    
-    public ApiKeys createApiKeys()
-    {
+
+    public ApiKeys createApiKeys() {
         ApiKeys retVal = new ApiKeys();
-        
+
         retVal.setName(MODULE_NAME);
-        
+
         return retVal;
     }
 
     public ModuleConf createModuleConf() {
         ModuleConf retVal = new ModuleConf();
         retVal.setModuleClassPath(MODULE_CLASS_PATH);
-            
+
         return retVal;
     }
 }

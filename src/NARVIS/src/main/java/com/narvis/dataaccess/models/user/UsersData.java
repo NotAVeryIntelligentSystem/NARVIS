@@ -23,9 +23,6 @@
  */
 package com.narvis.dataaccess.models.user;
 
-import com.narvis.dataaccess.exception.IllegalKeywordException;
-import com.narvis.dataaccess.exception.NoDataException;
-import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
 import java.util.HashMap;
 import java.util.Map;
 import org.simpleframework.xml.ElementMap;
@@ -35,24 +32,26 @@ import org.simpleframework.xml.ElementMap;
  * @author uwy
  */
 public class UsersData {
-    
+
     @ElementMap(entry = "UserData", key = "name", attribute = true, inline = true, required = false)
     @SuppressWarnings("FieldMayBeFinal")
     private Map<String, UserData> entries;
-    
+
     public UsersData() {
         this.entries = new HashMap<>();
     }
-    
+
     public UserData getUser(String userName) {
         return this.entries.get(userName);
     }
-    
+
     public UserData addUser(String userName) {
-        UserData retVal = new UserData(); 
+        UserData retVal = new UserData();
         this.entries.put(userName, retVal);
         return retVal;
     }
 
-
+    public void removeUser(String userName) {
+        this.entries.remove(userName);
+    }
 }

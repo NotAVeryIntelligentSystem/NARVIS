@@ -16,7 +16,7 @@ public class MessageInOut {
     private String inputAPIClass; // "ModuleAPIName"
     private String content; // "Message"
     private String answerTo; // "recepiant1;recepiant2" ex : "nakou;uwybbq"
-    
+
     private final IFrontEnd frontEnd;
 
     public MessageInOut(String inputAPIClass, String content, String answerTo, IFrontEnd frontEnd) {
@@ -25,7 +25,7 @@ public class MessageInOut {
         this.answerTo = answerTo;
         this.frontEnd = frontEnd;
     }
-    
+
     public String getInputAPI() {
         return inputAPIClass;
     }
@@ -49,12 +49,12 @@ public class MessageInOut {
     public void setAnswerTo(String answerTo) {
         this.answerTo = answerTo;
     }
-    
-    public IFrontEnd getFrontEnd(){
+
+    public IFrontEnd getFrontEnd() {
         return this.frontEnd;
     }
 
-    public void sendToOutput(String message){
+    public void sendToOutput(String message) {
         this.content = message;
         this.frontEnd.getOutput().setOuput(this);
     }
