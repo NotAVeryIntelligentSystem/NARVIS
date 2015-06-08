@@ -24,18 +24,14 @@
 package com.narvis.engine;
 
 import com.narvis.common.debug.NarvisLogger;
-import com.narvis.dataaccess.exception.NoDataException;
-import com.narvis.dataaccess.exception.PersistException;
-import com.narvis.dataaccess.exception.ProviderException;
-import com.narvis.dataaccess.interfaces.dataproviders.IDataModelProvider;
-import com.narvis.dataaccess.models.route.ActionNode;
-import com.narvis.dataaccess.models.route.RouteNode;
-import com.narvis.dataaccess.models.route.WordNode;
-import com.narvis.dataaccess.models.user.UserData;
+import com.narvis.dataaccess.exception.*;
+import com.narvis.dataaccess.models.route.*;;
+import com.narvis.dataaccess.models.user.*;
 import com.narvis.dataaccess.models.user.UsersData;
 import com.narvis.engine.exception.AmbigousException;
 import com.narvis.engine.exception.EngineException;
 import com.narvis.engine.exception.NoActionException;
+import com.narvis.engine.exception.NoDetailsException;
 import com.narvis.engine.exception.NoSentenceException;
 import java.util.List;
 import java.util.Map;
@@ -112,24 +108,24 @@ public class InternalActionsExecuter {
      * @throws com.narvis.engine.exception.EngineException
      * @throws com.narvis.dataaccess.exception.PersistException
      */
-    public String learnUserLocation(Map<String, String> detailsTypes) throws NoDataException, EngineException, PersistException
+    public String learnUserLocation(Map<String, String> detailsTypes) throws EngineException, PersistException, NoDataException
     {
         String successAnswer = "I'll remember that";
         
-        String location = "";
-        String username = "";
+        String location = lookForValueLocation( detailsTypes );
+        String username = lookForUSerName( detailsTypes );
         
-        if((location = lookForValueLocation( detailsTypes )) == null)
-            throw new NoDataException("No location found", "I don't understand, please precise your location");
+        if(location == null)
+            throw new NoDetailsException("No location found", "I don't understand, please precise your location");
         
-        if((username = lookForUSerName( detailsTypes )) == null)
-            throw new NoDataException("No username found", "I'm sorry but, who are you ?!");
+        if(username == null)
+            throw new NoDetailsException("No username found", "I'm sorry but, who are you ?!");
         
         UsersData usersData = narvisEngine.getDetailsAnalyser().getUserDataProvider().getModel();
-        UserData userData = null;
+        UserData userData = usersData.getUser(username);
         
         /* If we can't find a user, we create it */
-        if((userData = usersData.getUser(username)) == null)
+        if(userData == null)
         {
             usersData.addUser(username);
             
@@ -215,8 +211,7 @@ public class InternalActionsExecuter {
      * @throws com.narvis.engine.exception.NoSentenceException
      */
     private void createSimilarityBetweenRoutes(List<List<String>> pParsedSentences) throws NoDataException, PersistException, NoActionException, NoSentenceException, AmbigousException {
-        Action findedAction = null,     // Première action trouvée
-               currentAction = null;    // Action correspondant à la phrase courrante
+        Action findedAction = null;     // Première action trouvée
         int iSentence = 0,              // Indice de la phrase courrante
             iFindedSentence = -1;       // Indice de la phrase correspondant à l'action trouvée
         
@@ -224,7 +219,7 @@ public class InternalActionsExecuter {
         for(List<String> parsedSentence : pParsedSentences)
         {
             try{
-                currentAction = narvisEngine.getFondamentalAnalyser().findAction(parsedSentence);
+                Action currentAction = narvisEngine.getFondamentalAnalyser().findAction(parsedSentence);   // Action correspondant à la phrase courrante
                 
                 /* Si une action est trouvée pour la première fois */
                 if(findedAction == null && currentAction != null){

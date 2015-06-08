@@ -39,6 +39,8 @@ import com.narvis.engine.exception.NoSentenceException;
 import com.narvis.frontend.MessageInOut;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -104,22 +106,13 @@ public class NarvisEngine {
             public void run() {
                 try {
                     brainProcess(lastMessage);
-                } catch (IllegalKeywordException ex) {
-                    NarvisLogger.logException(ex);
-                    onError(lastMessage, ex.getNarvisErrorMessage());
-                } catch (NoDataException ex) {
-                    NarvisLogger.logException(ex);
-                    onError(lastMessage, ex.getNarvisErrorMessage());
                 } catch (ProviderException ex) {
-                    NarvisLogger.logException(ex);
-                    onError(lastMessage, ex.getNarvisErrorMessage());
-                } catch (NoActionException | NoSentenceException ex) {
                     NarvisLogger.logException(ex);
                     onError(lastMessage, ex.getNarvisErrorMessage());
                 } catch (EngineException ex) {
                     NarvisLogger.logException(ex);
                     onError(lastMessage, ex.getNarvisErrorMessage());
-                } 
+                }
             }
         });
     }
