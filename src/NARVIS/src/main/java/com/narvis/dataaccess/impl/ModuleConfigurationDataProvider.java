@@ -39,7 +39,7 @@ import java.io.File;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public final class ModuleConfigurationDataProvider implements IDataProvider {
 
@@ -64,6 +64,11 @@ public final class ModuleConfigurationDataProvider implements IDataProvider {
     private final ModuleAnswers answersLayout;
     private final ModuleErrors errorsLayout;
 
+    /**
+     * Default constructor
+     * @param moduleFolder the module folder
+     * @throws ProviderException 
+     */
     public ModuleConfigurationDataProvider(File moduleFolder) throws ProviderException {
         this.moduleFolder = moduleFolder;
         try {
@@ -86,26 +91,51 @@ public final class ModuleConfigurationDataProvider implements IDataProvider {
 
     }
 
+    /**
+     * Accessor
+     * @return data folder
+     */
     public File getDataFolder() {
         return new File(this.moduleFolder, DATA_FOLDER_NAME);
     }
 
+    /**
+     * Accessor
+     * @return API Keys
+     */
     public ApiKeys getApiKeys() {
         return this.apiKeys;
     }
 
+    /**
+     * Accessor
+     * @return Module conf
+     */
     public ModuleConf getConf() {
         return this.conf;
     }
 
+    /**
+     * Acessor
+     * @return Answer Layout
+     */
     public ModuleAnswers getAnswersLayout() {
         return this.answersLayout;
     }
 
+    /**
+     * Acessor
+     * @return Error Layout
+     */
     public ModuleErrors getErrorsLayout() {
         return this.errorsLayout;
     }
 
+    
+    /**
+     * Save the files
+     * @throws PersistException 
+     */
     public void persist() throws PersistException {
         try {
             XmlFileAccess.toFile(this.apiKeys, new File(new File(this.moduleFolder, CONF_FOLDER_NAME), API_KEY_FILE_NAME));

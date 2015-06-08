@@ -33,7 +33,7 @@ import java.util.Set;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class MetaDataProvider implements IMetaDataProvider {
 
@@ -43,12 +43,16 @@ public class MetaDataProvider implements IMetaDataProvider {
     public static final String CONF_KEYWORD = "Conf";
     public static final String FRONTEND_KEYWORD = "FrontEnd";
 
+    /**
+     * Constructor
+     * @throws Exception 
+     */
     public MetaDataProvider() throws Exception {
         this.config = new ConfigurationDataProvider();
         this.providers = this.config.createDataProviders();
         this.frontEnds = this.config.createFrontEnds();
     }
-
+    
     @Override
     public IDataProvider getDataProvider(String... keywords) {
         if (CONF_KEYWORD.equals(keywords[0])) {

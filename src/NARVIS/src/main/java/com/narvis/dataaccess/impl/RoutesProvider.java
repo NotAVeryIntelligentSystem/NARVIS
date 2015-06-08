@@ -36,7 +36,7 @@ import java.io.File;
 
 /**
  *
- * @author Zack
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class RoutesProvider implements IDataModelProvider<RouteNode> {
 

@@ -30,7 +30,7 @@ import java.util.Map;
 
 /**
  *
- * @author puma
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public interface IDataProviderDetails extends IDataProvider {
 

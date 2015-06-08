@@ -30,7 +30,7 @@ import org.simpleframework.xml.Root;
 
 /**
  *
- * @author Zack
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 @Root(name = "Route")
 public class RouteNode {

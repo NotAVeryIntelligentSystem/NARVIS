@@ -29,7 +29,7 @@ import org.simpleframework.xml.*;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 @Root(name = "NarvisConf")
 public class NarvisConf implements IConfDataProvider {

@@ -30,7 +30,7 @@ import org.simpleframework.xml.*;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 @Root(name = "ApiKeys")
 public class ApiKeys implements IDataProvider {

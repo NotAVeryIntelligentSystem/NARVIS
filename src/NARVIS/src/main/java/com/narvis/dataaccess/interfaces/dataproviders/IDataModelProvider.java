@@ -28,7 +28,7 @@ import com.narvis.dataaccess.exception.PersistException;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  * @param <T>
  */
 public interface IDataModelProvider<T> extends IDataProvider {

@@ -29,7 +29,7 @@ import java.util.Set;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public interface IMetaDataProvider {
 

@@ -32,7 +32,7 @@ import org.simpleframework.xml.Root;
 /**
  * Represent the XML file which contains the answers for each command
  *
- * @author puma
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 @Root(name = "Answers")
 public class ModuleAnswers implements IDataProvider {

@@ -34,7 +34,7 @@ import java.util.Map;
  * Apply the final construction of the answer. Get Data need 1: The level of
  * politness In details accepted parameters are : sentence -> sentence
  *
- * @author puma
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class StatusProvider implements IDataProviderDetails {
 
