@@ -28,7 +28,7 @@ import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.exception.NoValueException;
 import com.narvis.dataaccess.exception.ProviderException;
-import com.narvis.dataaccess.exception.annotations.Command;
+import com.narvis.common.annotations.Command;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.dataaccess.interfaces.IAnswerProvider;
 import com.narvis.dataaccess.interfaces.dataproviders.IDataProviderDetails;
@@ -68,7 +68,7 @@ public class NewsProvider implements IDataProviderDetails, IAnswerProvider {
     public NewsProvider(ModuleConfigurationDataProvider confProvider) throws ProviderException {
 
         try {
-            
+
             URL newsUrl = new URL(RSS_NEWS_URL);
 
             this._confProvider = confProvider;
@@ -87,71 +87,67 @@ public class NewsProvider implements IDataProviderDetails, IAnswerProvider {
 
     }
 
-
     /**
      * Get the city in the details provided by the caller
      *
-     * @param details This param could be null but it fail if it is
-     * catch a NullPointerException
+     * @param details This param could be null but it fail if it is catch a
+     * NullPointerException
      * @return
      */
     public String findCityInDetails(Map<String, String> details) {
 
-        
-        if( details == null )
+        if (details == null) {
             return null;
-        
+        }
+
         //First check if the location key is present
         if (details.containsKey(this.LOCATION_STRING)) {
             return details.get(this.LOCATION_STRING);
         } else {
-            
+
             //It's not, check if the location is present as a value not a key
             //Historical reason, the parser create the map as : [cityname] -> location
             //It's the opposite of us, we expect : location -> [cityname]
-            
-            for( Map.Entry<String,String> entry : details.entrySet() ) {
-                
-                if( entry.getValue().equals(this.LOCATION_STRING) ) {
-                
+            for (Map.Entry<String, String> entry : details.entrySet()) {
+
+                if (entry.getValue().equals(this.LOCATION_STRING)) {
+
                     //Found it return the key, (because it is the opposite of what we expect)
                     return entry.getKey();
                 }
             }
-            
+
         }
-        
+
         //We did not find it return null the exception will be thrown later
         return null;
     }
-    
-    
+
     /**
-     * Use it to extract the city name from a news 
+     * Use it to extract the city name from a news
+     *
      * @param news the current news to analyse
      * @return the name of the city
      */
     private String extractCityNameFromnews(SyndEntry news) {
-        
+
         String description = news.getDescription().getValue();
 
         String pattern = "(,|\\.| )";
         Pattern splitter = Pattern.compile(pattern);
-        
+
         String[] splitted;
-        
+
         //On applique une limite, on ne veut a la fin qu'un tableau avec deux entrées
-        splitted = splitter.split(description,2);
-        
+        splitted = splitter.split(description, 2);
+
         return splitted[0].toLowerCase();
-        
+
     }
-    
 
     @Override
     public Map<String, String> buildParamsToValueMap(Map<String, String> details, List<String> listOfParams) throws NoValueException {
-        
-        
+
         Map<String, String> paramsToValue = new HashMap<>();
 
         //To gain time we get all the details and their value
@@ -174,35 +170,34 @@ public class NewsProvider implements IDataProviderDetails, IAnswerProvider {
             }
 
         }
-        
+
         //Every details we need should be in the details provided by the caller !
         return paramsToValue;
-        
+
     }
 
     @Override
     public String getDataDetails(Map<String, String> detailsToValue, String... keywords) throws ProviderException, NoValueException {
-    
+
         String askedCity = findCityInDetails(detailsToValue).toLowerCase(Locale.FRENCH);
-        
-        if( detailsToValue == null || askedCity == null || keywords == null || keywords.length < 1 || keywords[0] == null ) {
+
+        if (detailsToValue == null || askedCity == null || keywords == null || keywords.length < 1 || keywords[0] == null) {
             throw new IllegalKeywordException("Incorrect parameters for getDetails methods", "engine");
         }
-        
+
         String wantedAnswer = "";
-        if( keywords[0].equals("") ) {
+        if (keywords[0].equals("")) {
             wantedAnswer = DEFAULT_COMMAND;
-        }else {
+        } else {
             wantedAnswer = keywords[0];
         }
-        
+
         this._news = findNewsForCity(askedCity);
-        
-        if( this._news == null ) {
+
+        if (this._news == null) {
             return this._confProvider.getAnswersLayout().getData("error");
         }
-        
-        
+
         IAnswerBuilder answerBuilder = new AnswerBuilder();
         String answerFromXml = this._confProvider.getAnswersLayout().getData(wantedAnswer);
 
@@ -215,47 +210,41 @@ public class NewsProvider implements IDataProviderDetails, IAnswerProvider {
         Map<String, String> paramsToValues = buildParamsToValueMap(detailsToValue, listOfParams);
 
         return answerBuilder.buildAnswer(paramsToValues, answerFromXml);
-        
-        
+
     }
 
-
-    
     private SyndEntry findNewsForCity(String city) {
-        
-        
+
         //Try to find a news for the asked city
-        for( SyndEntry news : this._inputFeed.getEntries() ) {
-            
+        for (SyndEntry news : this._inputFeed.getEntries()) {
+
             String currentCity = extractCityNameFromnews(news).toLowerCase(Locale.FRENCH);
-            
-            if( currentCity.equals(city) ) {
-                
+
+            if (currentCity.equals(city)) {
+
                 return news;
-                
+
             }
         }
-        
+
         //No news found
         return null;
-        
-    } 
-    
+
+    }
+
     @Command(CommandName = "link")
     public String getLink() {
-        
+
         return this._news.getLink();
-        
+
     }
-    
+
     @Command(CommandName = "title")
-    public String getTitle(){
-        
-        
+    public String getTitle() {
+
         return this._news.getTitle();
     }
-    
-    
+
     /**
      * Call the method wich provide the answer for the given method
      *
@@ -292,12 +281,10 @@ public class NewsProvider implements IDataProviderDetails, IAnswerProvider {
         return null;
 
     }
-    
-    
 
     @Override
     public String getData(String... keywords) throws NoDataException, IllegalKeywordException {
-        throw new UnsupportedOperationException("Not supported "); 
+        throw new UnsupportedOperationException("Not supported ");
     }
 
 }

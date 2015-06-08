@@ -36,11 +36,12 @@ import com.narvis.dataaccess.weather.OpenWeatherMapPortal;
  * @author Zack
  */
 public class WeatherConf {
+
     public final static String MODULE_NAME = "OpenWeatherMap";
     public final static String MODULE_CLASS_PATH = OpenWeatherMapPortal.class.getCanonicalName();
-     
+
     public final static String DICTIONARY_DATA_PATH = "dictionary.xml";
-    
+
     public Dictionary createDictionary() {
         Dictionary retVal = new Dictionary();
 
@@ -56,7 +57,7 @@ public class WeatherConf {
 
         return retVal;
     }
-    
+
     private Word createWord(String name, String[] informationTypes, String[] hints) {
         Word retVal = new Word();
 
@@ -74,51 +75,48 @@ public class WeatherConf {
 
         return retVal;
     }
-    
-    public ModuleErrors createErrorsLayout()
-    {
-        
+
+    public ModuleErrors createErrorsLayout() {
+
         ModuleErrors retVal = new ModuleErrors();
-        
+
         retVal.getMap().put("general", "Hum... I'm sure you don't really need to know that");
         retVal.getMap().put("engine", "Sorry, I get in a muddle...");
         retVal.getMap().put("data", "");
         retVal.getMap().put("noanswers", "I don't know what you're talking about...");
-        
+
         retVal.getMap().put("wrongkeywords", "Please precise the location where you want the weather, I can't guess it myself...");
         retVal.getMap().put("temperature", "Sorry, I can't find the temperature...");
         retVal.getMap().put("cloud", "Sorry, I can't find the sunshine...");
-        
+
         return retVal;
     }
-    
-    public ModuleAnswers createAnswerLayout()
-    {
-        
+
+    public ModuleAnswers createAnswerLayout() {
+
         ModuleAnswers retVal = new ModuleAnswers();
-        
+
         retVal.getMap().put("temperature", "The temperature in [city] is [temperature]°C");
         retVal.getMap().put("weather", "The temperature in [city] is [temperature]°C and the cloud percentage is [cloud]%");
         retVal.getMap().put("error", "Sorry guy I can't help you");
-        
+
         return retVal;
     }
-    
-    public ApiKeys createApiKeys()
-    {
+
+    public ApiKeys createApiKeys() {
         ApiKeys retVal = new ApiKeys();
-        
+
         retVal.setName(MODULE_NAME);
-        
+
         retVal.getApiKeys().put("key", "askCharles");
-        
+
         return retVal;
     }
-    
+
     public ModuleConf createModuleConf() {
         ModuleConf retVal = new ModuleConf();
         retVal.setModuleClassPath(MODULE_CLASS_PATH);
-            
+
         return retVal;
     }
 }

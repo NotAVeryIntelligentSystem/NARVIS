@@ -32,14 +32,14 @@ import com.narvis.dataaccess.models.layouts.*;
  * @author Zack
  */
 public class HardwareStatusConf {
+
     public final static String MODULE_NAME = "HardwareStatus";
     public final static String MODULE_CLASS_PATH = StatusProvider.class.getCanonicalName();
 
-    public ModuleErrors createErrorsLayout()
-    {
-        
+    public ModuleErrors createErrorsLayout() {
+
         ModuleErrors retVal = new ModuleErrors();
-        
+
         retVal.getMap().put("general", "Hum... I'm sure you don't really need to know that");
         retVal.getMap().put("engine", "Sorry, I get in a muddle...");
         retVal.getMap().put("data", "I don't know what to say... probably potatoes");
@@ -47,12 +47,11 @@ public class HardwareStatusConf {
 
         return retVal;
     }
-    
-    public ModuleAnswers createAnswersLayout()
-    {
-        
+
+    public ModuleAnswers createAnswersLayout() {
+
         ModuleAnswers retVal = new ModuleAnswers();
-        
+
         retVal.getMap().put("bursting0", "I'm fine actually");
         retVal.getMap().put("bursting1", "I'm a bit busy but it's okay");
         retVal.getMap().put("bursting2", "I'm definitively overwhelmed !");
@@ -60,20 +59,19 @@ public class HardwareStatusConf {
 
         return retVal;
     }
-    
-    public ApiKeys createApiKeys()
-    {
+
+    public ApiKeys createApiKeys() {
         ApiKeys retVal = new ApiKeys();
-        
+
         retVal.setName(MODULE_NAME);
-        
+
         return retVal;
     }
 
     public ModuleConf createModuleConf() {
         ModuleConf retVal = new ModuleConf();
         retVal.setModuleClassPath(MODULE_CLASS_PATH);
-            
+
         return retVal;
     }
 }

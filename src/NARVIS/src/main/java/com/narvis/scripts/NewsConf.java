@@ -33,32 +33,30 @@ import com.narvis.dataaccess.news.NewsProvider;
  * @author puma
  */
 public class NewsConf {
-    
+
     public final static String MODULE_CLASS_PATH = NewsProvider.class.getCanonicalName();
-    
-    public ModuleAnswers createAnswerLayout()
-    {
-        
+
+    public ModuleAnswers createAnswerLayout() {
+
         ModuleAnswers retVal = new ModuleAnswers();
-        
+
         retVal.getMap().put("news", "[title] link : [link]");
 
         return retVal;
     }
-    
-    public ModuleErrors createErrorsLayout()
-    {
-        
+
+    public ModuleErrors createErrorsLayout() {
+
         ModuleErrors retVal = new ModuleErrors();
-        retVal.getMap().put("error", "No news for your city sorry guys !"); 
+        retVal.getMap().put("error", "No news for your city sorry guys !");
         return retVal;
     }
-    
+
     public ModuleConf createModuleConf() {
         ModuleConf retVal = new ModuleConf();
         retVal.setModuleClassPath(MODULE_CLASS_PATH);
-            
+
         return retVal;
     }
-    
+
 }

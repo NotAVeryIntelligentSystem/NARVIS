@@ -30,7 +30,7 @@ public class AccessConsole implements IFrontEnd {
     public void start() {
         this.input = new Input(this.conf.getName(), this);
         this.output = new Output(this);
-        
+
         this.printReady();
         this.input.start();
     }
@@ -49,8 +49,7 @@ public class AccessConsole implements IFrontEnd {
         return this.output;
     }
 
-    public void printReady()
-    {
+    public void printReady() {
         System.out.print("NARVIS/READY/>");
     }
 }

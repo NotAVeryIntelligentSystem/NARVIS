@@ -109,7 +109,7 @@ public class TestRoutesProvider {
 
             DetailsAnalyser myDetailsAnalyser = new DetailsAnalyser();
             Map<String, String> myDetails = myDetailsAnalyser.getDetailsTypes(myAction.getDetails(), "nobody");
-            
+
             IDataModelProvider<RouteNode> myRoutesProvider = (IDataModelProvider<RouteNode>) DataAccessFactory.getMetaDataProvider().getDataProvider("Routes");
 
             String[] askFor = new String[1];

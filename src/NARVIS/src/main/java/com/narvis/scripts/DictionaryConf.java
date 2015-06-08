@@ -35,11 +35,12 @@ import com.narvis.dataaccess.models.layouts.ModuleErrors;
  * @author Zack
  */
 public class DictionaryConf {
+
     public final static String MODULE_NAME = "Dictionary";
     public final static String MODULE_CLASS_PATH = DictionaryProvider.class.getCanonicalName();
-     
+
     public final static String DICTIONARY_DATA_PATH = "dictionary.xml";
-    
+
     public Dictionary createDictionary() {
         Dictionary retVal = new Dictionary();
 
@@ -53,26 +54,26 @@ public class DictionaryConf {
         informationTypes[0] = "location";
         retVal.addWord(createWord("london", informationTypes, null, false));
         retVal.addWord(createWord("nimes", informationTypes, null, false));
-        
+
         informationTypes[0] = "politness";
         retVal.addWord(createWord("please", informationTypes, null, false));
         retVal.addWord(createWord("thanks", informationTypes, null, false));
-        
+
         informationTypes[0] = "insult";
         retVal.addWord(createWord("bitch", informationTypes, null, false));
-        
+
         retVal.addWord(createWord("the", null, null, true));
 
         return retVal;
     }
-    
+
     private Word createWord(String name, String[] informationTypes, String[] hints, boolean isIgnored) {
         Word retVal = new Word();
 
         retVal.setValue(name);
         retVal.setIsIgnored(isIgnored);
 
-        if(informationTypes != null) {
+        if (informationTypes != null) {
             for (String informationType : informationTypes) {
                 retVal.addInformationType(informationType);
             }
@@ -86,36 +87,34 @@ public class DictionaryConf {
 
         return retVal;
     }
-    
-    public ModuleErrors createErrorsLayout()
-    {
-        
+
+    public ModuleErrors createErrorsLayout() {
+
         ModuleErrors retVal = new ModuleErrors();
-        
+
         retVal.getMap().put("general", "Hum... I'm sure you don't really need to know that");
         retVal.getMap().put("persist", "I understand, but can't remember, it's probably due to alcohol...");
         retVal.getMap().put("engine", "");
         retVal.getMap().put("data", "");
         retVal.getMap().put("noanswers", "I don't know what you're talking about...");
-        
+
         return retVal;
     }
-    
-    public ApiKeys createApiKeys()
-    {
+
+    public ApiKeys createApiKeys() {
         ApiKeys retVal = new ApiKeys();
-        
+
         retVal.setName(MODULE_NAME);
-        
+
         return retVal;
     }
-    
+
     public ModuleConf createModuleConf() {
         ModuleConf retVal = new ModuleConf();
         retVal.setModuleClassPath(MODULE_CLASS_PATH);
 
         retVal.getEntries().put("DictionaryDataPath", DICTIONARY_DATA_PATH);
-            
+
         return retVal;
     }
 }

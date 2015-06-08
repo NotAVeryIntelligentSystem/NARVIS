@@ -35,10 +35,10 @@ import com.narvis.dataaccess.news.NewsProvider;
  * @author uwy
  */
 public class UsersConf {
-    
+
     public final static String MODULE_NAME = "News";
     public final static String MODULE_CLASS_PATH = NewsProvider.class.getCanonicalName();
-    
+
     public final static String USERS_DATA_PATH = "usersdata.xml";
 
     public UsersData createUsersData() {
@@ -48,13 +48,11 @@ public class UsersConf {
         uwy.addData("location", "nimes");
         return retVal;
     }
-    
-    
-    public ModuleErrors createErrorsLayout()
-    {
-        
+
+    public ModuleErrors createErrorsLayout() {
+
         ModuleErrors retVal = new ModuleErrors();
-        
+
         retVal.getMap().put("general", "Hum... I'm sure you don't really need to know that");
         retVal.getMap().put("engine", "");
         retVal.getMap().put("data", "");
@@ -63,23 +61,21 @@ public class UsersConf {
 
         return retVal;
     }
-    
 
     public ModuleConf createModuleConf() {
         ModuleConf retVal = new ModuleConf();
         retVal.setModuleClassPath(MODULE_CLASS_PATH);
 
         retVal.getEntries().put("UsersDataPath", USERS_DATA_PATH);
-            
+
         return retVal;
     }
-    
-    public ApiKeys createApiKeys()
-    {
+
+    public ApiKeys createApiKeys() {
         ApiKeys retVal = new ApiKeys();
-        
+
         retVal.setName(MODULE_NAME);
-                
+
         return retVal;
     }
 }

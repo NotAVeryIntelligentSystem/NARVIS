@@ -86,14 +86,14 @@ public class NarvisLogger {
                 } else {
                     Date date = new Date();
                     File logPath = new File(logDirectory.getAbsolutePath(), "narvis-log." + date.getTime() + ".txt");
-                    
+
                     INSTANCE.getLogger().addHandler(new FileHandler(logPath.getAbsolutePath()));
-                    
+
                     /* If the log file is correctly initialized, we disable parents logs that could be console, etc.*/
                     INSTANCE.getLogger().setUseParentHandlers(DEBUG_MOD);
                 }
 
-            } catch (IOException | SecurityException ex) {                
+            } catch (IOException | SecurityException ex) {
                 INSTANCE.getLogger().warning(ex.getMessage());
             }
         }

@@ -45,18 +45,15 @@ public class TestNewsProvider {
     @Test
     public void testNewsForCity() throws ProviderException {
 
-        
         ModuleConfigurationDataProvider confProvider = new ModuleConfigurationDataProvider(new File("../../release/modules/News"));
         NewsProvider provider = new NewsProvider(confProvider);
-        
-        Map<String,String> details = new HashMap<>();
-        
-        details.put("mexico", "location");        
+
+        Map<String, String> details = new HashMap<>();
+
+        details.put("mexico", "location");
         String response = provider.getDataDetails(details, "");
-        
-        
+
         System.out.println(response);
-        
-        
+
     }
 }

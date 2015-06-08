@@ -44,62 +44,59 @@ import java.util.Map;
  */
 public class AnswersProvider implements IDataProviderDetails, IAnswerProvider {
 
+    private final ModuleConfigurationDataProvider _confProvider;
 
-    private final ModuleConfigurationDataProvider _confProvider;  
-    
     private final static String ANSWER_SENTENCE = "sentence";
-    
+
     private final static String POLITNESS_WORD_TYPE = "politness";
     private final static String INSULT_WORD_TYPE = "insult";
-    
+
     private final static int MIN_POLITNESS_LEVEL = 1;
     private final static int NEUTRAL_POLITNESS_LEVEL = 2;
     private final static int MAX_POLITNESS_LEVEL = 3;
-    
+
     public AnswersProvider(ModuleConfigurationDataProvider confProvider) {
 
         this._confProvider = confProvider;
     }
 
     @Override
-    public String getDataDetails(Map<String,String> details, String... keywords) throws IllegalKeywordException, ProviderException{
-        
-        if( !details.containsKey(ANSWER_SENTENCE) ) {
+    public String getDataDetails(Map<String, String> details, String... keywords) throws IllegalKeywordException, ProviderException {
+
+        if (!details.containsKey(ANSWER_SENTENCE)) {
             throw new IllegalKeywordException("Details not supported", this._confProvider.getErrorsLayout().getData("engine"));
         }
-        
+
         /* We calculate the level of politness of the sentence, so we can choose witch type of answer we gonna make */
         int politnessLevel = calculatePolitnessLevelWithDetails(details);
-        
+
         IAnswerBuilder builder = new AnswerBuilder();
         /* We get the answer layout that correspond to the level of politness of the sentence */
-        String brutAnswer = this._confProvider.getAnswersLayout().getData("polite"+politnessLevel);
-        
+        String brutAnswer = this._confProvider.getAnswersLayout().getData("polite" + politnessLevel);
+
         /* If we can't find an answer layout, we are in trouble... */
-        if( brutAnswer == null ) {
+        if (brutAnswer == null) {
             throw new NoDataException(OpenWeatherMapPortal.class, "", this._confProvider.getErrorsLayout().getData("data"));
         }
-        
+
         /* We search all params we have to bind in the answer layout */
         List<String> listOfRequiredParams = builder.getListOfRequiredParams(brutAnswer);
-        
+
         /* We bind the params of the answer layout with values */
-        Map<String,String> paramsToValue = buildParamsToValueMap(details, listOfRequiredParams);
-        
+        Map<String, String> paramsToValue = buildParamsToValueMap(details, listOfRequiredParams);
+
         /* We finally build the answer before return it */
         return builder.buildAnswer(paramsToValue, brutAnswer);
 
     }
 
-
     @Override
-    public Map<String, String> buildParamsToValueMap(Map<String,String> details, List<String> listOfParams) throws NoValueException {
-        
-        
-        Map<String,String> paramsToValue = new HashMap<>();
-        
+    public Map<String, String> buildParamsToValueMap(Map<String, String> details, List<String> listOfParams) throws NoValueException {
+
+        Map<String, String> paramsToValue = new HashMap<>();
+
         paramsToValue.putAll(details);
-        
+
         for (String param : listOfParams) {
 
             if (!paramsToValue.containsKey(param)) {
@@ -113,20 +110,22 @@ public class AnswersProvider implements IDataProviderDetails, IAnswerProvider {
         return paramsToValue;
 
     }
-    
+
     /**
-     * Calculate the level of politness of the sentence according to the details words
+     * Calculate the level of politness of the sentence according to the details
+     * words
+     *
      * @param details : The map of details words
      * @return The level of politness ( 0 : Unpolyte; 1 : neutral; 2 : polite)
      */
-    private int calculatePolitnessLevelWithDetails(Map<String,String> details) {
-        
+    private int calculatePolitnessLevelWithDetails(Map<String, String> details) {
+
         /* Initialise the politness level at the neutral value */
         int politnessLevel = NEUTRAL_POLITNESS_LEVEL;
-        
-        for( Map.Entry<String, String> entry : details.entrySet() ) {
 
-            switch(entry.getValue()){
+        for (Map.Entry<String, String> entry : details.entrySet()) {
+
+            switch (entry.getValue()) {
                 case POLITNESS_WORD_TYPE:
                     politnessLevel += 1;
                     break;
@@ -135,15 +134,15 @@ public class AnswersProvider implements IDataProviderDetails, IAnswerProvider {
                     break;
             }
         }
-        
+
         /* We can't go deeper than an insulting sentence */
         politnessLevel = (politnessLevel < MIN_POLITNESS_LEVEL) ? MIN_POLITNESS_LEVEL : politnessLevel;
         /* We can't go higher than a very polite sentence */
         politnessLevel = (politnessLevel > MAX_POLITNESS_LEVEL) ? MAX_POLITNESS_LEVEL : politnessLevel;
-        
+
         return politnessLevel;
     }
-    
+
     @Override
     public String getData(String... keywords) throws NoDataException, IllegalKeywordException {
         throw new UnsupportedOperationException("Not supported ");

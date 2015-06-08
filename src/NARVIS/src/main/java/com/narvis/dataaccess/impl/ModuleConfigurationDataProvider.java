@@ -66,47 +66,19 @@ public final class ModuleConfigurationDataProvider implements IDataProvider {
 
     public ModuleConfigurationDataProvider(File moduleFolder) throws ProviderException {
         this.moduleFolder = moduleFolder;
-        File apiFile = null;
-        File confFile = null;
-        File answerFile = null;
-        File errorFile = null;
-        for (File file : new File(moduleFolder, CONF_FOLDER_NAME).listFiles()) {
-            switch (file.getName()) {
-                case API_KEY_FILE_NAME:
-                    if (apiFile != null) {
-                        throw new ProviderException(ModuleConfigurationDataProvider.class, "Api key file found twice !", "Ouch");
-                    }
-                    apiFile = file;
-                    break;
-                case MODULE_CONF_FILE_NAME:
-                    if (confFile != null) {
-                        throw new ProviderException(ModuleConfigurationDataProvider.class, "Module conf file found twice !", "Ouch");
-                    }
-                    confFile = file;
-                    break;
-            }
-        }
-        for (File file : new File(moduleFolder, LAYOUTS_FOLDER_NAME).listFiles()) {
-            switch (file.getName()) {
-                case ANSWERS_FILE_NAME:
-                    if (answerFile != null) {
-                        throw new ProviderException(ModuleConfigurationDataProvider.class, "Answers layout file found twice !", "Ouch");
-                    }
-                    answerFile = file;
-                    break;
-                case ERRORS_FILE_NAME:
-                    if (errorFile != null) {
-                        throw new ProviderException(ModuleConfigurationDataProvider.class, "Errors layout file found twice !", "Ouch");
-                    }
-                    errorFile = file;
-                    break;
-            }
-        }
         try {
-            this.apiKeys = apiFile == null ? null : XmlFileAccess.fromFile(ApiKeys.class, apiFile);
-            this.conf = confFile == null ? null : XmlFileAccess.fromFile(ModuleConf.class, confFile);
-            this.answersLayout = answerFile == null ? null : XmlFileAccess.fromFile(ModuleAnswers.class, answerFile);
-            this.errorsLayout = errorFile == null ? null : XmlFileAccess.fromFile(ModuleErrors.class, errorFile);
+            File confFolder = new File(moduleFolder, CONF_FOLDER_NAME);
+            File layoutFolder = new File(moduleFolder, LAYOUTS_FOLDER_NAME);
+            
+            File apiFile = confFolder.canRead() ? new File(confFolder, API_KEY_FILE_NAME) : null;
+            File confFile = confFolder.canRead() ? new File(confFolder, MODULE_CONF_FILE_NAME) : null;
+            File answerFile = layoutFolder.canRead() ? new File(layoutFolder, ANSWERS_FILE_NAME) : null;
+            File errorFile = layoutFolder.canRead() ? new File(layoutFolder, ERRORS_FILE_NAME) : null;
+
+            this.apiKeys = apiFile != null && apiFile.canRead() ?  XmlFileAccess.fromFile(ApiKeys.class, apiFile) : null;
+            this.conf = confFile != null && confFile.canRead() ? XmlFileAccess.fromFile(ModuleConf.class, confFile) : null;
+            this.answersLayout = answerFile != null && answerFile.canRead() ? XmlFileAccess.fromFile(ModuleAnswers.class, answerFile) : null;
+            this.errorsLayout = errorFile != null && errorFile.canRead() ? XmlFileAccess.fromFile(ModuleErrors.class, errorFile) : null;
         } catch (XmlFileAccessException ex) {
             NarvisLogger.logException(ex);
             throw new ProviderException(ModuleConfigurationDataProvider.class, "Could not deserialize a file, more info in intern exception", ex, this.getErrorsLayout().getData("data"));
@@ -133,7 +105,7 @@ public final class ModuleConfigurationDataProvider implements IDataProvider {
     public ModuleErrors getErrorsLayout() {
         return this.errorsLayout;
     }
-    
+
     public void persist() throws PersistException {
         try {
             XmlFileAccess.toFile(this.apiKeys, new File(new File(this.moduleFolder, CONF_FOLDER_NAME), API_KEY_FILE_NAME));
