@@ -62,7 +62,7 @@ public class TestWeatherProvider {
         Map<String, String> details = new HashMap<>();
         details.put("location", "nimes");
 
-        String result = weatherPortal.getDataDetails(details, "");
+        String result = weatherPortal.getDataDetails(details);
 
         Pattern p = Pattern.compile("The temperature in (([A-Z]*)|([a-z]*))* is ([0-9]*\\.[0-9]*)°C and the cloud percentage is ([0-9]*\\.[0-9])%");
 

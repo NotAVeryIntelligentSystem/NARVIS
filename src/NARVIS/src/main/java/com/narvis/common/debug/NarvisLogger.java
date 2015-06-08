@@ -34,7 +34,7 @@ import java.util.logging.*;
  */
 public class NarvisLogger {
 
-    private final static boolean DEBUG_MOD = true; // True : use console + file log, False : use only file log
+    private final static boolean DEBUG_MOD = false; // True : use console + file log, False : use only file log
     private static NarvisLogger INSTANCE = null;
 
     /**

@@ -43,7 +43,7 @@ import java.util.Map.*;
  */
 public class ConfigurationDataProvider implements IDataProvider {
 
-    public static final String GLOBAL_CONF_PATH = "../../release/";
+    public static final String GLOBAL_CONF_PATH = "../../";
     public static final String CONF_FOLDER_NAME = "conf";
 
     public static final String CONF_FILE_NAME = "narvis.conf";

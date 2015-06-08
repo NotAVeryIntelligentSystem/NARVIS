@@ -45,7 +45,7 @@ public class TestNewsProvider {
     @Test
     public void testNewsForCity() throws ProviderException {
 
-        ModuleConfigurationDataProvider confProvider = new ModuleConfigurationDataProvider(new File("../../release/modules/News"));
+        ModuleConfigurationDataProvider confProvider = new ModuleConfigurationDataProvider(new File("../../modules/News"));
         NewsProvider provider = new NewsProvider(confProvider);
 
         Map<String, String> details = new HashMap<>();
