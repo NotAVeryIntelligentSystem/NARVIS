@@ -67,12 +67,28 @@ public class RoutesConf {
         currentAction = new ActionNode("narvis");
         askFor.clear();
         askFor.add("learnsimilaritybetweenroutes");
-        currentAction.setAskFor(askFor);
+        currentAction.setAskFor(askFor);        
         
         retVal.addWord(
                 createWordNode(null,
                         createWordNode("mean",
                                 createWordNode(null, currentAction))));
+        
+        askFor.clear();
+        askFor.add("learnuserlocation");
+        currentAction.setAskFor(askFor);
+        
+        retVal.addWord(
+                createWordNode("i",
+                        createWordNode("live", currentAction)));
+        
+        askFor.clear();
+        askFor.add("forgetuserdata");
+        currentAction.setAskFor(askFor);
+        
+        retVal.addWord(
+                createWordNode("forget",
+                        createWordNode("me", currentAction)));
         
         return retVal;
     }
