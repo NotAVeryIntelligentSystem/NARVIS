@@ -43,8 +43,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author Nakou
+ * Singleton that contains the heart of NARVIS. It's the controller that use others class in the engine.
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class NarvisEngine {
 
@@ -56,6 +56,10 @@ public class NarvisEngine {
     private final IMetaDataProvider metaDataProvider;
     private final Executer executer;
 
+    /**
+     * Default constructor
+     * @throws Exception 
+     */
     private NarvisEngine() throws Exception {
         this.executer = new Executer("Narvis engine");
         parser = new Parser();
@@ -64,6 +68,11 @@ public class NarvisEngine {
         metaDataProvider = DataAccessFactory.getMetaDataProvider();
     }
 
+    /**
+     * Instantiate NARVIS
+     * @return the instance of NARVIS
+     * @throws Exception 
+     */
     public static NarvisEngine getInstance() throws Exception {
         if (narvis != null) {
             return narvis;
@@ -73,33 +82,35 @@ public class NarvisEngine {
         }
     }
 
+    /**
+     * Start the NARVIS process with the frontends threads
+     */
     public void start() {
         this.executer.start();
 
-        /**/
         // We starts all front ends
         for (String frontEnd : this.metaDataProvider.getAvailableFrontEnds()) {
             this.metaDataProvider.getFrontEnd(frontEnd).start();
         }
-        /**
-         *
-         * this.metaDataProvider.getFrontEnd("Console").start(); /*
-         */
     }
 
+    /**
+     * Stop the NARVIS process
+     * @throws Exception 
+     */
     public void close() throws Exception {
-        /**/
         // We stop all fronts ends
         for (String frontEnd : this.metaDataProvider.getAvailableFrontEnds()) {
             this.metaDataProvider.getFrontEnd(frontEnd).close();
         }
-        /**
-         * this.metaDataProvider.getFrontEnd("Console").close(); /*
-         */
-
         this.executer.close();
     }
 
+    /**
+     * Run the NARVIS thread to execute the action corresponding to the message
+     * @param lastMessage
+     * @throws ExecuterException 
+     */
     public void getMessage(final MessageInOut lastMessage) throws ExecuterException {
         this.executer.addToExecute(new Runnable() {
 
@@ -118,10 +129,21 @@ public class NarvisEngine {
         });
     }
 
+    /**
+     * Method called when an error is catch
+     * @param originalMessage The input message
+     * @param message 
+     */
     private void onError(MessageInOut originalMessage, String message) {
         originalMessage.sendToOutput(message);
     }
 
+    /**
+     * Start the process to answer the input message
+     * @param message The input message
+     * @throws ProviderException
+     * @throws EngineException 
+     */
     private void brainProcess(MessageInOut message) throws ProviderException, EngineException {
         List<String> parsedSentence;
         Map<String, String> detailsTypes;
@@ -164,14 +186,26 @@ public class NarvisEngine {
         message.sendToOutput(finalAnswer);
     }
 
+    /**
+     * Accessor for the fondamental analyser
+     * @return the fondamental analyser
+     */
     public FondamentalAnalyser getFondamentalAnalyser() {
         return this.fondamentalAnalyser;
     }
 
+    /**
+     * Accessor for the parser
+     * @return  the parser
+     */
     public Parser getParser() {
         return this.parser;
     }
 
+    /**
+     * Accessor for the details analyser
+     * @return the details analyser
+     */
     public DetailsAnalyser getDetailsAnalyser() {
         return this.detailAnalyser;
     }

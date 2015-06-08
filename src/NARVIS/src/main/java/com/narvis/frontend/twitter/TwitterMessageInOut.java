@@ -28,7 +28,7 @@ import com.narvis.frontend.interfaces.IFrontEnd;
 
 /**
  *
- * @author Nakou
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class TwitterMessageInOut extends MessageInOut {
 

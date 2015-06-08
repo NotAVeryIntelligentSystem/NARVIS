@@ -29,7 +29,7 @@ import com.narvis.frontend.interfaces.IOutput;
 
 /**
  *
- * @author Nakou
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class Output implements IOutput {
 

@@ -25,7 +25,7 @@ package com.narvis.frontend.interfaces;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public interface IFrontEnd {
 

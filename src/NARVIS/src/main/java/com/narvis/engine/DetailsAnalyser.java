@@ -37,19 +37,31 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- *
- * @author Nakou
+ * Define the type of information passed by words
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public final class DetailsAnalyser {
 
     private final IDataModelProvider<Dictionary> dictionary;
     private final IDataModelProvider<UsersData> usersDataProvider;
 
+    /**
+     * Default constructor
+     * @throws Exception 
+     */
     public DetailsAnalyser() throws Exception {
         this.dictionary = (IDataModelProvider<Dictionary>) DataAccessFactory.getMetaDataProvider().getDataProvider("Dictionary");
         this.usersDataProvider = (IDataModelProvider<UsersData>) DataAccessFactory.getMetaDataProvider().getDataProvider("Users");
     }
 
+    /**
+     * Define for each words the type of information pass by it.
+     * It also add informations that we know about the user if the type of information doesn't appeard in the sentence.
+     * @param details List of words that are details in the sentence
+     * @param username The user name we need to find his informations
+     * @return A Map that contain the words and there type (ex: "london" => "location")
+     * @throws NoDataException 
+     */
     public Map<String, String> getDetailsTypes(List<String> details, String username) throws NoDataException {
         List<String> hintList = new ArrayList<>();
         boolean isTypeFinded = false;
@@ -91,6 +103,12 @@ public final class DetailsAnalyser {
         return wordsAssociations;
     }
 
+    /**
+     * If a type of information is not contained in the words assocations and we know it by the user informations, we add it in the words associations
+     * @param username The user name we need to find his informations
+     * @param wordsAssociations The map of words and type associations (ex: "london" => "location")
+     * @throws NoDataException 
+     */
     private void addUsersData(String username, Map<String, String> wordsAssociations) throws NoDataException {
         UsersData usersData = this.usersDataProvider.getModel();
 
@@ -107,6 +125,10 @@ public final class DetailsAnalyser {
         }
     }
 
+    /**
+     * Accessor for the user data provider
+     * @return the user data provider
+     */
     public IDataModelProvider<UsersData> getUserDataProvider() {
         return this.usersDataProvider;
     }

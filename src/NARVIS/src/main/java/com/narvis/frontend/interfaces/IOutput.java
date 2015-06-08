@@ -27,7 +27,7 @@ import com.narvis.frontend.MessageInOut;
 
 /**
  *
- * @author Alban
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public interface IOutput {
 

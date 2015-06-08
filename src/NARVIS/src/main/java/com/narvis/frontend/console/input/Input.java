@@ -36,7 +36,7 @@ import java.util.logging.Level;
 
 /**
  *
- * @author Nakou
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class Input implements IInput {
 

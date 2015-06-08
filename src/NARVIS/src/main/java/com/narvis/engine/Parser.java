@@ -37,16 +37,16 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Permet de parser une chaine de caractère en une liste de mots.
+ * Parse a string sentence into a list of words
  *
- * @author Zack
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class Parser {
 
     private final IDataModelProvider<Dictionary> dictionaryProvider;
 
     /**
-     * Constructeur par défaut du Parser
+     * Default constructor
      *
      * @throws java.lang.Exception
      */
@@ -56,11 +56,10 @@ public class Parser {
     }
 
     /**
-     * Transforme une chaine de caractères en une liste de mots en retirant les
-     * mots inutiles
+     * Transform a string in a list of words without useless words
      *
-     * @param sentence : Chaine de caractères contenant le message à parser
-     * @return Le message parsé en une liste de mots
+     * @param sentence String with the sentence
+     * @return The parsed sentence
      * @throws com.narvis.dataaccess.exception.NoDataException
      */
     public List<String> parse(String sentence) throws NoDataException {
@@ -91,7 +90,7 @@ public class Parser {
      * Brows details map to find details that are sentences and parse these
      * sentences.
      *
-     * @param detailsToValue : Details map to scan
+     * @param detailsToValue : Details map to scan that contain at least 2 sentences (ex: key="give me the weather" => value = "")
      * @return Parsed sentences
      * @throws com.narvis.dataaccess.exception.NoDataException
      */
@@ -113,10 +112,9 @@ public class Parser {
     }
 
     /**
-     * Remplace les espaces entre les mots entourés de " par des _ afin qu'ils
-     * soient concidérés comme un ensemble de mots
+     * Replace spaces between words bordered by " with _ so it not gonna be considered like a word
      *
-     * @param sentence
+     * @param sentence The string to annalyse
      */
     private String transformSpaceInQuoteWithUnderscore(String sentence) {
         boolean replaceSpace = false;
@@ -139,11 +137,10 @@ public class Parser {
     }
 
     /**
-     * Remplace dans tous les mots d'une liste de mots les underscore par des
-     * espaces
+     * Replace in each words of the list underscores by spaces
      *
-     * @param parsedSentence : La liste de mot à traiter
-     * @return
+     * @param parsedSentence The list of words
+     * @return The modified list
      */
     private List<String> replaceUndescoreBySpace(List<String> parsedSentence) {
         List<String> newParsedSentence = new LinkedList<>();
@@ -155,11 +152,10 @@ public class Parser {
     }
 
     /**
-     * Transforme une liste de Word en une liste de String correspondant aux
-     * attributs "Value"
-     *
-     * @param words : Liste de mots (Word) à convertir
-     * @return Liste de String correspondante
+     * Convert a list of words to a list of strings
+     * 
+     * @param words List of Words to convert
+     * @return List of strings
      */
     private List<String> wordsToStrings(List<Word> words) {
         List<String> strings = new ArrayList<>();

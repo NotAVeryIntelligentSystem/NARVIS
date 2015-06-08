@@ -37,7 +37,7 @@ import twitter4j.TwitterException;
 
 /**
  *
- * @author Alban
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class Output implements IOutput {
 

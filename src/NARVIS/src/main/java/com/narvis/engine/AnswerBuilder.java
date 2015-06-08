@@ -31,8 +31,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
- * @author puma
+ * Build an answer by matching parameters with a sentence layout
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class AnswerBuilder implements IAnswerBuilder {
 
@@ -84,8 +84,9 @@ public class AnswerBuilder implements IAnswerBuilder {
     }
 
     /**
-     * Add the bracket around the param name. Do nothing if there is already
-     * bracket
+     * Add brackets around the param name. Do nothing if there is already bracket
+     * @param paramName
+     * @return 
      */
     private String AddBracketToParamName(String paramName) {
 
@@ -104,7 +105,7 @@ public class AnswerBuilder implements IAnswerBuilder {
     }
 
     /**
-     * Remove the bracket from the param if it exist
+     * Remove brackets from the param if it exists
      *
      * @param paramName the name of the param
      * @return return the param name without bracket

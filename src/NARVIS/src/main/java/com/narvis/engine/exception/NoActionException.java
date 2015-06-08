@@ -27,7 +27,7 @@ import com.narvis.dataaccess.exception.*;
 
 /**
  *
- * @author puma
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class NoActionException extends EngineException {
 

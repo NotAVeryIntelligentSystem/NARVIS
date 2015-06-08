@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 Zack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,36 +27,57 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Représente une action devant être réalisée.
+ * Represent an action that have to be executerd
  *
  * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class Action {
 
-    private String providerName; // Le nom du provider correspondant à l'action
-    private List<String> precisions; // Les éventuels précisions sur les types de données attendus
-    private List<String> details; // La liste des mots de détail de la phrase
+    private String providerName;     // The provider name
+    private List<String> precisions; // Possible precisions about the expected datas
+    private List<String> details;    // List of details words that can be used
 
+    /**
+     * Default constructor
+     */
     public Action() {
         providerName = "";
         precisions = new LinkedList<>();
         details = new LinkedList<>();
     }
 
+    /**
+     * Constructor
+     * @param pProviderName The provider name
+     * @param pPrecisions Possible precisions about the expected datas
+     * @param pDetails  List of details words that can be used
+     */
     public Action(String pProviderName, List<String> pPrecisions, List<String> pDetails) {
         providerName = pProviderName;
         precisions = pPrecisions;
         details = pDetails;
     }
 
+    /**
+     * Accessor for the provider name
+     * @return  the provider name
+     */
     public String getProviderName() {
         return providerName;
     }
 
+    /**
+     * Accessor for the precisions list
+     * @return the precision list
+     */
     public List<String> getPrecisions() {
         return precisions;
     }
 
+    /**
+     * Accessor for the details list
+     * @return the details list
+     */
     public List<String> getDetails() {
         return details;
     }

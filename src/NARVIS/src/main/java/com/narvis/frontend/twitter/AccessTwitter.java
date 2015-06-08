@@ -32,9 +32,8 @@ import twitter4j.*;
 import twitter4j.auth.AccessToken;
 
 /**
- * TODO : REFACTOR AND SECURISE
  *
- * @author Alban
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class AccessTwitter implements IFrontEnd {
 
