@@ -74,7 +74,7 @@ public final class DetailsAnalyser {
                     wordsAssociations.put(w.getValue(), w.getInformationTypes().get(0));
 
                 }
-                hintList = w.getHints();
+                hintList = new ArrayList<>(w.getHints());
             } else {
                 if (hintList.size() > 0) {
                     wordsAssociations.put(detail, hintList.get(0));
