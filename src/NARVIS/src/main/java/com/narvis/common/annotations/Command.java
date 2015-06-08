@@ -30,12 +30,16 @@ import java.lang.annotation.Target;
 
 /**
  *
- * @author puma
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Command {
 
+    /**
+     * Get the command name
+     * @return the command name
+     */
     String CommandName();
 
 }

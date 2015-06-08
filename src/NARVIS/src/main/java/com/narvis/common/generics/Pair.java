@@ -25,15 +25,20 @@ package com.narvis.common.generics;
 
 /**
  *
- * @author uwy
- * @param <T>
- * @param <U>
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
+ * @param <T> the first type of object
+ * @param <U> the secont type of object
  */
 public class Pair<T, U> {
 
     public final T item1;
     public final U item2;
 
+    /**
+     * Constructor
+     * @param item1 the first type of object for the pair
+     * @param item2 the second type of object for the pair
+     */
     public Pair(T item1, U item2) {
         this.item1 = item1;
         this.item2 = item2;

@@ -28,7 +28,7 @@ import java.util.List;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class StringExts {
 
@@ -83,6 +83,12 @@ public class StringExts {
         return retVal;
     }
 
+    /**
+     * Skip the first item
+     * @param items the item list
+     * @param count the size of the list
+     * @return the item list without the first element
+     */
     public static String[] skipFirst(String[] items, int count) {
         String[] retVal = new String[items.length - count];
         for (int i = count; i < items.length; i++) {
