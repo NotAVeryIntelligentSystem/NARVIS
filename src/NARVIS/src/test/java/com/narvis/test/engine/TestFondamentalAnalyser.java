@@ -1,3 +1,4 @@
+
 /*
  * The MIT License
  *
@@ -147,3 +148,6 @@ public class TestFondamentalAnalyser {
         }
     }
 }
+
+
+

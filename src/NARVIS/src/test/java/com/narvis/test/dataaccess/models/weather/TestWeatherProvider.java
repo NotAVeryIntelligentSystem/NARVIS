@@ -5,6 +5,9 @@
  */
 package com.narvis.test.dataaccess.models.weather;
 
+import com.narvis.dataaccess.exception.NoDataException;
+import com.narvis.dataaccess.exception.NoValueException;
+import com.narvis.dataaccess.exception.ProviderException;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.dataaccess.models.conf.ApiKeys;
 import com.narvis.dataaccess.weather.OpenWeatherMapPortal;
@@ -34,7 +37,7 @@ public class TestWeatherProvider {
         weatherPortal.getData("weather", "city");
     }
 
-    @Test
+    @Test(expected = NoValueException.class)
     public void testGetDataWithShittyData() throws Exception {
 
         ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../tests/weather"));
@@ -42,7 +45,7 @@ public class TestWeatherProvider {
 
         Map<String, String> details = new HashMap<>();
 
-        details.put("city", "fdhdfhgf");
+        details.put("location", "fdhdfhgf");
 
         String result = weatherPortal.getDataDetails(details, "");
 
@@ -57,7 +60,7 @@ public class TestWeatherProvider {
         OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(conf);
 
         Map<String, String> details = new HashMap<>();
-        details.put("city", "nimes");
+        details.put("location", "nimes");
 
         String result = weatherPortal.getDataDetails(details, "");
 
@@ -67,18 +70,35 @@ public class TestWeatherProvider {
 
     }
 
-    @Test
+    @Test(expected = NoValueException.class)
     public void testGetDataWithShittyCommand() throws Exception {
 
         ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../tests/weather"));
         OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(conf);
 
         Map<String, String> details = new HashMap<>();
-        details.put("city", "nimes");
+        details.put("location", "nimes");
 
         String result = weatherPortal.getDataDetails(details, "gfdghdfhg");
 
         Assert.assertEquals("Sorry guy I can't help you", result);
     }
 
+    @Test( expected = NoValueException.class )
+    public void testWithNewZealandCity() throws ProviderException {
+        
+        ModuleConfigurationDataProvider conf = new ModuleConfigurationDataProvider(new File("../../tests/weather"));
+        OpenWeatherMapPortal weatherPortal = new OpenWeatherMapPortal(conf);
+
+        Map<String, String> details = new HashMap<>();
+        details.put("Taumatawhakatangihangakoauauotamateaturipukakapikimaungahoronukupokaiwhenuakitanatahu", "location");
+        
+        String result = weatherPortal.getDataDetails(details, "");
+
+        Pattern p = Pattern.compile("The temperature in (([A-Z]*)|([a-z]*))* is ([0-9]*\\.[0-9]*)°C and the cloud percentage is ([0-9]*\\.[0-9])%");
+        
+        
+        Assert.assertTrue(result.matches(p.pattern()));
+        
+    }
 }

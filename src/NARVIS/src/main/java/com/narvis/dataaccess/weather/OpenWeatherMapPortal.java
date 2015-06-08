@@ -156,7 +156,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
                     } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                         //The user came to the wrong methodhood, we quit
                         return null;
-                    }
+                    } 
                 }
             }
 
@@ -204,9 +204,8 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
         }
 
         String wantedAnswer = "";
-        //If the user asked for nothing special, we pick the default answer
-        if (keywords.length == 0) {
 
+        if (keywords[0].length() == 0) { 
             wantedAnswer = DEFAULT_ANSWER;
         } else if (keywords[0] != null) {
 
@@ -252,7 +251,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
 
                 String value = CallMethodByCommand(param);
                 if (value == null) {
-                    throw new NoValueException(OpenWeatherMapPortal.class, param, this._confProvider.getErrorsLayout().getData("general"));
+                    throw new NoValueException(OpenWeatherMapPortal.class, param, this._confProvider.getErrorsLayout().getData(param));
 
                 } else {
 
@@ -273,6 +272,11 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
 
     private String lookForValueLocation(Map<String, String> details) {
 
+        
+        if( details.containsKey(this.LOCATION_STRING) ) {
+            return details.get(this.LOCATION_STRING);
+        }
+        
         for (Map.Entry<String, String> entry : details.entrySet()) {
 
             if (entry.getValue().equals(LOCATION_STRING)) {
