@@ -25,7 +25,7 @@ package com.narvis.engine.exception;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class NoDetailsException extends EngineException {
 

@@ -25,7 +25,7 @@ package com.narvis.common.tools.reflection;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class FactoryException extends Exception {
 

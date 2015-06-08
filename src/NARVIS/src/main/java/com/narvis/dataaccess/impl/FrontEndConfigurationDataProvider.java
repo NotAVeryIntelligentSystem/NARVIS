@@ -38,7 +38,7 @@ import java.io.File;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public final class FrontEndConfigurationDataProvider implements IDataProvider {
 
@@ -59,6 +59,12 @@ public final class FrontEndConfigurationDataProvider implements IDataProvider {
     private final ModuleConf conf;
     private final ModuleErrors errorsLayout;
 
+    
+    /**
+     * Default constructor
+     * @param frontendFolder Frontend folder file
+     * @throws ProviderException 
+     */
     public FrontEndConfigurationDataProvider(File frontendFolder) throws ProviderException {
         this.moduleFolder = frontendFolder;
         try {
@@ -78,22 +84,42 @@ public final class FrontEndConfigurationDataProvider implements IDataProvider {
 
     }
 
+    /**
+     * Accessor
+     * @return Name
+     */
     public String getName() {
         return this.moduleFolder.getName();
     }
 
+    /**
+     * Accessor
+     * @return API Key
+     */
     public ApiKeys getApiKeys() {
         return this.apiKeys;
     }
 
+    /**
+     * Accessor
+     * @return Module Conf
+     */
     public ModuleConf getConf() {
         return this.conf;
     }
 
+    /**
+     * Accessor
+     * @return Module Errors
+     */
     public ModuleErrors getErrorsLayout() {
         return this.errorsLayout;
     }
 
+    /**
+     * Save the files
+     * @throws PersistException 
+     */
     public void persist() throws PersistException {
         try {
             XmlFileAccess.toFile(this.apiKeys, new File(new File(this.moduleFolder, CONF_FOLDER_NAME), API_KEY_FILE_NAME));

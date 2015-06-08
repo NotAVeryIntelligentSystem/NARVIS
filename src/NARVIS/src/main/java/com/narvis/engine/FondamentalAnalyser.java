@@ -40,8 +40,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 /**
- * Module permettant d'analyser des phrases parsées au préalable afin de
- * sélectionner le module qui permettra de répondre à la demande
+ * 
+ * Analysed parsed sentences to identify the module that could answer the demand
  *
  * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
@@ -105,16 +105,12 @@ public class FondamentalAnalyser {
 
         /* If no action is found */
         if (action != null) {
-            /* Récupère le nom de provider correspondant au noeud action */
             providerName = action.getProviderName();
 
-            /* Récupère les précisions correspondants au noeud action */
             askFor = action.getAskFor();
-
-            /* Créé une action avec le contenu du noeud action trouvé */
+            
             implAction = new Action(providerName, askFor, details);
-
-            /* Sinon, Reset de toutes les valeurs */
+            
         } else {
             providerName = "";
             askFor = null;
@@ -126,12 +122,10 @@ public class FondamentalAnalyser {
     }
 
     /**
-     * Recherche le provider et les informations attendues en fonction de la
-     * phrase en entrée.
-     *
-     * @param pParsedSentence : La phrase ayant préalablement été parsée
-     * @return Retourne l'action correspondant à la phrase, ou NULL si aucune
-     * n'est trouvée.
+     * Search the provider and the expected informations depending from the parsed sentence
+     * 
+     * @param pParsedSentence the parsed sentence, a list of words
+     * @return The finded action, or NULL otherwise
      * @throws com.narvis.dataaccess.exception.NoDataException
      * @throws com.narvis.engine.exception.NoActionException
      * @throws com.narvis.engine.exception.NoSentenceException
@@ -244,7 +238,7 @@ public class FondamentalAnalyser {
             }
         }
 
-        /* Si aucune action n'a été trouvée, on recherche une action sur le noeud courrant */
+        /* If no action is found, we look at the actions of the current node */
         if (action == null) {
             final List<ActionNode> actions = wordNode.getActions();
 
@@ -257,14 +251,18 @@ public class FondamentalAnalyser {
     }
 
     /**
-     * Enregistre l'état des routes dans le fichier XML
-     *
+     * Save the routes in the database
+     * 
      * @throws com.narvis.dataaccess.exception.PersistException
      */
     public void saveRoutes() throws PersistException {
         routesProvider.persist();
     }
 
+    /**
+     * Accessor for the routes provider
+     * @return the route provider
+     */
     public IDataModelProvider<RouteNode> getRoutesProvider() {
         return this.routesProvider;
     }

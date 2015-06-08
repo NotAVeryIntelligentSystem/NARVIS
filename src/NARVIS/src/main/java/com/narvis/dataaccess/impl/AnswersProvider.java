@@ -40,7 +40,7 @@ import java.util.Map;
  * Apply the final construction of the answer. Get Data need 1: The level of
  * politness In details accepted parameters are : sentence -> sentence
  *
- * @author puma
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class AnswersProvider implements IDataProviderDetails, IAnswerProvider {
 
@@ -55,11 +55,23 @@ public class AnswersProvider implements IDataProviderDetails, IAnswerProvider {
     private final static int NEUTRAL_POLITNESS_LEVEL = 2;
     private final static int MAX_POLITNESS_LEVEL = 3;
 
+    /**
+     * Constructor
+     * @param confProvider ModuleConf reference
+     */
     public AnswersProvider(ModuleConfigurationDataProvider confProvider) {
 
         this._confProvider = confProvider;
     }
 
+    /**
+     * Get the details for an array of strings
+     * @param details 
+     * @param keywords 
+     * @return return the conrespondant detail
+     * @throws IllegalKeywordException
+     * @throws ProviderException 
+     */
     @Override
     public String getDataDetails(Map<String, String> details, String... keywords) throws IllegalKeywordException, ProviderException {
 
@@ -90,6 +102,14 @@ public class AnswersProvider implements IDataProviderDetails, IAnswerProvider {
 
     }
 
+    
+    /**
+     * build and return a map of parameters=>details
+     * @param details map of details
+     * @param listOfParams list of parameters
+     * @return a map of parameters=>details
+     * @throws NoValueException 
+     */
     @Override
     public Map<String, String> buildParamsToValueMap(Map<String, String> details, List<String> listOfParams) throws NoValueException {
 

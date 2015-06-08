@@ -33,13 +33,17 @@ import java.util.logging.Logger;
 /**
  * Execute
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class Executer implements AutoCloseable {
 
     private final BlockingQueue<Runnable> toExecute;
     private final Thread executionLoop;
 
+    /**
+     * Constructor
+     * @param name set the name of the thread
+     */
     public Executer(String name) {
         this.toExecute = new LinkedBlockingQueue<>();
         this.executionLoop = new Thread(name) {
@@ -57,11 +61,21 @@ public class Executer implements AutoCloseable {
         };
     }
 
+    /**
+     * Start the thread
+     */
     public void start() {
         this.executionLoop.start();
 
     }
 
+    /**
+     * add an executable with a specific type of object to the pile of the executor
+     * @param <T> type of object to thread
+     * @param executable runnable executable
+     * @return the object
+     * @throws ExecuterException 
+     */
     public <T> T addToExecute(RunnableFuture<T> executable) throws ExecuterException {
         try {
             this.toExecute.put(executable);
@@ -71,6 +85,11 @@ public class Executer implements AutoCloseable {
         }
     }
 
+    /**
+     * add an executable to the pile of the executor
+     * @param executable runnable executable
+     * @throws ExecuterException 
+     */
     public void addToExecute(Runnable executable) throws ExecuterException {
         try {
             this.toExecute.put(executable);
@@ -79,6 +98,10 @@ public class Executer implements AutoCloseable {
         }
     }
 
+    /**
+     * Interupt the execution
+     * @throws Exception 
+     */
     @Override
     public void close() throws Exception {
         this.executionLoop.interrupt();

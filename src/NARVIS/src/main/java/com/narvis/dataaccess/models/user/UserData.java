@@ -29,7 +29,7 @@ import org.simpleframework.xml.ElementMap;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class UserData {
 

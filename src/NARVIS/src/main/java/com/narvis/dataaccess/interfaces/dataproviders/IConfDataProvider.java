@@ -25,7 +25,7 @@ package com.narvis.dataaccess.interfaces.dataproviders;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public interface IConfDataProvider extends IDataProvider {
 

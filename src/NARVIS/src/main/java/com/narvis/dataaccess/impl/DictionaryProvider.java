@@ -33,13 +33,18 @@ import java.io.File;
 
 /**
  *
- * @author Zack
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class DictionaryProvider implements IDataModelProvider<Dictionary> {
 
     private final Dictionary dictionary;
     private final ModuleConfigurationDataProvider conf;
 
+    /**
+     * Default constructor
+     * @param conf ModuleConfigurationDataProvider
+     * @throws ProviderException 
+     */
     public DictionaryProvider(ModuleConfigurationDataProvider conf) throws ProviderException {
         this.conf = conf;
         try {
@@ -50,6 +55,12 @@ public class DictionaryProvider implements IDataModelProvider<Dictionary> {
         }
     }
 
+    /**
+     * set the dictionary data path
+     * @return return the path of the dictionary
+     * @throws IllegalKeywordException
+     * @throws NoDataException 
+     */
     private String getDictionaryDataPath() throws IllegalKeywordException, NoDataException {
         return this.conf.getData("Conf", "DictionaryDataPath");
     }

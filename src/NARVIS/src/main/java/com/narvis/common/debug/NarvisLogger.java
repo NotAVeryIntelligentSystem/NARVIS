@@ -30,7 +30,7 @@ import java.util.logging.*;
 
 /**
  *
- * @author Zack
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class NarvisLogger {
 
@@ -38,31 +38,54 @@ public class NarvisLogger {
     private static NarvisLogger INSTANCE = null;
 
     /**
-     * Constructeur privé
+     * Private constructor
      */
     private final Logger logger;
-
+    
     private NarvisLogger() {
         this.logger = Logger.getGlobal();
 
     }
-
+    
+    /**
+     * Return the logger
+     * @return 
+     */
     public Logger getLogger() {
         return this.logger;
     }
 
+    /**
+     * Log an "Info"
+     * @param msg The information you want to log
+     */
     public static void logInfo(String msg) {
         getInstance().getLogger().log(Level.INFO, msg);
     }
 
+    /**
+     * Log an "Exception"
+     * @param ex The exception you want to log
+     */
     public static void logException(Throwable ex) {
         getInstance().getLogger().log(Level.SEVERE, "Nothing provided", ex);
     }
 
+    /**
+     * Log an "Exception" and attach a particular level
+     * @param ex The exception you want to log
+     * @param level the Level of the log
+     */
     public static void logException(Level level, Throwable ex) {
         getInstance().getLogger().log(level, "Nothing provided", ex);
     }
 
+    /**
+     * Log an "Exception" 
+     * @param ex The exception you want to log
+     * @param msg 
+     * @param level the Level of the log
+     */
     public static void logException(Level level, String msg, Throwable ex) {
         getInstance().getLogger().log(level, msg, ex);
     }

@@ -54,7 +54,7 @@ import java.util.regex.Pattern;
  * News provider, To get the Data, call GetDataDetails() with the city name in
  * the details
  *
- * @author puma
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class NewsProvider implements IDataProviderDetails, IAnswerProvider {
 

@@ -36,7 +36,7 @@ import java.io.File;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class UserDataProvider implements IDataModelProvider<UsersData> {
 

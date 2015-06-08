@@ -28,17 +28,26 @@ import java.io.FileFilter;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class FileNameFileFilter implements FileFilter {
 
     private final String fileName;
 
+    /**
+     * Constructor
+     * @param fileName the filename you want to filter
+     */
     public FileNameFileFilter(String fileName) {
         assert fileName != null && !fileName.isEmpty() : "File name given is null or empty";
         this.fileName = fileName;
     }
 
+    /**
+     * check the pathname
+     * @param pathname pathname of the file
+     * @return true if it's a file & if the file exist.
+     */
     @Override
     public boolean accept(File pathname) {
         return pathname.isFile() && this.fileName.equals(pathname.getName());

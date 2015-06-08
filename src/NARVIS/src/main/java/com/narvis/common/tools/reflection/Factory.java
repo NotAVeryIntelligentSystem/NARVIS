@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class Factory {
 

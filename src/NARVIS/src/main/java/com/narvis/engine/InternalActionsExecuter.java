@@ -38,11 +38,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
- * @author Zack
+ * Execute internal actions that a specifics to the narvis engine
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
-
-
 public class InternalActionsExecuter {
 
     NarvisEngine narvisEngine;
@@ -57,8 +55,8 @@ public class InternalActionsExecuter {
      * Guide NARVIS to choose the right internal action.
      *
      * @param action : The action to execute
-     * @param detailsTypes
-     * @return The answer
+     * @param detailsTypes Map that contain details in format key = detail; value = type; (ex: "london" => "location") 
+     * @return The answer made by the choosen action
      * @throws com.narvis.engine.exception.EngineException
      * @throws com.narvis.dataaccess.exception.ProviderException
      */
@@ -85,6 +83,13 @@ public class InternalActionsExecuter {
         return answer;
     }
 
+    /**
+     * Remove a user informations from the database
+     * @param detailsTypes Map that contain details in format key = detail; value = type; And more specificly the user name (ex: "Zack" => "username")
+     * @return The success answer
+     * @throws NoDataException
+     * @throws PersistException 
+     */
     public String forgetUser(Map<String, String> detailsTypes) throws NoDataException, PersistException {
         String successAnswer = "Okay, good by";
 
@@ -106,8 +111,8 @@ public class InternalActionsExecuter {
     /**
      * Learn the location of a user
      *
-     * @param detailsTypes
-     * @return The success answer if the action has succesfuly
+     * @param detailsTypes Map that contain details in format key = detail; value = type; And more specificly the user location (ex: "london" => "location")
+     * @return The success answer if the action was succesfuly executed
      * @throws com.narvis.dataaccess.exception.NoDataException
      * @throws com.narvis.engine.exception.EngineException
      * @throws com.narvis.dataaccess.exception.PersistException
@@ -151,7 +156,7 @@ public class InternalActionsExecuter {
     /**
      * Search in the map if there is a key that has for value "location"
      *
-     * @param details
+     * @param details Map that contain details in format key = detail; value = type; And more specificly a location (ex: "london" => "location")
      * @return The key that correspond, or null if there is none
      */
     private String lookForValueLocation(Map<String, String> details) {
@@ -189,8 +194,8 @@ public class InternalActionsExecuter {
     /**
      * Learn the similarity between sentences that are passed in details.
      *
-     * @param details
-     * @return The success answer if the action has succesfuly
+     * @param details Map that contain details in format key = detail; value = type; And more specificly multiple sentences (ex: "give me the weather" => "")
+     * @return The success answer if the action was succesfuly executed
      * @throws EngineException
      * @throws NoDataException
      * @throws PersistException
@@ -339,7 +344,8 @@ public class InternalActionsExecuter {
 
             if (!isFound && jokerWordNode != null && isJokerWord(currentSentenceWord)) {
                 createPath(jokerWordNode, parsedSentence, action);
-            } /* Si aucun noeud enfant ne correspond au mot, on créé un nouveau noeud */ else if (!isFound) {
+            } /* If no child match the current word, we creat a new one */
+            else if (!isFound) {
                 WordNode newWordNode;
 
                 if (!isJokerWord(currentSentenceWord)) {
@@ -354,7 +360,7 @@ public class InternalActionsExecuter {
             }
         } else {
 
-            /* On fois qu'on a finit de générer le chemin, on ajoute l'action à la fin */
+            /* When we finished the path generation, we add the action at the end */
             ActionNode newActionNode = new ActionNode(action.getProviderName());
             newActionNode.setAskFor(action.getPrecisions());
 
@@ -362,6 +368,11 @@ public class InternalActionsExecuter {
         }
     }
 
+    /**
+     * Check if a word is a joker word, that's mean it's a word that can be replaced. (ex: "something")
+     * @param word The word to analyser
+     * @return TRUE if it's a joker word, else FALSE
+     */
     private boolean isJokerWord(String word) {
         return word.equals("something") || word.equals("someone");
     }

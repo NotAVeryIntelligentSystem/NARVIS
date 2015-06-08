@@ -55,7 +55,7 @@ import org.json.JSONException;
  *
  *
  *
- * @author puma
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvider {
 

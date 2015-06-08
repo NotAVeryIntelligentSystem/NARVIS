@@ -39,7 +39,7 @@ import java.util.Map.*;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLINs
  */
 public class ConfigurationDataProvider implements IDataProvider {
 
@@ -56,6 +56,11 @@ public class ConfigurationDataProvider implements IDataProvider {
     private final Map<String, ModuleConfigurationDataProvider> modulesConfs;
     private final Map<String, FrontEndConfigurationDataProvider> frontEndConfs;
 
+    /**
+     * Constructor
+     * @throws XmlFileAccessException
+     * @throws Exception 
+     */
     public ConfigurationDataProvider() throws XmlFileAccessException, Exception {
         this.modulesConfs = new HashMap<>();
         this.frontEndConfs = new HashMap<>();
@@ -76,7 +81,11 @@ public class ConfigurationDataProvider implements IDataProvider {
         }
     }
 
-    // Returns the MODULES not the configuration 
+    /**
+     * Returns the dataproviders MODULES not the configuration 
+     * @return the map of modules from names
+     * @throws FactoryException 
+     */
     public Map<String, IDataProvider> createDataProviders() throws FactoryException {
         Map<String, IDataProvider> retVal = new HashMap<>();
         for (Entry<String, ModuleConfigurationDataProvider> entry : this.modulesConfs.entrySet()) {
@@ -84,7 +93,11 @@ public class ConfigurationDataProvider implements IDataProvider {
         }
         return retVal;
     }
-
+    /**
+     * Returns the dataproviders Frontend not the configuration 
+     * @return the map of FrontEnd from names
+     * @throws FactoryException 
+     */
     public Map<String, IFrontEnd> createFrontEnds() throws FactoryException {
         Map<String, IFrontEnd> retVal = new HashMap<>();
         for (Entry<String, FrontEndConfigurationDataProvider> entry : this.frontEndConfs.entrySet()) {

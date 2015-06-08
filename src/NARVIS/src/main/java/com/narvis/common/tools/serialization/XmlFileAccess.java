@@ -30,7 +30,7 @@ import org.simpleframework.xml.core.*;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class XmlFileAccess {
 

@@ -28,17 +28,26 @@ import java.io.FileFilter;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class FolderNameFileFilter implements FileFilter {
 
     private final String folderName;
 
+    /**
+     * Constructor
+     * @param folderName the name of the folder you want to filter
+     */
     public FolderNameFileFilter(String folderName) {
         assert folderName != null && !folderName.isEmpty() : "Folder name given is null or empty";
         this.folderName = folderName;
     }
 
+    /**
+     * check the pathname
+     * @param pathname pathname of the file
+     * @return true if it's a directory & if the directory exist.
+     */
     @Override
     public boolean accept(File pathname) {
         return pathname.isDirectory() && folderName.equals(pathname.getName());

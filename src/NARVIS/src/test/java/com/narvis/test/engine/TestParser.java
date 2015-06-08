@@ -37,7 +37,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author Zack
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class TestParser {
 

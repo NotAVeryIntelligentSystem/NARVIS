@@ -25,7 +25,7 @@ package com.narvis.common.tools.executer;
 
 /**
  *
- * @author uwy
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class ExecuterException extends Exception {
 
@@ -45,7 +45,12 @@ public class ExecuterException extends Exception {
     public ExecuterException(String msg) {
         super(msg);
     }
-
+    /**
+     * Constructs an instance of <code>ExecuterException</code> with the
+     * specified detail message.
+     *
+     * @param msg the detail message.
+     */
     public ExecuterException(Exception ex) {
         super(ex);
     }

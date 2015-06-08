@@ -30,7 +30,7 @@ import org.simpleframework.xml.ElementMap;
 
 /**
  *
- * @author Zack
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class ModuleErrors implements IDataProvider {
 
