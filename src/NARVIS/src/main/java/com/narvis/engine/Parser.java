@@ -81,6 +81,9 @@ public class Parser {
         parsedMessage.removeAll(wordsToStrings(ignoredWords));
         
         parsedMessage = replaceUndescoreBySpace(parsedMessage);
+        
+        /* Remove empty words in word list */
+        parsedMessage.removeAll(Arrays.asList("", null));
         return parsedMessage;
     }
     
