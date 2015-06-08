@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.narvis.dataaccess.weather.annotations;
+package com.narvis.dataaccess.exception.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

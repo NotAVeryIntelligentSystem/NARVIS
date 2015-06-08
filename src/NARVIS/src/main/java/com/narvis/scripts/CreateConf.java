@@ -54,6 +54,8 @@ public class CreateConf {
             createRoutesModuleFolder(modulesFolder);
             createDictionaryModuleFolder(modulesFolder);
             createUsersModuleFolder(modulesFolder);
+            createNewsConfFolder(modulesFolder);
+            
             // Front ends
             File frontendsFolder = createFolder(baseFolder, ConfigurationDataProvider.FRONTENDS_FOLDER_NAME);
             createTwitterFrontEndFolder(frontendsFolder);
@@ -80,6 +82,9 @@ public class CreateConf {
         XmlFileAccess.toFile(myTwitterConf.createApiKeys(), new File(confModuleFolder, FrontEndConfigurationDataProvider.API_KEY_FILE_NAME));
     }
 
+    
+    
+    
     /* Console */
     public static void createConsoleFrontEndFolder(File frontendsFolder) throws IOException, XmlFileAccessException {
         ConsoleConf myConsoleConf = new ConsoleConf();
@@ -187,6 +192,25 @@ public class CreateConf {
         XmlFileAccess.toFile(myWeatherConf.createAnswerLayout(), new File(layoutFolder, ModuleConfigurationDataProvider.ANSWERS_FILE_NAME));
         XmlFileAccess.toFile(myWeatherConf.createModuleConf(), new File(confModuleFolder, ModuleConfigurationDataProvider.MODULE_CONF_FILE_NAME));
         XmlFileAccess.toFile(myWeatherConf.createApiKeys(), new File(confModuleFolder, ModuleConfigurationDataProvider.API_KEY_FILE_NAME));
+    }
+    
+    
+    public static void createNewsConfFolder(File newsFolder) throws IOException, XmlFileAccessException {
+        
+        
+        NewsConf newsConf = new NewsConf();
+        
+        File moduleFolder = createFolder(newsFolder, UsersConf.MODULE_NAME);
+        
+        File confModuleFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.CONF_FOLDER_NAME);
+        File layoutFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.LAYOUTS_FOLDER_NAME);
+        File dataFolder = createFolder(moduleFolder, ModuleConfigurationDataProvider.DATA_FOLDER_NAME);
+        
+        
+        XmlFileAccess.toFile(newsConf.createErrorsLayout(), new File(layoutFolder, ModuleConfigurationDataProvider.ERRORS_FILE_NAME));
+        XmlFileAccess.toFile(newsConf.createAnswerLayout(), new File(layoutFolder, ModuleConfigurationDataProvider.ANSWERS_FILE_NAME));
+        XmlFileAccess.toFile(newsConf.createModuleConf(), new File(confModuleFolder, ModuleConfigurationDataProvider.MODULE_CONF_FILE_NAME));
+        
     }
 
     public static File createFolder(String folderPath) throws IOException {

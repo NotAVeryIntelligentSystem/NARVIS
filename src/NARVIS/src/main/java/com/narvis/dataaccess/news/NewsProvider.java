@@ -28,18 +28,25 @@ import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.exception.NoValueException;
 import com.narvis.dataaccess.exception.ProviderException;
+import com.narvis.dataaccess.exception.annotations.Command;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.dataaccess.interfaces.IAnswerProvider;
 import com.narvis.dataaccess.interfaces.dataproviders.IDataProviderDetails;
+import com.narvis.engine.AnswerBuilder;
+import com.narvis.engine.interfaces.IAnswerBuilder;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -52,18 +59,21 @@ import java.util.regex.Pattern;
 public class NewsProvider implements IDataProviderDetails, IAnswerProvider {
 
     private SyndFeed _inputFeed;
+    private SyndEntry _news;
     private ModuleConfigurationDataProvider _confProvider;
-    private URL NEWS_FEED_URL;
     private String LOCATION_STRING = "location";
+    private String RSS_NEWS_URL = "http://feeds.reuters.com/Reuters/worldNews";
+    private String DEFAULT_COMMAND = "news";
 
     public NewsProvider(ModuleConfigurationDataProvider confProvider) throws ProviderException {
 
         try {
-            this.NEWS_FEED_URL = new URL("http://feeds.reuters.com/Reuters/worldNews");
+            
+            URL newsUrl = new URL(RSS_NEWS_URL);
 
             this._confProvider = confProvider;
             SyndFeedInput input = new SyndFeedInput();
-            this._inputFeed = input.build(new XmlReader(NEWS_FEED_URL));
+            this._inputFeed = input.build(new XmlReader(newsUrl));
 
         } catch (MalformedURLException | IllegalArgumentException | FeedException ex) {
 
@@ -77,9 +87,6 @@ public class NewsProvider implements IDataProviderDetails, IAnswerProvider {
 
     }
 
-
-    
-    
 
     /**
      * Get the city in the details provided by the caller
@@ -116,7 +123,6 @@ public class NewsProvider implements IDataProviderDetails, IAnswerProvider {
         
         //We did not find it return null the exception will be thrown later
         return null;
-
     }
     
     
@@ -141,49 +147,152 @@ public class NewsProvider implements IDataProviderDetails, IAnswerProvider {
         
     }
     
-    /**
-     * Format the news the construct a good old string
-     * @param news the news to format
-     * @return the formated string
-     */
-    private String formatNews(SyndEntry news) {
-        
-        return "Titre : " + news.getTitle() + "\nLien : " + news.getLink();
-         
-    }
 
     @Override
     public Map<String, String> buildParamsToValueMap(Map<String, String> details, List<String> listOfParams) throws NoValueException {
         
         
+        Map<String, String> paramsToValue = new HashMap<>();
+
+        //To gain time we get all the details and their value
+        paramsToValue.putAll(details);
+
+        for (String param : listOfParams) {
+
+            //Make sur we don't already have the value of the params
+            if (!paramsToValue.containsKey(param)) {
+
+                String value = CallMethodByCommand(param);
+                if (value == null) {
+                    throw new NoValueException(NewsProvider.class, param, this._confProvider.getErrorsLayout().getData("general"));
+
+                } else {
+
+                    paramsToValue.put(param, value);
+
+                }
+            }
+
+        }
+        
         //Every details we need should be in the details provided by the caller !
-        return details;
+        return paramsToValue;
         
     }
 
     @Override
     public String getDataDetails(Map<String, String> detailsToValue, String... keywords) throws ProviderException, NoValueException {
     
-        String askedCity = findCityInDetails(detailsToValue);
+        String askedCity = findCityInDetails(detailsToValue).toLowerCase(Locale.FRENCH);
         
-        if( detailsToValue == null || askedCity == null ) {
-            throw new NoValueException(NewsProvider.class ,"No value found for location", "engine");
+        if( detailsToValue == null || askedCity == null || keywords == null || keywords.length < 1 || keywords[0] == null ) {
+            throw new IllegalKeywordException("Incorrect parameters for getDetails methods", "engine");
         }
         
+        String wantedAnswer = "";
+        if( keywords[0].equals("") ) {
+            wantedAnswer = DEFAULT_COMMAND;
+        }else {
+            wantedAnswer = keywords[0];
+        }
+        
+        this._news = findNewsForCity(askedCity);
+        
+        if( this._news == null ) {
+            return this._confProvider.getAnswersLayout().getData("error");
+        }
+        
+        
+        IAnswerBuilder answerBuilder = new AnswerBuilder();
+        String answerFromXml = this._confProvider.getAnswersLayout().getData(wantedAnswer);
+
+        //Can not find the answer from the xml something went wrong we quit
+        if (answerFromXml == null) {
+            throw new NoValueException(NewsProvider.class, "Command not supported", this._confProvider.getErrorsLayout().getData("noanswers"));
+        }
+
+        List<String> listOfParams = answerBuilder.getListOfRequiredParams(answerFromXml);
+        Map<String, String> paramsToValues = buildParamsToValueMap(detailsToValue, listOfParams);
+
+        return answerBuilder.buildAnswer(paramsToValues, answerFromXml);
+        
+        
+    }
+
+
+    
+    private SyndEntry findNewsForCity(String city) {
+        
+        
+        //Try to find a news for the asked city
         for( SyndEntry news : this._inputFeed.getEntries() ) {
             
-            String currentCity = extractCityNameFromnews(news);
+            String currentCity = extractCityNameFromnews(news).toLowerCase(Locale.FRENCH);
             
-            if( currentCity.equals(askedCity) ) {
-                //Found a news for the asked city
-                return formatNews(news);
+            if( currentCity.equals(city) ) {
+                
+                return news;
+                
             }
         }
         
-        //Found nothing, we'll check for it laterr
-        throw new NoValueException(NewsProvider.class, "No news for city", "data");
+        //No news found
+        return null;
+        
+    } 
+    
+    @Command(CommandName = "link")
+    public String getLink() {
+        
+        return this._news.getLink();
         
     }
+    
+    @Command(CommandName = "title")
+    public String getTitle(){
+        
+        
+        return this._news.getTitle();
+    }
+    
+    
+    /**
+     * Call the method wich provide the answer for the given method
+     *
+     * @param command
+     * @return the return value of the called method
+     */
+    private String CallMethodByCommand(String command) {
+
+        if (command == null) {
+            return null;
+        }
+
+        Method[] methods = this.getClass().getMethods();
+
+        //Heizenberg is behind you...
+        for (Method meth : methods) {
+
+            Command[] comAnnotations = meth.getAnnotationsByType(Command.class);
+            for (Command comAnnot : comAnnotations) {
+                if (comAnnot.CommandName().equals(command)) {
+                    try {
+                        //Method found we call it
+                        return (String) meth.invoke(this);
+
+                    } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                        //The user came to the wrong methodhood, we quit
+                        return null;
+                    }
+                }
+            }
+
+        }
+
+        return null;
+
+    }
+    
     
 
     @Override

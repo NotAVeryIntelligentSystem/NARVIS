@@ -23,12 +23,12 @@
  */
 package com.narvis.scripts;
 
-import com.narvis.dataaccess.impl.UserDataProvider;
 import com.narvis.dataaccess.models.conf.ApiKeys;
 import com.narvis.dataaccess.models.conf.ModuleConf;
 import com.narvis.dataaccess.models.layouts.ModuleErrors;
 import com.narvis.dataaccess.models.user.UserData;
 import com.narvis.dataaccess.models.user.UsersData;
+import com.narvis.dataaccess.news.NewsProvider;
 
 /**
  *
@@ -36,8 +36,8 @@ import com.narvis.dataaccess.models.user.UsersData;
  */
 public class UsersConf {
     
-    public final static String MODULE_NAME = "Users";
-    public final static String MODULE_CLASS_PATH = UserDataProvider.class.getCanonicalName();
+    public final static String MODULE_NAME = "News";
+    public final static String MODULE_CLASS_PATH = NewsProvider.class.getCanonicalName();
     
     public final static String USERS_DATA_PATH = "usersdata.xml";
 

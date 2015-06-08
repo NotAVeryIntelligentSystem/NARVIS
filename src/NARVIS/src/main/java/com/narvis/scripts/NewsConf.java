@@ -21,42 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.test.dataaccess.conf.news;
+package com.narvis.scripts;
 
-import com.narvis.dataaccess.exception.ProviderException;
-import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
+import com.narvis.dataaccess.models.conf.ModuleConf;
+import com.narvis.dataaccess.models.layouts.ModuleAnswers;
+import com.narvis.dataaccess.models.layouts.ModuleErrors;
 import com.narvis.dataaccess.news.NewsProvider;
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import javax.print.attribute.HashAttributeSet;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author puma
  */
-public class TestNewsProvider {
+public class NewsConf {
+    
+    public final static String MODULE_CLASS_PATH = NewsProvider.class.getCanonicalName();
+    
+    public ModuleAnswers createAnswerLayout()
+    {
+        
+        ModuleAnswers retVal = new ModuleAnswers();
+        
+        retVal.getMap().put("news", "[title] link : [link]");
 
-    public TestNewsProvider() {
+        return retVal;
     }
-
-    @Test
-    public void testNewsForCity() throws ProviderException {
-
+    
+    public ModuleErrors createErrorsLayout()
+    {
         
-        ModuleConfigurationDataProvider confProvider = new ModuleConfigurationDataProvider(new File("../../release/modules/News"));
-        NewsProvider provider = new NewsProvider(confProvider);
-        
-        Map<String,String> details = new HashMap<>();
-        
-        details.put("mexico", "location");        
-        String response = provider.getDataDetails(details, "");
-        
-        
-        System.out.println(response);
-        
-        
+        ModuleErrors retVal = new ModuleErrors();
+        retVal.getMap().put("error", "No news for your city sorry guys !"); 
+        return retVal;
     }
+    
+    public ModuleConf createModuleConf() {
+        ModuleConf retVal = new ModuleConf();
+        retVal.setModuleClassPath(MODULE_CLASS_PATH);
+            
+        return retVal;
+    }
+    
 }
