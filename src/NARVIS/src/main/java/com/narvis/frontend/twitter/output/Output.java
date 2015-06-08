@@ -10,8 +10,10 @@ import com.narvis.common.extensions.StringExts;
 import com.narvis.dataaccess.impl.FrontEndConfigurationDataProvider;
 import com.narvis.frontend.MessageInOut;
 import com.narvis.frontend.interfaces.IOutput;
+import com.narvis.frontend.twitter.TwitterMessageInOut;
 import java.util.List;
 import twitter4j.Status;
+import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
@@ -20,59 +22,60 @@ import twitter4j.TwitterException;
  * @author Alban
  */
 public class Output implements IOutput {
+
     private static final int MAX_TWEET_LENGTH = 140;
     public String nameAPI = "Twitter";
     public String internalName = "nakJarvis";
     private final Twitter twitterLink;
-    private final String moduleName;
 
-    
     public Output(Twitter twitter, String moduleName) {
         this.twitterLink = twitter;
-        this.moduleName = moduleName;
     }
 
     @Override
     public void setOuput(MessageInOut m) {
         try {
-            for(String s : this.getTweetList(m)){
-                Status status = this.twitterLink.updateStatus(s);
+            for (String s : this.getTweetList(m)) {
+                //Status status = this.twitterLink.updateStatus(s);
+                StatusUpdate status = new StatusUpdate(s);
+                status.setInReplyToStatusId(((TwitterMessageInOut) m).getIdResponseTo());
+                this.twitterLink.updateStatus(status);
             }
         } catch (TwitterException ex) {
             NarvisLogger.logException(ex);
         }
     }
-    
+
     private String getAnswerTo(MessageInOut tweetOut) {
         return "@" + tweetOut.getAnswerTo().split(";")[0] + " "; // The space is here to avoid problems, also adding it here will help it be taken in consideration when calculating output size tweets
     }
-    
+
     private String[] putAtSymbol(String... tweeterPeople) {
-        for(int i = 0 ; i < tweeterPeople.length ; i++) {
+        for (int i = 0; i < tweeterPeople.length; i++) {
             tweeterPeople[i] = "@" + tweeterPeople[i];
         }
         return tweeterPeople;
     }
-    
+
     private String getCC(MessageInOut tweetOut) {
         String[] answerTo = tweetOut.getAnswerTo().split(";");
-        if(answerTo.length > 1) {
+        if (answerTo.length > 1) {
             return " cc " + String.join(" ", putAtSymbol(StringExts.skipFirst(tweetOut.getAnswerTo().split(";"), 1)));
         }
-        return "";        
+        return "";
     }
-   
-    public List<String> getTweetList(MessageInOut tweetOut){
+
+    public List<String> getTweetList(MessageInOut tweetOut) {
         String answerTo = this.getAnswerTo(tweetOut);
         String ccTo = this.getCC(tweetOut);
         // This is totally arbitrary and is intended to avoid MASS CC SPAM
-        if(answerTo.length() + ccTo.length() >= (MAX_TWEET_LENGTH / 2)) {
+        if (answerTo.length() + ccTo.length() >= (MAX_TWEET_LENGTH / 2)) {
             ccTo = "";
         }
         String appendMessage = " [...]";
-        List<String> retVal = StringExts.split(tweetOut.getContent(),  MAX_TWEET_LENGTH - (answerTo.length() + ccTo.length() + appendMessage.length()), appendMessage);
-        for(int i = 0 ; i < retVal.size() ; i++) {
-            retVal.set(i, answerTo + retVal.get(i) + ccTo) ;
+        List<String> retVal = StringExts.split(tweetOut.getContent(), MAX_TWEET_LENGTH - (answerTo.length() + ccTo.length() + appendMessage.length()), appendMessage);
+        for (int i = 0; i < retVal.size(); i++) {
+            retVal.set(i, answerTo + retVal.get(i) + ccTo);
         }
         return retVal;
     }

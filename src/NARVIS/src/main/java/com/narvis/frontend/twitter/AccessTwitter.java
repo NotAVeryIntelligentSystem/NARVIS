@@ -75,8 +75,8 @@ public class AccessTwitter implements IFrontEnd {
     public IOutput getOutput() {
         return this.output;
     }
-    
-    public FrontEndConfigurationDataProvider getConf(){
+
+    public FrontEndConfigurationDataProvider getConf() {
         return this.conf;
     }
 }

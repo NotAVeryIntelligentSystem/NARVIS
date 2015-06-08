@@ -41,6 +41,6 @@ public interface IAnswerProvider {
      * @return A Map containing the params and their values
      * @throws com.narvis.dataaccess.exception.NoValueException
      */
-    Map<String, String> buildParamsToValueMap(Map<String,String> details, List<String> listOfParams) throws NoValueException;
+    Map<String, String> buildParamsToValueMap(Map<String, String> details, List<String> listOfParams) throws NoValueException;
 
 }

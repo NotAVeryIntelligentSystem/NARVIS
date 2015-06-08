@@ -28,5 +28,6 @@ package com.narvis.dataaccess.interfaces.dataproviders;
  * @author uwy
  */
 public interface IConfDataProvider extends IDataProvider {
+
     public void setData(String... keywords);
 }

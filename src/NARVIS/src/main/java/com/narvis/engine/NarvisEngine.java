@@ -39,12 +39,15 @@ import com.narvis.engine.exception.NoSentenceException;
 import com.narvis.frontend.MessageInOut;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Nakou
  */
 public class NarvisEngine {
+
     private static NarvisEngine narvis;
 
     private final Parser parser;
@@ -72,28 +75,28 @@ public class NarvisEngine {
 
     public void start() {
         this.executer.start();
-        
+
         /**/
         // We starts all front ends
-        for(String frontEnd : this.metaDataProvider.getAvailableFrontEnds()) {
+        for (String frontEnd : this.metaDataProvider.getAvailableFrontEnds()) {
             this.metaDataProvider.getFrontEnd(frontEnd).start();
         }
         /**
-        
-        this.metaDataProvider.getFrontEnd("Console").start();
-        /**/
+         *
+         * this.metaDataProvider.getFrontEnd("Console").start(); /*
+         */
     }
 
     public void close() throws Exception {
         /**/
         // We stop all fronts ends
-        for(String frontEnd : this.metaDataProvider.getAvailableFrontEnds()) {
+        for (String frontEnd : this.metaDataProvider.getAvailableFrontEnds()) {
             this.metaDataProvider.getFrontEnd(frontEnd).close();
         }
         /**
-        this.metaDataProvider.getFrontEnd("Console").close();
-        /**/
-        
+         * this.metaDataProvider.getFrontEnd("Console").close(); /*
+         */
+
         this.executer.close();
     }
 
@@ -104,54 +107,46 @@ public class NarvisEngine {
             public void run() {
                 try {
                     brainProcess(lastMessage);
-                } catch (IllegalKeywordException ex) {
-                    NarvisLogger.logException(ex);
-                    onError(lastMessage, ex.getNarvisErrorMessage());
-                } catch (NoDataException ex) {
-                    NarvisLogger.logException(ex);
-                    onError(lastMessage, ex.getNarvisErrorMessage());
                 } catch (ProviderException ex) {
-                    NarvisLogger.logException(ex);
-                    onError(lastMessage, ex.getNarvisErrorMessage());
-                } catch (NoActionException | NoSentenceException ex) {
                     NarvisLogger.logException(ex);
                     onError(lastMessage, ex.getNarvisErrorMessage());
                 } catch (EngineException ex) {
                     NarvisLogger.logException(ex);
                     onError(lastMessage, ex.getNarvisErrorMessage());
-                } 
+                }
             }
         });
     }
-    
+
     private void onError(MessageInOut originalMessage, String message) {
         originalMessage.sendToOutput(message);
     }
 
-    private void brainProcess(MessageInOut message) throws ProviderException, EngineException{
+    private void brainProcess(MessageInOut message) throws ProviderException, EngineException {
         List<String> parsedSentence;
         Map<String, String> detailsTypes;
-        
+
         parsedSentence = parser.parse(message.getContent());
         Action action = fondamentalAnalyser.findAction(parsedSentence);
-        
+
         /* We get the user name from the list of users we have to answer to */
         String username = "";
         String[] answerTo = message.getAnswerTo().split(";");
-        if(answerTo.length > 0)
+        if (answerTo.length > 0) {
             username = answerTo[0];
-        
+        }
+
         detailsTypes = detailAnalyser.getDetailsTypes(action.getDetails(), username);
         IDataProvider provider = this.metaDataProvider.getDataProvider(action.getProviderName());
         String protoAnswer = "";
-        
+
         /* If the provider is NARVIS, we execute an internal action */
-        if(action.getProviderName().equals("narvis")){
+        if (action.getProviderName().equals("narvis")) {
             InternalActionsExecuter internalActionsExecuter = new InternalActionsExecuter(this);
             protoAnswer = internalActionsExecuter.executeInternalAction(action, detailsTypes);
-            
-        /* else, we did the classic way and get the provider that correspond to the action */
-        }else{
+
+            /* else, we did the classic way and get the provider that correspond to the action */
+        } else {
             String[] askForArray = (String[]) action.getPrecisions().toArray(new String[action.getPrecisions().size()]);
             if (provider instanceof IDataProviderDetails) {
                 protoAnswer = ((IDataProviderDetails) provider).getDataDetails(detailsTypes, askForArray);
@@ -162,24 +157,22 @@ public class NarvisEngine {
 
         /* We finaly put the proto answer returne by the provider at the end of the details map */
         detailsTypes.put("sentence", protoAnswer);
-        
+
         IDataProviderDetails answerBuilder = (IDataProviderDetails) this.metaDataProvider.getDataProvider("Answers");
         String finalAnswer = answerBuilder.getDataDetails(detailsTypes);
-        
+
         message.sendToOutput(finalAnswer);
     }
-    
-    public FondamentalAnalyser getFondamentalAnalyser()
-    {
+
+    public FondamentalAnalyser getFondamentalAnalyser() {
         return this.fondamentalAnalyser;
     }
-    
-    public Parser getParser()
-    {
+
+    public Parser getParser() {
         return this.parser;
     }
-    
-    public DetailsAnalyser getDetailsAnalyser(){
+
+    public DetailsAnalyser getDetailsAnalyser() {
         return this.detailAnalyser;
     }
 }

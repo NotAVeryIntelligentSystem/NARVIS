@@ -28,12 +28,13 @@ package com.narvis.engine.exception;
  * @author puma
  */
 public class EngineException extends Exception {
+
     private final String narvisErrorMessage;
 
     public String getNarvisErrorMessage() {
         return narvisErrorMessage;
     }
-    
+
     public EngineException(String msg, String narvisErrorMessage) {
         super(msg);
         this.narvisErrorMessage = narvisErrorMessage;

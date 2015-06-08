@@ -101,13 +101,12 @@ public class TestFondamentalAnalyser {
         expectedDetails.add("me");
         expectedDetails.add("in");
         expectedDetails.add("london");
-        
+
         List<String> expectedDetails2 = new LinkedList<>();
         expectedDetails2.add("please");
         expectedDetails2.add("me");
         expectedDetails2.add("in");
         expectedDetails2.add("london");
-
 
         List<String> expectedAskFor = new LinkedList<>();
         /**/
@@ -131,15 +130,14 @@ public class TestFondamentalAnalyser {
             assertArrayEquals(myAction.getPrecisions().toArray(), expectedAskFor.toArray());
 
             /* Test with a NULL value *
-            myAction = myFondamentalAnalyser.findAction(null);
-            assertNull(myAction);
-            /**/
+             myAction = myFondamentalAnalyser.findAction(null);
+             assertNull(myAction);
+             /**/
 
             /* Test with an empty sentence *
-            myAction = myFondamentalAnalyser.findAction(new LinkedList<String>());
-            assertNull(myAction);
-            /**/
-
+             myAction = myFondamentalAnalyser.findAction(new LinkedList<String>());
+             assertNull(myAction);
+             /**/
         } catch (SAXException ex) {
             fail(ex.getMessage());
         } catch (IOException ex) {

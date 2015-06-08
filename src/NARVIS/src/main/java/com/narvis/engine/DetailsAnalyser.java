@@ -53,9 +53,9 @@ public final class DetailsAnalyser {
     public Map<String, String> getDetailsTypes(List<String> details, String username) throws NoDataException {
         List<String> hintList = new ArrayList<>();
         boolean isTypeFinded = false;
-        
+
         Map<String, String> wordsAssociations = new HashMap<>();
-        
+
         for (String detail : details) {
             Word w = this.dictionary.getModel().getWordByValue(detail);
             isTypeFinded = false;
@@ -69,49 +69,45 @@ public final class DetailsAnalyser {
                 }
                 if (!isTypeFinded && hintList.size() > 0) {
                     wordsAssociations.put(w.getValue(), hintList.get(0));
-                    
-                } else if(!isTypeFinded && w.getInformationTypes().size() > 0){
+
+                } else if (!isTypeFinded && w.getInformationTypes().size() > 0) {
                     wordsAssociations.put(w.getValue(), w.getInformationTypes().get(0));
-                    
+
                 }
                 hintList = w.getHints();
             } else {
                 if (hintList.size() > 0) {
                     wordsAssociations.put(detail, hintList.get(0));
-                }else{
+                } else {
                     wordsAssociations.put(detail, "");
                 }
                 hintList.clear();
             }
         }
-        
+
         wordsAssociations.put(username, "username");
         addUsersData(username, wordsAssociations);
-        
+
         return wordsAssociations;
     }
-    
-    private void addUsersData(String username, Map<String, String> wordsAssociations) throws NoDataException{
+
+    private void addUsersData(String username, Map<String, String> wordsAssociations) throws NoDataException {
         UsersData usersData = this.usersDataProvider.getModel();
-        
+
         UserData userData;
-        
-        if((userData = usersData.getUser(username)) != null)
-        {
-            for(Entry<String, String> data : userData.getAllData().entrySet())
-            {
+
+        if ((userData = usersData.getUser(username)) != null) {
+            for (Entry<String, String> data : userData.getAllData().entrySet()) {
                 /* If we can't find a type of information in details and we know it with the user data,
-                   we put it in the details list */
-                if(!wordsAssociations.containsValue(data.getKey()))
-                {
+                 we put it in the details list */
+                if (!wordsAssociations.containsValue(data.getKey())) {
                     wordsAssociations.put(data.getValue(), data.getKey());
                 }
             }
         }
     }
-    
-    public IDataModelProvider<UsersData> getUserDataProvider()
-    {
+
+    public IDataModelProvider<UsersData> getUserDataProvider() {
         return this.usersDataProvider;
     }
 }

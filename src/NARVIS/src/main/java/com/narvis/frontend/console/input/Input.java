@@ -21,48 +21,50 @@ import java.util.logging.Level;
  * @author Nakou
  */
 public class Input implements IInput {
+
     private final static int REFRESH_PERIOD_SECOND = 1;
 
     private final AccessConsole accessConsole;
-    
+
     private final String moduleName;
-    private final Timer listenloop;
-    
+    private final Thread listenloop;
+
     public Input(String moduleName, AccessConsole accessConsole) {
         this.moduleName = moduleName;
         this.accessConsole = accessConsole;
-        this.listenloop = new Timer("Console front end");
+        this.listenloop = new Thread("Console front end") {
+            @Override
+            public void run() {
+                while (true) {
+                    Scanner sc = new Scanner(System.in);
+                    String s = sc.nextLine();
+
+                    try {
+                        NarvisEngine.getInstance().getMessage(getMessage(s));
+                    } catch (Exception ex) {
+                        NarvisLogger.getInstance().getLogger().log(Level.SEVERE, ex.getMessage());
+                    }
+                }
+            }
+        };
     }
-    
+
     private MessageInOut getMessage(String s) {
         return new MessageInOut(this.moduleName, s, "localhost", accessConsole);
     }
 
     @Override
     public void start() {
-        this.listenloop.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Scanner sc = new Scanner(System.in);
-                String s = sc.nextLine();
-
-                try {
-                    NarvisEngine.getInstance().getMessage(getMessage(s));
-                } catch (Exception ex) {
-                    NarvisLogger.getInstance().getLogger().log(Level.SEVERE, ex.getMessage());
-                }
-            }
-        }, 0, REFRESH_PERIOD_SECOND * 1000);
-
+        this.listenloop.start();
     }
 
     @Override
     public void close() throws Exception {
 
     }
-    
+
     @Override
-    public IFrontEnd getFrontEnd(){
+    public IFrontEnd getFrontEnd() {
         return accessConsole;
     }
 }

@@ -23,7 +23,6 @@
  */
 package com.narvis.engine;
 
-
 import com.narvis.engine.interfaces.IAnswerBuilder;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +35,7 @@ import java.util.regex.Pattern;
  * @author puma
  */
 public class AnswerBuilder implements IAnswerBuilder {
-    
+
     @Override
     public List<String> getListOfRequiredParams(String answerFromXml) {
 

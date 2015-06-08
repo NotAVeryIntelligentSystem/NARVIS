@@ -65,49 +65,49 @@ public class Parser {
      */
     public List<String> parse(String sentence) throws NoDataException {
         List<String> parsedMessage = new ArrayList<>();
-        
+
         /* We put the sentence to lowercase and remove all the non-alphanumeric caracters.
-           This prevents us to the differents way users can write there messages (with punctuation or not, etc.)*/
+         This prevents us to the differents way users can write there messages (with punctuation or not, etc.)*/
         sentence = sentence.toLowerCase().replaceAll("[^a-z0-9|\" ]", "");
-        
+
         /* We replace doubl-space that could be caused by the suppression of a single caracter with one space */
         sentence = sentence.toLowerCase().replaceAll("  ", " ");
 
         sentence = transformSpaceInQuoteWithUnderscore(sentence);
-        
+
         parsedMessage.addAll(Arrays.asList(sentence.split(" ")));
-        
+
         List<Word> ignoredWords = dictionaryProvider.getModel().getIgnoredWords();
         parsedMessage.removeAll(wordsToStrings(ignoredWords));
-        
+
         parsedMessage = replaceUndescoreBySpace(parsedMessage);
         
         /* Remove empty words in word list */
         parsedMessage.removeAll(Arrays.asList("", null));
         return parsedMessage;
     }
-    
+
     /**
-     * Brows details map to find details that are sentences and parse these sentences.
+     * Brows details map to find details that are sentences and parse these
+     * sentences.
+     *
      * @param detailsToValue : Details map to scan
      * @return Parsed sentences
      * @throws com.narvis.dataaccess.exception.NoDataException
      */
-    public List<List<String>> getParsedSentencesFromDetails(Map<String, String> detailsToValue) throws NoDataException
-    {
+    public List<List<String>> getParsedSentencesFromDetails(Map<String, String> detailsToValue) throws NoDataException {
         List<List<String>> parsedSentences = new LinkedList<>();
-        
+
         Set keys = detailsToValue.keySet();
         Iterator it = keys.iterator();
-        while (it.hasNext()){
-           String key = (String) it.next();
-           
-           /* If the key contain spaces, this is actualy a sentence */
-           if(key.contains(" "))
-           {
-               List<String> currentParsedSentence = this.parse(key);
-               parsedSentences.add(currentParsedSentence);
-           }
+        while (it.hasNext()) {
+            String key = (String) it.next();
+
+            /* If the key contain spaces, this is actualy a sentence */
+            if (key.contains(" ")) {
+                List<String> currentParsedSentence = this.parse(key);
+                parsedSentences.add(currentParsedSentence);
+            }
         }
         return parsedSentences;
     }
@@ -126,29 +126,28 @@ public class Parser {
         for (int i = 0; i < sentenceChar.length; i++) {
             if (sentenceChar[i] == '"') {
                 replaceSpace = !replaceSpace;
-            }else if (replaceSpace && sentenceChar[i] == ' ')
-            {
+            } else if (replaceSpace && sentenceChar[i] == ' ') {
                 sentenceChar[i] = '_';
             }
         }
 
         sentence = String.copyValueOf(sentenceChar);
-        
+
         sentence = sentence.replaceAll("\"", "");
-        
+
         return sentence;
     }
 
     /**
-     * Remplace dans tous les mots d'une liste de mots les underscore par des espaces
-     * @param parsedSentence  : La liste de mot à traiter
+     * Remplace dans tous les mots d'une liste de mots les underscore par des
+     * espaces
+     *
+     * @param parsedSentence : La liste de mot à traiter
      * @return
      */
-    private List<String> replaceUndescoreBySpace(List<String> parsedSentence)
-    {
+    private List<String> replaceUndescoreBySpace(List<String> parsedSentence) {
         List<String> newParsedSentence = new LinkedList<>();
-        for(String word : parsedSentence)
-        {
+        for (String word : parsedSentence) {
             word = word.replace("_", " ");
             newParsedSentence.add(word);
         }
@@ -164,9 +163,8 @@ public class Parser {
      */
     private List<String> wordsToStrings(List<Word> words) {
         List<String> strings = new ArrayList<>();
-        
-        for(Word word : words)
-        {
+
+        for (Word word : words) {
             strings.add(word.getValue());
         }
 
