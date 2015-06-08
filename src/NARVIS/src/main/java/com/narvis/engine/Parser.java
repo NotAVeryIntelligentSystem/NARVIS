@@ -71,7 +71,7 @@ public class Parser {
         sentence = sentence.toLowerCase().replaceAll("[^a-z0-9|\" ]", "");
 
         /* We replace doubl-space that could be caused by the suppression of a single caracter with one space */
-        sentence = sentence.toLowerCase().replaceAll("  ", " ");
+        sentence = sentence.toLowerCase().replaceAll("\\s+", " ");
 
         sentence = transformSpaceInQuoteWithUnderscore(sentence);
 

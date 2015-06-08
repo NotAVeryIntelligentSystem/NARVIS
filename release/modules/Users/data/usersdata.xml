@@ -1,4 +1,9 @@
 <usersData>
+   <UserData name="localhost">
+      <userData>
+         <DataEntry key="location">nimes</DataEntry>
+      </userData>
+   </UserData>
    <UserData name="UwyBBQ">
       <userData>
          <DataEntry key="privileges">dev</DataEntry>
