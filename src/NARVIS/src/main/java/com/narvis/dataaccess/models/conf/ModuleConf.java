@@ -23,7 +23,7 @@
  */
 package com.narvis.dataaccess.models.conf;
 
-import com.narvis.dataaccess.interfaces.IDataProvider;
+import com.narvis.dataaccess.interfaces.dataproviders.IConfDataProvider;
 import java.util.HashMap;
 import java.util.Map;
 import org.simpleframework.xml.*;
@@ -33,7 +33,7 @@ import org.simpleframework.xml.*;
  * @author uwy
  */
 @Root(name = "ModuleConf")
-public class ModuleConf implements IDataProvider {
+public class ModuleConf implements IConfDataProvider {
 
     @Element(name = "ModuleClassPath")
     private String moduleClassPath;
@@ -68,5 +68,13 @@ public class ModuleConf implements IDataProvider {
         return this.entries.get(keywords[0]);
     }
     //Todo
+
+    @Override
+    public void setData(String... keywords) {
+        if (keywords[0].equals(MODULE_CLASS_PATH_KEYWORD)) {
+            this.moduleClassPath = keywords[1];
+        }
+        this.entries.put(keywords[0], keywords[1]);
+    }
 
 }

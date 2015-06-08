@@ -23,7 +23,7 @@
  */
 package com.narvis.dataaccess.models.conf;
 
-import com.narvis.dataaccess.interfaces.IDataProvider;
+import com.narvis.dataaccess.interfaces.dataproviders.IConfDataProvider;
 import java.util.*;
 import org.simpleframework.xml.*;
 
@@ -32,7 +32,7 @@ import org.simpleframework.xml.*;
  * @author uwy
  */
 @Root(name = "NarvisConf")
-public class NarvisConf implements IDataProvider {
+public class NarvisConf implements IConfDataProvider {
 
     @ElementMap(entry = "entry", key = "key", attribute = true, inline = true, required = false)
     @SuppressWarnings("FieldMayBeFinal")
@@ -47,4 +47,10 @@ public class NarvisConf implements IDataProvider {
         return this.entries.get(keywords[0]);
     }
     // Nothing here yet
+
+    @Override
+    public void setData(String... keywords) {
+        this.entries.replace(keywords[0], keywords[1]);
+    }
+
 }

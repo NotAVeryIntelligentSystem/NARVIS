@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 puma.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,19 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.interfaces;
-
-import com.narvis.dataaccess.exception.NoDataException;
-import com.narvis.dataaccess.exception.PersistException;
+package com.narvis.engine.exception;
 
 /**
  *
- * @author uwy
- * @param <T>
+ * @author puma
  */
-public interface IDataModelProvider<T> extends IDataProvider {
+public class AmbigousException extends EngineException {
 
-    public T getModel(String... keywords) throws NoDataException;
+    public AmbigousException(String msg, String narvisErrorMessage) {
+        super(msg, narvisErrorMessage);
+    }
 
-    public void persist() throws PersistException;
+    public AmbigousException(Throwable thrwbl, String narvisErrorMessage) {
+        super(thrwbl, narvisErrorMessage);
+    }
+
+    public AmbigousException(Class<?> providerName, String msg, String narvisErrorMessage) {
+        super(providerName, msg, narvisErrorMessage);
+    }
+
+    public AmbigousException(Class<?> providerName, String string, Throwable thrwbl, String narvisErrorMessage) {
+        super(providerName, string, thrwbl, narvisErrorMessage);
+    }
+
 }

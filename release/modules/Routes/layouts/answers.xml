@@ -1,6 +1,0 @@
-<Answers>
-	<Sentence command="error">Oups... a wild error appeared !</Sentence>
-    <Sentence command="errornocommand">I'm sorry but I can't do the task you ask me.</Sentence>
-    <Sentence command="success">I did it !</Sentence>
-    <Sentence command="successsimilarity">I learned the similarity between these two sentences</Sentence>
-</Answers>

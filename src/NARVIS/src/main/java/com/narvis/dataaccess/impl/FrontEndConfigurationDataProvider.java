@@ -24,12 +24,13 @@
 package com.narvis.dataaccess.impl;
 
 import com.narvis.common.debug.NarvisLogger;
-import com.narvis.common.tools.Arrays;
+import com.narvis.common.extensions.StringExts;
 import com.narvis.common.tools.serialization.XmlFileAccess;
 import com.narvis.common.tools.serialization.XmlFileAccessException;
 import com.narvis.dataaccess.exception.IllegalKeywordException;
+import com.narvis.dataaccess.exception.PersistException;
 import com.narvis.dataaccess.exception.ProviderException;
-import com.narvis.dataaccess.interfaces.IDataProvider;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
 import com.narvis.dataaccess.models.conf.ApiKeys;
 import com.narvis.dataaccess.models.conf.ModuleConf;
 import com.narvis.dataaccess.models.layouts.ModuleErrors;
@@ -53,11 +54,13 @@ public final class FrontEndConfigurationDataProvider implements IDataProvider {
     public static final String CONF_KEYWORD = "Conf";
     public static final String ERRORS_KEYWORD = "Error";
 
+    private final File moduleFolder;
     private final ApiKeys apiKeys;
     private final ModuleConf conf;
     private final ModuleErrors errorsLayout;
 
     public FrontEndConfigurationDataProvider(File frontendFolder) throws ProviderException {
+        this.moduleFolder = frontendFolder;
         File apiFile = null;
         File confFile = null;
         File errorFile = null;
@@ -97,6 +100,11 @@ public final class FrontEndConfigurationDataProvider implements IDataProvider {
         }
 
     }
+    
+        
+    public String getName() {
+        return this.moduleFolder.getName();
+    }
 
     public ApiKeys getApiKeys() {
         return this.apiKeys;
@@ -109,14 +117,26 @@ public final class FrontEndConfigurationDataProvider implements IDataProvider {
     public ModuleErrors getErrorsLayout() {
         return this.errorsLayout;
     }
+    
+    public void persist() throws PersistException {
+        try {
+            XmlFileAccess.toFile(this.apiKeys, new File(new File(this.moduleFolder, CONF_FOLDER_NAME), API_KEY_FILE_NAME));
+            XmlFileAccess.toFile(this.conf, new File(new File(this.moduleFolder, CONF_FOLDER_NAME), MODULE_CONF_FILE_NAME));
+            XmlFileAccess.toFile(this.errorsLayout, new File(new File(this.moduleFolder, LAYOUTS_FOLDER_NAME), ERRORS_FILE_NAME));
+        } catch (XmlFileAccessException ex) {
+            NarvisLogger.logException(ex);
+            throw new PersistException(FrontEndConfigurationDataProvider.class, "Could not persist conf files", ex, "general");
+        }
+    }
 
     @Override
     public String getData(String... keywords) throws IllegalKeywordException {
         if (keywords.length < 1) {
             throw new IllegalKeywordException(FrontEndConfigurationDataProvider.class, keywords, "keywords.length < 1", this.errorsLayout.getData("engine"));
         }
-        String[] nextkeywords = Arrays.skipFirst(keywords, 1);
-        switch (keywords[0]) {
+        String[] nextkeywords = StringExts.skipFirst(keywords, 1);
+        switch(keywords[0]) {
+
             case API_KEY_FILE_NAME:
                 return this.apiKeys.getData(nextkeywords);
             case MODULE_CONF_FILE_NAME:

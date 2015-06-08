@@ -21,23 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.common.tools;
+package com.narvis.dataaccess.interfaces.dataproviders;
 
-/**
- *
+import com.narvis.dataaccess.exception.IllegalKeywordException;
+import com.narvis.dataaccess.exception.NoDataException;
+
+/*
  * @author uwy
  */
-public class Arrays {
+public interface IDataProvider {
 
-    private Arrays() {
+    public String getData(String... keywords) throws NoDataException, IllegalKeywordException;
 
-    }
-
-    public static String[] skipFirst(String[] items, int count) {
-        String[] retVal = new String[items.length - count];
-        for (int i = count; i < items.length; i++) {
-            retVal[i - count] = items[i];
-        }
-        return retVal;
-    }
 }

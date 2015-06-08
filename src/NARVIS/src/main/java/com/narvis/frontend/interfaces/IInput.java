@@ -11,6 +11,6 @@ package com.narvis.frontend.interfaces;
  */
 public interface IInput extends AutoCloseable {
 
-    ;
     public void start();
+    public IFrontEnd getFrontEnd();
 }

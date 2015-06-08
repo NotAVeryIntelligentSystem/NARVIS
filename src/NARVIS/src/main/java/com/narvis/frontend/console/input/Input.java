@@ -5,39 +5,64 @@
  */
 package com.narvis.frontend.console.input;
 
+import com.narvis.common.debug.NarvisLogger;
 import com.narvis.engine.NarvisEngine;
 import com.narvis.frontend.MessageInOut;
+import com.narvis.frontend.console.AccessConsole;
+import com.narvis.frontend.interfaces.IFrontEnd;
 import com.narvis.frontend.interfaces.IInput;
-import java.util.List;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Nakou
  */
 public class Input implements IInput {
+    private final static int REFRESH_PERIOD_SECOND = 1;
 
+    private final AccessConsole accessConsole;
+    
+    private final String moduleName;
+    private final Timer listenloop;
+    
+    public Input(String moduleName, AccessConsole accessConsole) {
+        this.moduleName = moduleName;
+        this.accessConsole = accessConsole;
+        this.listenloop = new Timer("Console front end");
+    }
+    
     private MessageInOut getMessage(String s) {
-        return new MessageInOut("Console", s, "localhost");
+        return new MessageInOut(this.moduleName, s, "localhost", accessConsole);
     }
 
     @Override
     public void start() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("NARVIS/READY/>");
-        String s = sc.nextLine();
-        try {
-            NarvisEngine.getInstance().getMessage(this.getMessage(s));
-        } catch (Exception ex) {
-            Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.listenloop.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Scanner sc = new Scanner(System.in);
+                String s = sc.nextLine();
+
+                try {
+                    NarvisEngine.getInstance().getMessage(getMessage(s));
+                } catch (Exception ex) {
+                    NarvisLogger.getInstance().getLogger().log(Level.SEVERE, ex.getMessage());
+                }
+            }
+        }, 0, REFRESH_PERIOD_SECOND * 1000);
+
     }
 
     @Override
     public void close() throws Exception {
 
     }
-
+    
+    @Override
+    public IFrontEnd getFrontEnd(){
+        return accessConsole;
+    }
 }

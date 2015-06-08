@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 uwy.
+ * Copyright 2015 Zack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,15 +25,16 @@ package com.narvis.engine;
 
 import com.narvis.dataaccess.DataAccessFactory;
 import com.narvis.dataaccess.exception.NoDataException;
-import com.narvis.dataaccess.interfaces.IDataModelProvider;
-import com.narvis.dataaccess.interfaces.IMetaDataProvider;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataModelProvider;
 import com.narvis.dataaccess.models.lang.word.Dictionary;
 import com.narvis.dataaccess.models.lang.word.Word;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Permet de parser une chaine de caractère en une liste de mots.
@@ -41,8 +42,6 @@ import java.util.logging.Logger;
  * @author Zack
  */
 public class Parser {
-
-    private final static Logger LOGGER = Logger.getLogger(Parser.class.getName());
 
     private final IDataModelProvider<Dictionary> dictionaryProvider;
 
@@ -53,7 +52,6 @@ public class Parser {
      */
     public Parser() throws Exception {
         // Récupération du RoutesProvider
-        IMetaDataProvider metaDataProvider = DataAccessFactory.getMetaDataProvider();
         this.dictionaryProvider = (IDataModelProvider<Dictionary>) DataAccessFactory.getMetaDataProvider().getDataProvider("Dictionary");
     }
 
@@ -67,17 +65,48 @@ public class Parser {
      */
     public List<String> parse(String sentence) throws NoDataException {
         List<String> parsedMessage = new ArrayList<>();
-        sentence = sentence.toLowerCase();
+        
+        /* We put the sentence to lowercase and remove all the non-alphanumeric caracters.
+           This prevents us to the differents way users can write there messages (with punctuation or not, etc.)*/
+        sentence = sentence.toLowerCase().replaceAll("[^a-z0-9|\" ]", "");
+        
+        /* We replace doubl-space that could be caused by the suppression of a single caracter with one space */
+        sentence = sentence.toLowerCase().replaceAll("  ", " ");
 
         sentence = transformSpaceInQuoteWithUnderscore(sentence);
-
+        
         parsedMessage.addAll(Arrays.asList(sentence.split(" ")));
-
+        
         List<Word> ignoredWords = dictionaryProvider.getModel().getIgnoredWords();
         parsedMessage.removeAll(wordsToStrings(ignoredWords));
-
+        
         parsedMessage = replaceUndescoreBySpace(parsedMessage);
         return parsedMessage;
+    }
+    
+    /**
+     * Brows details map to find details that are sentences and parse these sentences.
+     * @param detailsToValue : Details map to scan
+     * @return Parsed sentences
+     * @throws com.narvis.dataaccess.exception.NoDataException
+     */
+    public List<List<String>> getParsedSentencesFromDetails(Map<String, String> detailsToValue) throws NoDataException
+    {
+        List<List<String>> parsedSentences = new LinkedList<>();
+        
+        Set keys = detailsToValue.keySet();
+        Iterator it = keys.iterator();
+        while (it.hasNext()){
+           String key = (String) it.next();
+           
+           /* If the key contain spaces, this is actualy a sentence */
+           if(key.contains(" "))
+           {
+               List<String> currentParsedSentence = this.parse(key);
+               parsedSentences.add(currentParsedSentence);
+           }
+        }
+        return parsedSentences;
     }
 
     /**
@@ -94,28 +123,29 @@ public class Parser {
         for (int i = 0; i < sentenceChar.length; i++) {
             if (sentenceChar[i] == '"') {
                 replaceSpace = !replaceSpace;
-            } else if (replaceSpace && sentenceChar[i] == ' ') {
+            }else if (replaceSpace && sentenceChar[i] == ' ')
+            {
                 sentenceChar[i] = '_';
             }
         }
 
         sentence = String.copyValueOf(sentenceChar);
-
+        
         sentence = sentence.replaceAll("\"", "");
-
+        
         return sentence;
     }
 
     /**
-     * Remplace dans tous les mots d'une liste de mots les underscore par des
-     * espaces
-     *
-     * @param parsedSentence : La liste de mot à traiter
+     * Remplace dans tous les mots d'une liste de mots les underscore par des espaces
+     * @param parsedSentence  : La liste de mot à traiter
      * @return
      */
-    private List<String> replaceUndescoreBySpace(List<String> parsedSentence) {
+    private List<String> replaceUndescoreBySpace(List<String> parsedSentence)
+    {
         List<String> newParsedSentence = new LinkedList<>();
-        for (String word : parsedSentence) {
+        for(String word : parsedSentence)
+        {
             word = word.replace("_", " ");
             newParsedSentence.add(word);
         }
@@ -131,8 +161,9 @@ public class Parser {
      */
     private List<String> wordsToStrings(List<Word> words) {
         List<String> strings = new ArrayList<>();
-
-        for (Word word : words) {
+        
+        for(Word word : words)
+        {
             strings.add(word.getValue());
         }
 

@@ -5,16 +5,16 @@
  */
 package com.narvis.frontend.twitter.input;
 
-import com.narvis.common.tools.executer.Executer;
+import com.narvis.common.debug.NarvisLogger;
+import com.narvis.dataaccess.exception.PersistException;
 import com.narvis.engine.NarvisEngine;
 import com.narvis.frontend.MessageInOut;
+import com.narvis.frontend.interfaces.IFrontEnd;
 import com.narvis.frontend.interfaces.IInput;
 import com.narvis.frontend.twitter.AccessTwitter;
-import static java.lang.Thread.sleep;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Timer;
+import java.util.TimerTask;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -25,60 +25,18 @@ import twitter4j.TwitterException;
  */
 public class Input implements IInput {
 
-    private final Thread listenloop;
-    public String nameAPI = "Twitter";
+    private final static int REFRESH_PERIOD_SECOND = 120;
     public String internalName = "nakJarvis";
-    private Twitter twitterLink;
-    private List<MessageInOut> messageList;
-    private long lastMessageId = 0; // Meh
-    private long lastMessageIdMinusOne; // Meh
+    private final Timer listenloop;
+    private final Twitter twitterLink;
+    private final AccessTwitter accessTwitter;
 
-    public Input(Twitter twit) {
+    public Input(Twitter twit, AccessTwitter accessTwitter) {
         this.twitterLink = twit;
-        this.listenloop = new Thread("Twitter listen") {
-            @Override
-            public void run() {
-                MessageInOut lastMessage = null;
-                while (!Thread.currentThread().isInterrupted()) {
-                    lastMessage = getInput();
-                    if (lastMessage != null) {
-                        try {
-                            NarvisEngine.getInstance().getMessage(lastMessage);
-                        } catch (Exception ex) {
-                            Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    try {
-                        sleep(60000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-
-        };
+        this.listenloop = new Timer("Twitter listen");
+        this.accessTwitter = accessTwitter;
     }
 
-    public void getMessages() throws TwitterException {
-        List<Status> statuses = this.twitterLink.getMentionsTimeline();
-        this.lastMessageIdMinusOne = this.lastMessageId; // meh
-        this.lastMessageId = statuses.get(0).getId(); // meh
-        List<MessageInOut> messageList = new ArrayList<>();
-        MessageInOut temp;
-        String[] tempParser;
-        for (Status status : statuses) {
-            if (status != null) {
-                tempParser = this.tweetParser(status);
-                temp = new MessageInOut(this.nameAPI, tempParser[0], tempParser[1]);
-                messageList.add(temp);
-            }
-        }
-        this.messageList = messageList;
-    }
-
-    public List<MessageInOut> getInputs() {
-        return messageList;
-    }
 
     private String getOtherResponseName(String tweet) {
         String recepiantsResponse = "";
@@ -93,16 +51,30 @@ public class Input implements IInput {
         return recepiantsResponse;
     }
 
+    /**
+     * Remove all specific Twitter vocabulary from the tweet to transform it in a simple sentence
+     * @param tweet : The tweet to transform
+     * @return A sentence withour Twitter specificity
+     */
     private String getCleanTweet(String tweet) {
         String cleanTweet = "";
         String[] parts = tweet.split(" ");
         for (String s : parts) {
-            if (!(s.charAt(0) == '@')) {
-                if (s.charAt(0) == '#') {
-                    cleanTweet += " " + s.replace("#", "");
-                } else {
+            switch(s.charAt(0))
+            {
+                /* If it's a @ (ex: @nakJarvis), that's mean it's a person. 
+                   To avoid abiguitie, we replace the name of the personne with "someone".
+                   The FrontEnd twitter already know who answer to. */
+                case '@':
+                    cleanTweet += " someone";
+                    break;
+                /* If it's a hashtag, we remove the # and use the it like a normal word */
+                case '#':
+                    cleanTweet += " " + s.substring(1);
+                    break;
+                /* Otherwise, we just put the word at the end of the sentence */
+                default:
                     cleanTweet += " " + s;
-                }
             }
         }
         return cleanTweet;
@@ -115,28 +87,53 @@ public class Input implements IInput {
         return returnValue;
     }
 
-    public MessageInOut getInput() {
+    public MessageInOut getInput() throws PersistException {
         try {
-            this.getMessages();
-            if (this.lastMessageId != this.lastMessageIdMinusOne) // Meh
-            {
-                return messageList.get(0);
-            } else {
-                return null;
+            List<Status> statuses = this.twitterLink.getMentionsTimeline();
+            Status lastStatus = statuses.get(0);
+            NarvisLogger.logInfo("Received following status : " + lastStatus.getText());
+            if(lastStatus.getId() != Long.parseLong(accessTwitter.getConf().getConf().getData("LastTwitterMessageId"))) {
+                accessTwitter.getConf().getConf().setData("LastTwitterMessageId", Long.toString(lastStatus.getId()));
+                accessTwitter.getConf().persist();
+                String[] tmp = this.tweetParser(lastStatus);
+                return new MessageInOut(accessTwitter.getConf().getName(), tmp[0], tmp[1], accessTwitter);
+            }
+            else {
+                NarvisLogger.logInfo("Ignoring tweet because identical to previous one");
+
             }
         } catch (TwitterException ex) {
-            Logger.getLogger(Input.class.getName()).log(Level.SEVERE, null, ex);
+            NarvisLogger.logException(ex);
         }
         return null;
     }
 
     @Override
     public void start() {
-        this.listenloop.start();
+        this.listenloop.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    MessageInOut lastMessage = getInput();
+                    if (lastMessage != null) {
+
+                        NarvisEngine.getInstance().getMessage(lastMessage);
+                    } 
+                }
+                catch (Exception ex) {
+                    NarvisLogger.logException(ex);
+                }
+            }
+        }, 0, REFRESH_PERIOD_SECOND * 1000);
     }
 
     @Override
     public void close() {
-        this.listenloop.interrupt();
+        this.listenloop.cancel();
+    }
+    
+    @Override
+    public IFrontEnd getFrontEnd(){
+        return accessTwitter;
     }
 }

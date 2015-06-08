@@ -36,10 +36,11 @@ public interface IAnswerProvider {
     /**
      * Build a map which link each param with its value
      *
+     * @param details : list of details that can be used to bind params
      * @param listOfParams the list of param needed to fulfill the answer
      * @return A Map containing the params and their values
-     * @throws com.narvis.dataaccess.exception.CanNotFindValueForParamException
+     * @throws com.narvis.dataaccess.exception.NoValueException
      */
-    Map<String, String> buildParamsToValueMap(List<String> listOfParams) throws NoValueException;
+    Map<String, String> buildParamsToValueMap(Map<String,String> details, List<String> listOfParams) throws NoValueException;
 
 }

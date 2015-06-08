@@ -21,23 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.models.lang;
+package com.narvis.dataaccess.interfaces.dataproviders;
+
+import com.narvis.dataaccess.exception.NoDataException;
+import com.narvis.dataaccess.exception.PersistException;
 
 /**
  *
  * @author uwy
+ * @param <T>
  */
-/*
- @Root(name = "Language")
- public class Language {
- @Element(name = "Name")
- private String name;
- <<<<<<< HEAD
-    
-    
- =======
+public interface IDataModelProvider<T> extends IDataProvider {
 
- @ElementList()
- >>>>>>> 7c3d03eb4cca7562e63a12ad178014bd6d023929
- private List<String> ignoreWords; 
- }*/
+    public T getModel(String... keywords) throws NoDataException;
+
+    public void persist() throws PersistException;
+}

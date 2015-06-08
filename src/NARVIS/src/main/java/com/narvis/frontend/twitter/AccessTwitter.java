@@ -7,11 +7,9 @@ package com.narvis.frontend.twitter;
 
 import com.narvis.common.debug.NarvisLogger;
 import com.narvis.dataaccess.impl.FrontEndConfigurationDataProvider;
-import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.frontend.interfaces.*;
 import com.narvis.frontend.twitter.input.Input;
 import com.narvis.frontend.twitter.output.Output;
-import java.util.logging.Level;
 import twitter4j.*;
 import twitter4j.auth.AccessToken;
 
@@ -47,8 +45,8 @@ public class AccessTwitter implements IFrontEnd {
             throw new IllegalArgumentException("Front end has already started !");
         }
         this.twitter = this.loadAccessTwitter(this.conf.getApiKeys().getData("token"), this.conf.getApiKeys().getData("tokenSecret"), this.conf.getApiKeys().getData("consumerKey"), this.conf.getApiKeys().getData("consumerSecret"));
-        this.input = new Input(this.twitter);
-        this.output = new Output(this.twitter);
+        this.input = new Input(this.twitter, this);
+        this.output = new Output(this.twitter, this.conf.getName());
         this.input.start();
     }
 
@@ -64,7 +62,7 @@ public class AccessTwitter implements IFrontEnd {
             this.input = null;
             this.output = null;
         } catch (Exception ex) {
-            NarvisLogger.getInstance().logException(ex);
+            NarvisLogger.logException(ex);
         }
     }
 
@@ -76,5 +74,9 @@ public class AccessTwitter implements IFrontEnd {
     @Override
     public IOutput getOutput() {
         return this.output;
+    }
+    
+    public FrontEndConfigurationDataProvider getConf(){
+        return this.conf;
     }
 }

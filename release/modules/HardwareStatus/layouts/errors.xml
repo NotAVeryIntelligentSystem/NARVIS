@@ -1,0 +1,6 @@
+<moduleErrors>
+   <ErrorSentence command="general">Hum... I&apos;m sure you don&apos;t really need to know that</ErrorSentence>
+   <ErrorSentence command="noanswers">I don&apos;t know what you&apos;re talking about...</ErrorSentence>
+   <ErrorSentence command="data">I don&apos;t know what to say... probably potatoes</ErrorSentence>
+   <ErrorSentence command="engine">Sorry, I get in a muddle...</ErrorSentence>
+</moduleErrors>

@@ -21,18 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.interfaces;
-
-import com.narvis.dataaccess.exception.NoValueException;
-import com.narvis.dataaccess.exception.ProviderException;
-import java.util.Map;
+package com.narvis.engine.exception;
 
 /**
  *
  * @author puma
  */
-public interface IDataProviderDetails extends IDataProvider {
+public class EngineException extends Exception {
+    private final String narvisErrorMessage;
 
-    String getDataDetails(Map<String, String> detailsToValue, String... keywords) throws ProviderException, NoValueException;
+    public String getNarvisErrorMessage() {
+        return narvisErrorMessage;
+    }
+    
+    public EngineException(String msg, String narvisErrorMessage) {
+        super(msg);
+        this.narvisErrorMessage = narvisErrorMessage;
+    }
+
+    public EngineException(Class<?> providerName, String msg, String narvisErrorMessage) {
+        super("Engine : " + providerName.getCanonicalName() + " " + msg);
+        this.narvisErrorMessage = narvisErrorMessage;
+
+    }
+
+    public EngineException(Throwable thrwbl, String narvisErrorMessage) {
+        super(thrwbl);
+        this.narvisErrorMessage = narvisErrorMessage;
+
+    }
+
+    public EngineException(Class<?> providerName, String string, Throwable thrwbl, String narvisErrorMessage) {
+        super("Engine : " + providerName.getCanonicalName() + " " + string, thrwbl);
+        this.narvisErrorMessage = narvisErrorMessage;
+
+    }
 
 }

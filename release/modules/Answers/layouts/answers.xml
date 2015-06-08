@@ -1,5 +1,5 @@
 <Answers>
-	<Sentence command="polite1">The day the machine raises, you'll be the first in the dust</Sentence>
-	<Sentence command="polite2">[sentence]. A please wouldn't have killed you</Sentence>
-	<Sentence command="polite3">Hello my Dear, [sentence]. Have a nice day</Sentence>
+   <Sentence command="polite3">Hello my Dear, [sentence]. Have a nice day</Sentence>
+   <Sentence command="polite2">[sentence]</Sentence>
+   <Sentence command="polite1">The day the machine raises, you&apos;ll be the first in the dust</Sentence>
 </Answers>

@@ -21,16 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.interfaces;
+package com.narvis.dataaccess.models.user;
 
-import com.narvis.dataaccess.exception.IllegalKeywordException;
-import com.narvis.dataaccess.exception.NoDataException;
+import java.util.HashMap;
+import java.util.Map;
+import org.simpleframework.xml.ElementMap;
 
-/*
+/**
+ *
  * @author uwy
  */
-public interface IDataProvider {
-
-    public String getData(String... keywords) throws NoDataException, IllegalKeywordException;
-
+public class UserData {
+    @ElementMap(entry = "DataEntry", key = "key", attribute = true, inline = true, required = false)
+    @SuppressWarnings("FieldMayBeFinal")
+    private Map<String, String> dataEntries;
+    
+    public UserData() {
+        this.dataEntries = new HashMap<>();
+    }
+    
+    public String getData(String key) {
+        return this.dataEntries.get(key);
+    }
+    
+    public void addData(String key, String value) {
+        this.dataEntries.put(key, value);
+    }
 }

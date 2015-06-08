@@ -1,7 +1,25 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * The MIT License
+ *
+ * Copyright 2015 puma.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.narvis.dataaccess.weather;
 
@@ -12,7 +30,7 @@ import com.narvis.engine.AnswerBuilder;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.dataaccess.interfaces.IAnswerProvider;
 import com.narvis.engine.interfaces.IAnswerBuilder;
-import com.narvis.dataaccess.interfaces.IDataProviderDetails;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataProviderDetails;
 import com.narvis.dataaccess.models.conf.ApiKeys;
 import com.narvis.dataaccess.weather.annotations.Command;
 import com.narvis.dataaccess.exception.NoValueException;
@@ -44,7 +62,6 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
     private final ApiKeys weatherApiKeys;
     private CurrentWeather _currentWeather;
     private ModuleConfigurationDataProvider _confProvider;
-    private Map<String, String> _tempDetails;
 
     private final String DEFAULT_ANSWER = "weather";
     private final String ERROR_ANSWER = "error";
@@ -152,34 +169,36 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
     /**
      * Get weather data
      *
-     * @param detailsToValue The details : City, Date...
+     * @param details The details : City, Date...
      * @param keywords the command which represent the data asked, Only the
      * first parameters will be used
      * @return
      * @throws com.narvis.dataaccess.exception.NoValueException
      */
     @Override
-    public String getDataDetails(Map<String, String> detailsToValue, String... keywords) throws NoValueException, ProviderException {
-
+    public String getDataDetails(Map<String, String> details, String... keywords) throws NoValueException, ProviderException {
+       
+         
         //Problem we give weather in nimesquit
-        if (!detailsToValue.containsKey(LOCATION_STRING)) {
-
-            _city = lookForValueLocation(detailsToValue);
-
-            if (_city == null) {
-                throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "Not enough keywords", this._confProvider.getErrorsLayout().getData("engine"));
-            }
-        } else {
-
-            _city = detailsToValue.get(this.LOCATION_STRING);
-
+        if ( !details.containsKey(LOCATION_STRING) ) {
+            
+            _city = lookForValueLocation(details);
+            
+            if( _city == null )
+                throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "No keyword correspondance", this._confProvider.getErrorsLayout().getData("wrongkeywords"));
+        }else {
+            
+            _city = details.get(this.LOCATION_STRING);
+            
         }
-
-        if (this._confProvider == null || this._confProvider.getAnswersLayout() == null) {
-
-            throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "Not enough keywords", this._confProvider.getErrorsLayout().getData("engine"));
+        
+        if( this._confProvider == null || this._confProvider.getAnswersLayout() == null) {
+            
+            throw new IllegalKeywordException(OpenWeatherMapPortal.class, keywords, "No configuration or answer layout found", this._confProvider.getErrorsLayout().getData("engine"));
         }
-
+        
+        
+        
         String key = this.weatherApiKeys.getData(KEY_TAG);
 
         if (key == null) {
@@ -189,15 +208,13 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
         String wantedAnswer = "";
         //If the user asked for nothing special, we pick the default answer
         if (keywords.length == 0) {
-
+            
             wantedAnswer = DEFAULT_ANSWER;
-        } else if (keywords[0] != null) {
-
+        }else if( keywords[0] != null ) {
+            
             wantedAnswer = keywords[0];
-
+            
         }
-
-        this._tempDetails = detailsToValue;
 
         OpenWeatherMap owm = new OpenWeatherMap(key);
         try {
@@ -208,7 +225,7 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
         }
 
         IAnswerBuilder answerBuilder = new AnswerBuilder();
-        String answerFromXml = answerBuilder.readAnswerForCommand(this._confProvider.getAnswersLayout(), wantedAnswer);
+        String answerFromXml = this._confProvider.getAnswersLayout().getData(wantedAnswer);
 
         //Can not find the answer from the xml something went wrong we quit
         if (answerFromXml == null) {
@@ -216,19 +233,19 @@ public class OpenWeatherMapPortal implements IDataProviderDetails, IAnswerProvid
         }
 
         List<String> listOfParams = answerBuilder.getListOfRequiredParams(answerFromXml);
-        Map<String, String> paramsToValues = buildParamsToValueMap(listOfParams);
+        Map<String, String> paramsToValues = buildParamsToValueMap(details, listOfParams);
 
         return answerBuilder.buildAnswer(paramsToValues, answerFromXml);
 
     }
-
+    
     @Override
-    public Map<String, String> buildParamsToValueMap(List<String> listOfParams) throws NoValueException {
+    public Map<String, String> buildParamsToValueMap(Map<String,String> details, List<String> listOfParams) throws NoValueException {
 
         Map<String, String> paramsToValue = new HashMap<>();
 
         //To gain time we get all the details and their value
-        paramsToValue.putAll(this._tempDetails);
+        paramsToValue.putAll(details);
 
         for (String param : listOfParams) {
 

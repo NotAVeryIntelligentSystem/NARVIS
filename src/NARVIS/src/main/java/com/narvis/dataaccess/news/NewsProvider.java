@@ -30,7 +30,7 @@ import com.narvis.dataaccess.exception.NoValueException;
 import com.narvis.dataaccess.exception.ProviderException;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.dataaccess.interfaces.IAnswerProvider;
-import com.narvis.dataaccess.interfaces.IDataProviderDetails;
+import com.narvis.dataaccess.interfaces.dataproviders.IDataProviderDetails;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
@@ -77,45 +77,9 @@ public class NewsProvider implements IDataProviderDetails, IAnswerProvider {
 
     }
 
-    @Override
-    public Map<String, String> buildParamsToValueMap(List<String> listOfParams) throws NoValueException {
 
-        
-        throw new UnsupportedOperationException("Not implemented yet");
-        
-        
-    }
-
-    @Override
-    public String getDataDetails(Map<String, String> detailsToValue, String... keywords) throws ProviderException, NoValueException {
-
-        
-        String askedCity = findCityInDetails(detailsToValue);
-        
-        if( detailsToValue == null || askedCity == null ) {
-            throw new NoValueException(NewsProvider.class ,"No value found for location", "engine");
-        }
-        
-        for( SyndEntry news : this._inputFeed.getEntries() ) {
-            
-            String currentCity = extractCityNameFromnews(news);
-            
-            if( currentCity.equals(askedCity) ) {
-                //Found a news for the asked city
-                return formatNews(news);
-            }
-        }
-        
-        //Found nothing, we'll check for it laterr
-        throw new NoValueException(NewsProvider.class, "No news for city", "data");
-    }
     
     
-
-    @Override
-    public String getData(String... keywords) throws NoDataException, IllegalKeywordException {
-        throw new UnsupportedOperationException("Not supported"); //To change body of generated methods, choose Tools | Templates.
-    }
 
     /**
      * Get the city in the details provided by the caller
@@ -186,6 +150,45 @@ public class NewsProvider implements IDataProviderDetails, IAnswerProvider {
         
         return "Titre : " + news.getTitle() + "\nLien : " + news.getLink();
          
+    }
+
+    @Override
+    public Map<String, String> buildParamsToValueMap(Map<String, String> details, List<String> listOfParams) throws NoValueException {
+        
+        
+        //Every details we need should be in the details provided by the caller !
+        return details;
+        
+    }
+
+    @Override
+    public String getDataDetails(Map<String, String> detailsToValue, String... keywords) throws ProviderException, NoValueException {
+    
+        String askedCity = findCityInDetails(detailsToValue);
+        
+        if( detailsToValue == null || askedCity == null ) {
+            throw new NoValueException(NewsProvider.class ,"No value found for location", "engine");
+        }
+        
+        for( SyndEntry news : this._inputFeed.getEntries() ) {
+            
+            String currentCity = extractCityNameFromnews(news);
+            
+            if( currentCity.equals(askedCity) ) {
+                //Found a news for the asked city
+                return formatNews(news);
+            }
+        }
+        
+        //Found nothing, we'll check for it laterr
+        throw new NoValueException(NewsProvider.class, "No news for city", "data");
+        
+    }
+    
+
+    @Override
+    public String getData(String... keywords) throws NoDataException, IllegalKeywordException {
+        throw new UnsupportedOperationException("Not supported "); 
     }
 
 }

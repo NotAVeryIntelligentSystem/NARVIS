@@ -5,14 +5,12 @@
  */
 package com.narvis.frontend.twitter.output;
 
+import com.narvis.common.debug.NarvisLogger;
+import com.narvis.common.extensions.StringExts;
+import com.narvis.dataaccess.impl.FrontEndConfigurationDataProvider;
 import com.narvis.frontend.MessageInOut;
 import com.narvis.frontend.interfaces.IOutput;
-import com.narvis.frontend.twitter.AccessTwitter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -22,75 +20,60 @@ import twitter4j.TwitterException;
  * @author Alban
  */
 public class Output implements IOutput {
-
+    private static final int MAX_TWEET_LENGTH = 140;
     public String nameAPI = "Twitter";
     public String internalName = "nakJarvis";
     private final Twitter twitterLink;
+    private final String moduleName;
 
-    public Output(Twitter twitter) {
+    
+    public Output(Twitter twitter, String moduleName) {
         this.twitterLink = twitter;
+        this.moduleName = moduleName;
     }
 
     @Override
     public void setOuput(MessageInOut m) {
         try {
-            for (String s : this.getTweetList(m)) {
+            for(String s : this.getTweetList(m)){
                 Status status = this.twitterLink.updateStatus(s);
             }
         } catch (TwitterException ex) {
-            Logger.getLogger(Output.class.getName()).log(Level.SEVERE, null, ex);
+            NarvisLogger.logException(ex);
         }
     }
-
-    private String returnNameAndCCToString(MessageInOut tweetOut) {
-        String retVal = "";
-        String answerTo = tweetOut.getAnswerTo().split(";")[0];
-        retVal += " @" + answerTo;
-        if (tweetOut.getAnswerTo().split(";").length > 1) {
-            retVal += " cc ";
+    
+    private String getAnswerTo(MessageInOut tweetOut) {
+        return "@" + tweetOut.getAnswerTo().split(";")[0] + " "; // The space is here to avoid problems, also adding it here will help it be taken in consideration when calculating output size tweets
+    }
+    
+    private String[] putAtSymbol(String... tweeterPeople) {
+        for(int i = 0 ; i < tweeterPeople.length ; i++) {
+            tweeterPeople[i] = "@" + tweeterPeople[i];
         }
-        for (String s : tweetOut.getAnswerTo().split(";")) {
-            if (!s.equals(tweetOut.getAnswerTo().split(";")[0])) {
-                if ((retVal + s).length() <= 140) {
-                    retVal += " @" + s;
-                } else {
-                    break;
-                }
-            }
+        return tweeterPeople;
+    }
+    
+    private String getCC(MessageInOut tweetOut) {
+        String[] answerTo = tweetOut.getAnswerTo().split(";");
+        if(answerTo.length > 1) {
+            return " cc " + String.join(" ", putAtSymbol(StringExts.skipFirst(tweetOut.getAnswerTo().split(";"), 1)));
+        }
+        return "";        
+    }
+   
+    public List<String> getTweetList(MessageInOut tweetOut){
+        String answerTo = this.getAnswerTo(tweetOut);
+        String ccTo = this.getCC(tweetOut);
+        // This is totally arbitrary and is intended to avoid MASS CC SPAM
+        if(answerTo.length() + ccTo.length() >= (MAX_TWEET_LENGTH / 2)) {
+            ccTo = "";
+        }
+        String appendMessage = " [...]";
+        List<String> retVal = StringExts.split(tweetOut.getContent(),  MAX_TWEET_LENGTH - (answerTo.length() + ccTo.length() + appendMessage.length()), appendMessage);
+        for(int i = 0 ; i < retVal.size() ; i++) {
+            retVal.set(i, answerTo + retVal.get(i) + ccTo) ;
         }
         return retVal;
-    }
-
-    public List<String> getWordList(MessageInOut tweetOut) {
-        List<String> retVal = Arrays.asList(tweetOut.getContent().split(" "));
-        return retVal;
-    }
-
-    public List<String> getTweetList(MessageInOut tweetOut) {
-        List<String> wordList = this.getWordList(tweetOut);
-        List<String> tweetList = new ArrayList<>();
-        String tweet = "";
-        boolean putNameOnIt = false;
-        int i = 0;
-        while (i < wordList.size() || !tweet.equals("")) {
-            if ((tweet + this.returnNameAndCCToString(tweetOut)).length() < 140 && !putNameOnIt) {
-                if ((tweet + this.returnNameAndCCToString(tweetOut) + wordList.get(i) + 1).length() < 140) {
-                    if (tweet.equals("")) {
-                        tweet += wordList.get(i);
-                    } else {
-                        tweet += " " + wordList.get(i);
-                    }
-                } else {
-                    tweet += this.returnNameAndCCToString(tweetOut);
-                    putNameOnIt = true;
-                }
-            } else {
-                tweetList.add(tweet);
-                tweet = "";
-                putNameOnIt = false;
-            }
-            i++;
-        }
-        return tweetList;
     }
 }

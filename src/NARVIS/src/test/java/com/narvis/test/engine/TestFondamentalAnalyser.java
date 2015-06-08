@@ -28,8 +28,6 @@ import com.narvis.engine.FondamentalAnalyser;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -87,19 +85,29 @@ public class TestFondamentalAnalyser {
         parsedSentence.add("in");
         parsedSentence.add("london");
 
-        List<String> wrongParsedSentence = new LinkedList<>();
-        wrongParsedSentence.add("this");
-        wrongParsedSentence.add("is");
-        wrongParsedSentence.add("sparta");
+        List<String> parsedSentence2 = new LinkedList<>();
+        parsedSentence2.add("please");
+        parsedSentence2.add("give");
+        parsedSentence2.add("me");
+        parsedSentence2.add("weather");
+        parsedSentence2.add("in");
+        parsedSentence2.add("london");
         /**/
 
         /* Expected Result */
-        String expectedProviderName = "weather";
+        String expectedProviderName = "OpenWeatherMap";
 
         List<String> expectedDetails = new LinkedList<>();
         expectedDetails.add("me");
         expectedDetails.add("in");
         expectedDetails.add("london");
+        
+        List<String> expectedDetails2 = new LinkedList<>();
+        expectedDetails2.add("please");
+        expectedDetails2.add("me");
+        expectedDetails2.add("in");
+        expectedDetails2.add("london");
+
 
         List<String> expectedAskFor = new LinkedList<>();
         /**/
@@ -116,17 +124,21 @@ public class TestFondamentalAnalyser {
             assertArrayEquals(myAction.getDetails().toArray(), expectedDetails.toArray());
             assertArrayEquals(myAction.getPrecisions().toArray(), expectedAskFor.toArray());
 
-            /* Test with a sentence that match no route */
-            myAction = myFondamentalAnalyser.findAction(wrongParsedSentence);
-            assertNull(myAction);
+            /* Test with a sentence that has good pattern but with some words before */
+            myAction = myFondamentalAnalyser.findAction(parsedSentence2);
+            assertEquals(myAction.getProviderName(), expectedProviderName);
+            assertArrayEquals(myAction.getDetails().toArray(), expectedDetails2.toArray());
+            assertArrayEquals(myAction.getPrecisions().toArray(), expectedAskFor.toArray());
 
-            /* Test with a NULL value */
+            /* Test with a NULL value *
             myAction = myFondamentalAnalyser.findAction(null);
             assertNull(myAction);
+            /**/
 
-            /* Test with an empty sentence */
+            /* Test with an empty sentence *
             myAction = myFondamentalAnalyser.findAction(new LinkedList<String>());
             assertNull(myAction);
+            /**/
 
         } catch (SAXException ex) {
             fail(ex.getMessage());
@@ -163,7 +175,7 @@ public class TestFondamentalAnalyser {
         /**/
 
         /* Expected Result */
-        String expectedProviderName = "weather";
+        String expectedProviderName = "OpenWeatherMap";
         /**/
 
         Action myAction;

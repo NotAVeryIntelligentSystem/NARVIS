@@ -42,5 +42,49 @@
          </Words>
          <Actions class="java.util.LinkedList"/>
       </Word>
+      <Word>
+         <Value>how</Value>
+         <Words class="java.util.LinkedList">
+            <Word>
+               <Value>are</Value>
+               <Words class="java.util.LinkedList">
+                  <Word>
+                     <Value>you</Value>
+                     <Words class="java.util.LinkedList"/>
+                     <Actions class="java.util.LinkedList">
+                        <Action>
+                           <Provider>HardwareStatus</Provider>
+                           <AskFor class="java.util.LinkedList"/>
+                        </Action>
+                     </Actions>
+                  </Word>
+               </Words>
+               <Actions class="java.util.LinkedList"/>
+            </Word>
+         </Words>
+         <Actions class="java.util.LinkedList"/>
+      </Word>
+      <Word>
+         <Words class="java.util.LinkedList">
+            <Word>
+               <Value>mean</Value>
+               <Words class="java.util.LinkedList">
+                  <Word>
+                     <Words class="java.util.LinkedList"/>
+                     <Actions class="java.util.LinkedList">
+                        <Action>
+                           <Provider>narvis</Provider>
+                           <AskFor class="java.util.LinkedList">
+                              <string>learnsimilaritybetweenroutes</string>
+                           </AskFor>
+                        </Action>
+                     </Actions>
+                  </Word>
+               </Words>
+               <Actions class="java.util.LinkedList"/>
+            </Word>
+         </Words>
+         <Actions class="java.util.LinkedList"/>
+      </Word>
    </Words>
 </Route>
