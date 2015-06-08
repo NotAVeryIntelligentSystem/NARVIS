@@ -90,8 +90,8 @@ public class Input implements IInput {
         return returnValue;
     }
 
-    public Stack<MessageInOut> getInput() throws PersistException {
-        Stack<MessageInOut> retVal = new Stack<>();
+    public List<MessageInOut> getInput() throws PersistException {
+        List<MessageInOut> retVal = new Stack<>();
         try {
             List<Status> statuses = this.twitterLink.getMentionsTimeline();
             long lastMessageId = Long.parseLong(accessTwitter.getConf().getConf().getData("LastTwitterMessageId"));

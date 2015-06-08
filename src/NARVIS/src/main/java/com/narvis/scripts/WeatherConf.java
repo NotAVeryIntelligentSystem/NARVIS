@@ -97,6 +97,7 @@ public class WeatherConf {
         ModuleAnswers retVal = new ModuleAnswers();
 
         retVal.getMap().put("temperature", "The temperature in [city] is [temperature]°C");
+        retVal.getMap().put("cloud", "The cloud percentage in [city] is [cloud]%");
         retVal.getMap().put("weather", "The temperature in [city] is [temperature]°C and the cloud percentage is [cloud]%");
         retVal.getMap().put("error", "Sorry guy I can't help you");
 
