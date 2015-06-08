@@ -43,6 +43,54 @@
          <Actions class="java.util.LinkedList"/>
       </Word>
       <Word>
+         <Value>what</Value>
+         <Words class="java.util.LinkedList">
+            <Word>
+               <Value>is</Value>
+               <Words class="java.util.LinkedList">
+                  <Word>
+                     <Value>temperature</Value>
+                     <Words class="java.util.LinkedList"/>
+                     <Actions class="java.util.LinkedList">
+                        <Action>
+                           <Provider>OpenWeatherMap</Provider>
+                           <AskFor class="java.util.LinkedList">
+                              <string>temperature</string>
+                           </AskFor>
+                        </Action>
+                     </Actions>
+                  </Word>
+               </Words>
+               <Actions class="java.util.LinkedList"/>
+            </Word>
+         </Words>
+         <Actions class="java.util.LinkedList"/>
+      </Word>
+      <Word>
+         <Value>is</Value>
+         <Words class="java.util.LinkedList">
+            <Word>
+               <Value>it</Value>
+               <Words class="java.util.LinkedList">
+                  <Word>
+                     <Value>cloudy</Value>
+                     <Words class="java.util.LinkedList"/>
+                     <Actions class="java.util.LinkedList">
+                        <Action>
+                           <Provider>OpenWeatherMap</Provider>
+                           <AskFor class="java.util.LinkedList">
+                              <string>cloud</string>
+                           </AskFor>
+                        </Action>
+                     </Actions>
+                  </Word>
+               </Words>
+               <Actions class="java.util.LinkedList"/>
+            </Word>
+         </Words>
+         <Actions class="java.util.LinkedList"/>
+      </Word>
+      <Word>
          <Value>how</Value>
          <Words class="java.util.LinkedList">
             <Word>

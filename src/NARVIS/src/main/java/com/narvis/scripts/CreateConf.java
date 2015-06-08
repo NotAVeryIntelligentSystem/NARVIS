@@ -52,10 +52,10 @@ public class CreateConf {
             //createAnswersModuleFolder(modulesFolder);
             //createStatusModuleFolder(modulesFolder);
             //createWeatherModuleFolder(modulesFolder);
-            //createRoutesModuleFolder(modulesFolder);
+            createRoutesModuleFolder(modulesFolder);
             //createDictionaryModuleFolder(modulesFolder);
             //createUsersModuleFolder(modulesFolder);
-            createNewsConfFolder(modulesFolder);
+            //createNewsConfFolder(modulesFolder);
 
             // Front ends
             File frontendsFolder = createFolder(baseFolder, ConfigurationDataProvider.FRONTENDS_FOLDER_NAME);
