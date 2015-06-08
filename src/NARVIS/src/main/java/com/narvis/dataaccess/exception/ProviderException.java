@@ -25,33 +25,60 @@ package com.narvis.dataaccess.exception;
 
 /**
  *
- * @author puma
+ * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class ProviderException extends Exception {
 
     private final String narvisErrorMessage;
 
+    /**
+     * Get the error message
+     * @return the message
+     */
     public String getNarvisErrorMessage() {
         return narvisErrorMessage;
     }
 
+    /**
+     * Constructor
+     * @param msg the message
+     * @param narvisErrorMessage narvis error message
+     */
     public ProviderException(String msg, String narvisErrorMessage) {
         super(msg);
         this.narvisErrorMessage = narvisErrorMessage;
     }
 
+    
+    /**
+     * Cosntructor
+     * @param providerName .class of the provider
+     * @param msg the message
+     * @param narvisErrorMessage narvis error message
+     */
     public ProviderException(Class<?> providerName, String msg, String narvisErrorMessage) {
         super("Provider : " + providerName.getCanonicalName() + " " + msg);
         this.narvisErrorMessage = narvisErrorMessage;
 
     }
-
+    /**
+     * Constructor
+     * @param thrwbl the throwable exception
+     * @param narvisErrorMessage narvis error message
+     */
     public ProviderException(Throwable thrwbl, String narvisErrorMessage) {
         super(thrwbl);
         this.narvisErrorMessage = narvisErrorMessage;
 
     }
 
+    /**
+     * Constructor
+     * @param providerName .class of the provider
+     * @param string message
+     * @param thrwbl throwable exception
+     * @param narvisErrorMessage narvis error message
+     */
     public ProviderException(Class<?> providerName, String string, Throwable thrwbl, String narvisErrorMessage) {
         super("Provider : " + providerName.getCanonicalName() + " " + string, thrwbl);
         this.narvisErrorMessage = narvisErrorMessage;
