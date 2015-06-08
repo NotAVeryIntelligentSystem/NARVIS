@@ -78,9 +78,8 @@ public class Word {
     public void setValue(String value) {
         this.value = value;
     }
-    
-    public void setIsIgnored(boolean isIgnored)
-    {
+
+    public void setIsIgnored(boolean isIgnored) {
         this.isIgnored = isIgnored;
     }
 

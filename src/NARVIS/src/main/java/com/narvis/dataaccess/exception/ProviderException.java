@@ -28,12 +28,13 @@ package com.narvis.dataaccess.exception;
  * @author puma
  */
 public class ProviderException extends Exception {
+
     private final String narvisErrorMessage;
 
     public String getNarvisErrorMessage() {
         return narvisErrorMessage;
     }
-    
+
     public ProviderException(String msg, String narvisErrorMessage) {
         super(msg);
         this.narvisErrorMessage = narvisErrorMessage;

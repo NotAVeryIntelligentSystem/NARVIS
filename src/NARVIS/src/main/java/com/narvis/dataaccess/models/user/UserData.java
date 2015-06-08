@@ -32,24 +32,24 @@ import org.simpleframework.xml.ElementMap;
  * @author uwy
  */
 public class UserData {
-    
+
     @ElementMap(entry = "DataEntry", key = "key", attribute = true, inline = true, required = false)
     @SuppressWarnings("FieldMayBeFinal")
     private Map<String, String> dataEntries;
-    
+
     public UserData() {
         this.dataEntries = new HashMap<>();
     }
-    
+
     public String getData(String key) {
         return this.dataEntries.get(key);
     }
-    
+
     public void addData(String key, String value) {
         this.dataEntries.put(key, value);
     }
-    
-    public Map<String, String> getAllData(){
+
+    public Map<String, String> getAllData() {
         return dataEntries;
     }
 }

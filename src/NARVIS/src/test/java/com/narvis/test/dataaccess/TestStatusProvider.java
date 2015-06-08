@@ -39,22 +39,22 @@ import static org.junit.Assert.*;
  * @author Zack
  */
 public class TestStatusProvider {
-    
+
     public TestStatusProvider() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -64,17 +64,14 @@ public class TestStatusProvider {
     //
     // @Test
     // public void hello() {}
-    
     @Test
-    public void TestConstructor() throws Exception
-    {
+    public void TestConstructor() throws Exception {
         StatusProvider myRoutesProvider = (StatusProvider) DataAccessFactory.getMetaDataProvider().getDataProvider("HardwareStatus");
-        
+
     }
-    
+
     @Test
-    public void TestGetDataDetails() throws Exception
-    {
+    public void TestGetDataDetails() throws Exception {
         StatusProvider myRoutesProvider = (StatusProvider) DataAccessFactory.getMetaDataProvider().getDataProvider("HardwareStatus");
         String protoAnswer = myRoutesProvider.getDataDetails(null);
     }

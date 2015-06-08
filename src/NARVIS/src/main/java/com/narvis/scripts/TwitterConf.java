@@ -33,42 +33,41 @@ import com.narvis.frontend.twitter.AccessTwitter;
  * @author Zack
  */
 public class TwitterConf {
+
     public final static String MODULE_NAME = "Twitter";
     public final static String MODULE_CLASS_PATH = AccessTwitter.class.getCanonicalName();
-    
-    public ModuleErrors createErrorsLayout()
-    {
-        
+
+    public ModuleErrors createErrorsLayout() {
+
         ModuleErrors retVal = new ModuleErrors();
-        
+
         retVal.getMap().put("general", "Hum... I'm sure you don't really need to know that");
         retVal.getMap().put("engine", "");
         retVal.getMap().put("data", "");
         retVal.getMap().put("noanswers", "I don't know what you're talking about...");
-        
+
         return retVal;
     }
-    
-    public ApiKeys createApiKeys()
-    {
+
+    public ApiKeys createApiKeys() {
         ApiKeys retVal = new ApiKeys();
-        
+
         retVal.setName(MODULE_NAME);
-        
+
         retVal.getApiKeys().put("token", "askNakou");
         retVal.getApiKeys().put("tokenSecret", "askNakou");
         retVal.getApiKeys().put("consumerKey", "askNakou");
         retVal.getApiKeys().put("consumerSecret", "askNakou");
-        
+
         return retVal;
     }
-    
+
     public ModuleConf createModuleConf() {
         ModuleConf retVal = new ModuleConf();
         retVal.setModuleClassPath(MODULE_CLASS_PATH);
 
         retVal.getEntries().put("LastTwitterMessageId", "0");
-            
+
         return retVal;
     }
 }

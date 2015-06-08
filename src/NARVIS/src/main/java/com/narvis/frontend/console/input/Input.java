@@ -21,20 +21,21 @@ import java.util.logging.Level;
  * @author Nakou
  */
 public class Input implements IInput {
+
     private final static int REFRESH_PERIOD_SECOND = 1;
 
     private final AccessConsole accessConsole;
-    
+
     private final String moduleName;
     private final Thread listenloop;
-    
+
     public Input(String moduleName, AccessConsole accessConsole) {
         this.moduleName = moduleName;
         this.accessConsole = accessConsole;
         this.listenloop = new Thread("Console front end") {
             @Override
             public void run() {
-                while(true) {
+                while (true) {
                     Scanner sc = new Scanner(System.in);
                     String s = sc.nextLine();
 
@@ -47,7 +48,7 @@ public class Input implements IInput {
             }
         };
     }
-    
+
     private MessageInOut getMessage(String s) {
         return new MessageInOut(this.moduleName, s, "localhost", accessConsole);
     }
@@ -61,9 +62,9 @@ public class Input implements IInput {
     public void close() throws Exception {
 
     }
-    
+
     @Override
-    public IFrontEnd getFrontEnd(){
+    public IFrontEnd getFrontEnd() {
         return accessConsole;
     }
 }

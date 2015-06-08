@@ -95,7 +95,7 @@ public final class ModuleConfigurationDataProvider implements IDataProvider {
                     answerFile = file;
                     break;
                 case ERRORS_FILE_NAME:
-                    if(errorFile != null) {
+                    if (errorFile != null) {
                         throw new ProviderException(ModuleConfigurationDataProvider.class, "Errors layout file found twice !", "Ouch");
                     }
                     errorFile = file;
@@ -129,11 +129,11 @@ public final class ModuleConfigurationDataProvider implements IDataProvider {
     public ModuleAnswers getAnswersLayout() {
         return this.answersLayout;
     }
-    
+
     public ModuleErrors getErrorsLayout() {
         return this.errorsLayout;
     }
-    
+
     public void persist() throws PersistException {
         try {
             XmlFileAccess.toFile(this.apiKeys, new File(new File(this.moduleFolder, CONF_FOLDER_NAME), API_KEY_FILE_NAME));

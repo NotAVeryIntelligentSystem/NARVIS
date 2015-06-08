@@ -38,7 +38,6 @@ public class Input implements IInput {
         this.accessTwitter = accessTwitter;
     }
 
-
     private String getOtherResponseName(String tweet) {
         String recepiantsResponse = "";
         String[] parts = tweet.split(" ");
@@ -53,7 +52,9 @@ public class Input implements IInput {
     }
 
     /**
-     * Remove all specific Twitter vocabulary from the tweet to transform it in a simple sentence
+     * Remove all specific Twitter vocabulary from the tweet to transform it in
+     * a simple sentence
+     *
      * @param tweet : The tweet to transform
      * @return A sentence withour Twitter specificity
      */
@@ -61,11 +62,10 @@ public class Input implements IInput {
         String cleanTweet = "";
         String[] parts = tweet.split(" ");
         for (String s : parts) {
-            switch(s.charAt(0))
-            {
+            switch (s.charAt(0)) {
                 /* If it's a @ (ex: @nakJarvis), that's mean it's a person. 
-                   To avoid abiguitie, we replace the name of the personne with "someone".
-                   The FrontEnd twitter already know who answer to. */
+                 To avoid abiguitie, we replace the name of the personne with "someone".
+                 The FrontEnd twitter already know who answer to. */
                 case '@':
                     cleanTweet += " someone";
                     break;
@@ -93,13 +93,12 @@ public class Input implements IInput {
             List<Status> statuses = this.twitterLink.getMentionsTimeline();
             Status lastStatus = statuses.get(0);
             NarvisLogger.logInfo("Received following status : " + lastStatus.getText());
-            if(lastStatus.getId() != Long.parseLong(accessTwitter.getConf().getConf().getData("LastTwitterMessageId"))) {
+            if (lastStatus.getId() != Long.parseLong(accessTwitter.getConf().getConf().getData("LastTwitterMessageId"))) {
                 accessTwitter.getConf().getConf().setData("LastTwitterMessageId", Long.toString(lastStatus.getId()));
                 accessTwitter.getConf().persist();
                 String[] tmp = this.tweetParser(lastStatus);
                 return new TwitterMessageInOut(accessTwitter.getConf().getName(), tmp[0], tmp[1], accessTwitter, lastStatus.getId());
-            }
-            else {
+            } else {
                 NarvisLogger.logInfo("Ignoring tweet because identical to previous one");
 
             }
@@ -119,9 +118,8 @@ public class Input implements IInput {
                     if (lastMessage != null) {
 
                         NarvisEngine.getInstance().getMessage(lastMessage);
-                    } 
-                }
-                catch (Exception ex) {
+                    }
+                } catch (Exception ex) {
                     NarvisLogger.logException(ex);
                 }
             }
@@ -132,9 +130,9 @@ public class Input implements IInput {
     public void close() {
         this.listenloop.cancel();
     }
-    
+
     @Override
-    public IFrontEnd getFrontEnd(){
+    public IFrontEnd getFrontEnd() {
         return accessTwitter;
     }
 }

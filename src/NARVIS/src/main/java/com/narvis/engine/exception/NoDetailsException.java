@@ -21,24 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.narvis.dataaccess.interfaces;
-
-import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
-import com.narvis.frontend.interfaces.IFrontEnd;
-import java.util.Set;
+package com.narvis.engine.exception;
 
 /**
  *
  * @author uwy
  */
-public interface IMetaDataProvider {
+public class NoDetailsException extends EngineException {
 
-    public IDataProvider getDataProvider(String... keywords);
+    public NoDetailsException(String msg, String narvisErrorMessage) {
+        super(msg, narvisErrorMessage);
+    }
 
-    public IFrontEnd getFrontEnd(String... keywords);
+    public NoDetailsException(Throwable thrwbl, String narvisErrorMessage) {
+        super(thrwbl, narvisErrorMessage);
+    }
 
-    public Set<String> getAvailableDataProviders();
+    public NoDetailsException(Class<?> providerName, String msg, String narvisErrorMessage) {
+        super(providerName, msg, narvisErrorMessage);
+    }
 
-    public Set<String> getAvailableFrontEnds();
-
+    public NoDetailsException(Class<?> providerName, String string, Throwable thrwbl, String narvisErrorMessage) {
+        super(providerName, string, thrwbl, narvisErrorMessage);
+    }
 }

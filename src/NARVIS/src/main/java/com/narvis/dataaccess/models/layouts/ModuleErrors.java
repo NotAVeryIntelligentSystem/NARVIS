@@ -33,10 +33,11 @@ import org.simpleframework.xml.ElementMap;
  * @author Zack
  */
 public class ModuleErrors implements IDataProvider {
+
     @ElementMap(entry = "ErrorSentence", key = "command", attribute = true, inline = true)
     @SuppressWarnings("FieldMayBeFinal")
     private Map<String, String> map;
-    
+
     public ModuleErrors() {
         this.map = new HashMap<>();
     }
@@ -44,7 +45,6 @@ public class ModuleErrors implements IDataProvider {
     public Map<String, String> getMap() {
         return map;
     }
-
 
     @Override
     public String getData(String... keywords) {

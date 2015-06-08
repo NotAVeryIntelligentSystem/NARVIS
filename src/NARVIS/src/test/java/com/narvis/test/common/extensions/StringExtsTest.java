@@ -38,22 +38,22 @@ import static org.junit.Assert.*;
  * @author uwy
  */
 public class StringExtsTest {
-    
+
     public StringExtsTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -70,9 +70,9 @@ public class StringExtsTest {
         String appendMessage = " [...]";
         List<String> expResult = new ArrayList<>();
         expResult.add("This is a very long sentence that need [...]");
-        expResult.add("to be splitted !"); 
+        expResult.add("to be splitted !");
         List<String> result = StringExts.split(sentence, maxPacketSize, appendMessage);
-        for(int i = 0 ; i < result.size() ; i++) {
+        for (int i = 0; i < result.size(); i++) {
             assertEquals(expResult.get(i), result.get(i));
         }
     }
@@ -89,9 +89,9 @@ public class StringExtsTest {
         String appendMessage = " [...]";
         List<String> expResult = new ArrayList<>();
         expResult.add("This is a very long sentence that need [...]");
-        expResult.add("to be splitted !");  
+        expResult.add("to be splitted !");
         List<String> result = StringExts.split(words, maxPacketSize, appendMessage);
-        for(int i = 0 ; i < result.size() ; i++) {
+        for (int i = 0; i < result.size(); i++) {
             assertEquals(expResult.get(i), result.get(i));
         }
     }
@@ -102,11 +102,11 @@ public class StringExtsTest {
     @Test
     public void testSkipFirst() {
         System.out.println("skipFirst");
-        String[] items = new String[] {"1", "2", "3"};
+        String[] items = new String[]{"1", "2", "3"};
         int count = 1;
-        String[] expResult = new String[] {"2", "3"};
+        String[] expResult = new String[]{"2", "3"};
         String[] result = StringExts.skipFirst(items, count);
         assertArrayEquals(expResult, result);
     }
-    
+
 }
