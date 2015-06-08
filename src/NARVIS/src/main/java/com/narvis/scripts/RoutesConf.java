@@ -62,9 +62,16 @@ public class RoutesConf {
                 createWordNode("how",
                         createWordNode("are",
                                 createWordNode("you", new ActionNode("HardwareStatus")))));
+        
+        retVal.addWord(
+                createWordNode("what",
+                        createWordNode("is",
+                                createWordNode("new", new ActionNode("News")))));
 
+        
+        
         currentAction = new ActionNode("narvis");
-        askFor.clear();
+        askFor = new LinkedList<>();
         askFor.add("learnsimilaritybetweenroutes");
         currentAction.setAskFor(askFor);
 
@@ -73,7 +80,8 @@ public class RoutesConf {
                         createWordNode("mean",
                                 createWordNode(null, currentAction))));
 
-        askFor.clear();
+        currentAction = new ActionNode("narvis");
+        askFor = new LinkedList<>();
         askFor.add("learnuserlocation");
         currentAction.setAskFor(askFor);
 
@@ -81,7 +89,8 @@ public class RoutesConf {
                 createWordNode("i",
                         createWordNode("live", currentAction)));
 
-        askFor.clear();
+        currentAction = new ActionNode("narvis");
+        askFor = new LinkedList<>();
         askFor.add("forgetuserdata");
         currentAction.setAskFor(askFor);
 

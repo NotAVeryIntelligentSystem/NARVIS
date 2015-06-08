@@ -65,6 +65,38 @@
          <Actions class="java.util.LinkedList"/>
       </Word>
       <Word>
+         <Value>what</Value>
+         <Words class="java.util.LinkedList">
+            <Word>
+               <Value>is</Value>
+               <Words class="java.util.LinkedList">
+                  <Word>
+                     <Value>new</Value>
+                     <Words class="java.util.LinkedList"/>
+                     <Actions class="java.util.LinkedList">
+                        <Action>
+                           <Provider>News</Provider>
+                           <AskFor class="java.util.LinkedList"/>
+                        </Action>
+                     </Actions>
+                  </Word>
+                  <Word>
+                     <Value>weather</Value>
+                     <Words class="java.util.LinkedList"/>
+                     <Actions class="java.util.LinkedList">
+                        <Action>
+                           <Provider>OpenWeatherMap</Provider>
+                           <AskFor class="java.util.LinkedList"/>
+                        </Action>
+                     </Actions>
+                  </Word>
+               </Words>
+               <Actions class="java.util.LinkedList"/>
+            </Word>
+         </Words>
+         <Actions class="java.util.LinkedList"/>
+      </Word>
+      <Word>
          <Words class="java.util.LinkedList">
             <Word>
                <Value>mean</Value>
@@ -75,7 +107,7 @@
                         <Action>
                            <Provider>narvis</Provider>
                            <AskFor class="java.util.LinkedList">
-                              <string>forgetuserdata</string>
+                              <string>learnsimilaritybetweenroutes</string>
                            </AskFor>
                         </Action>
                      </Actions>
@@ -96,7 +128,7 @@
                   <Action>
                      <Provider>narvis</Provider>
                      <AskFor class="java.util.LinkedList">
-                        <string>forgetuserdata</string>
+                        <string>learnuserlocation</string>
                      </AskFor>
                   </Action>
                </Actions>

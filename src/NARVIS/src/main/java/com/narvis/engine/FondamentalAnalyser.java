@@ -223,10 +223,18 @@ public class FondamentalAnalyser {
                 }
 
                 if (currentWordNode.getValue() != null && currentWordNode.getValue().equals(currentSentenceWord)) {
-                    details.remove(sentenceOffset);
-                    action = searchPath(currentWordNode, sentenceOffset);
-                    break;
+                    /* Search an action that match the sentence */
+                    action = searchPath(currentWordNode, sentenceOffset + 1);
 
+                    /* If an action is finded */
+                    if (action != null) {
+                        /* If the node isn't empty */
+                        if (currentWordNode.getValue() != null || !currentWordNode.getValue().isEmpty()) {
+                            /* Remove the current word in the details because he was used by the fondamental analyser */
+                            details.remove(sentenceOffset);
+                        }
+                        break;
+                    }
                 }
             }
 
