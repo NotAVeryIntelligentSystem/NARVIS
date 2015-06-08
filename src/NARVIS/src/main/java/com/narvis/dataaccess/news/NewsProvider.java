@@ -23,12 +23,12 @@
  */
 package com.narvis.dataaccess.news;
 
-import com.narvis.common.annotations.Command;
 import com.narvis.common.debug.NarvisLogger;
 import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.exception.NoValueException;
 import com.narvis.dataaccess.exception.ProviderException;
+import com.narvis.common.annotations.Command;
 import com.narvis.dataaccess.impl.ModuleConfigurationDataProvider;
 import com.narvis.dataaccess.interfaces.IAnswerProvider;
 import com.narvis.dataaccess.interfaces.dataproviders.IDataProviderDetails;
