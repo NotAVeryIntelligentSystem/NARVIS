@@ -23,9 +23,6 @@
  */
 package com.narvis.dataaccess.models.user;
 
-import com.narvis.dataaccess.exception.IllegalKeywordException;
-import com.narvis.dataaccess.exception.NoDataException;
-import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
 import java.util.HashMap;
 import java.util.Map;
 import org.simpleframework.xml.ElementMap;
@@ -53,6 +50,8 @@ public class UsersData {
         this.entries.put(userName, retVal);
         return retVal;
     }
-
-
+    
+    public void removeUser(String userName){
+        this.entries.remove(userName);
+    }
 }

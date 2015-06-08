@@ -38,7 +38,7 @@ import java.io.File;
  *
  * @author uwy
  */
-public class UserDataProvider implements IDataModelProvider {
+public class UserDataProvider implements IDataModelProvider<UsersData> {
     private final ModuleConfigurationDataProvider conf;
     private final UsersData data;
     public UserDataProvider(ModuleConfigurationDataProvider confProvider) throws IllegalKeywordException, NoDataException, ProviderException {
@@ -70,7 +70,7 @@ public class UserDataProvider implements IDataModelProvider {
     }
 
     @Override
-    public Object getModel(String... keywords) throws NoDataException {
+    public UsersData getModel(String... keywords) throws NoDataException {
         return this.data;
     }
 

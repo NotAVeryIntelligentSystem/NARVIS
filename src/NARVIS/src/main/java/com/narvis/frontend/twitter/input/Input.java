@@ -12,6 +12,7 @@ import com.narvis.frontend.MessageInOut;
 import com.narvis.frontend.interfaces.IFrontEnd;
 import com.narvis.frontend.interfaces.IInput;
 import com.narvis.frontend.twitter.AccessTwitter;
+import com.narvis.frontend.twitter.TwitterMessageInOut;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -96,7 +97,7 @@ public class Input implements IInput {
                 accessTwitter.getConf().getConf().setData("LastTwitterMessageId", Long.toString(lastStatus.getId()));
                 accessTwitter.getConf().persist();
                 String[] tmp = this.tweetParser(lastStatus);
-                return new MessageInOut(accessTwitter.getConf().getName(), tmp[0], tmp[1], accessTwitter);
+                return new TwitterMessageInOut(accessTwitter.getConf().getName(), tmp[0], tmp[1], accessTwitter, lastStatus.getId());
             }
             else {
                 NarvisLogger.logInfo("Ignoring tweet because identical to previous one");

@@ -149,59 +149,6 @@ public class TestFondamentalAnalyser {
         }
     }
 
-    @Test
-    public void TestCreateSimilarityBetween() {
-        /* Input Values */
-        List<List<String>> parsedSentences = new LinkedList<>();
 
-        List<String> knownParsedSentence = new LinkedList<>();
-        knownParsedSentence.add("give");
-        knownParsedSentence.add("someone");
-        knownParsedSentence.add("weather");
-        parsedSentences.add(knownParsedSentence);
 
-        List<String> newParsedSentence = new LinkedList<>();
-        newParsedSentence.add("bring");
-        newParsedSentence.add("someone");
-        newParsedSentence.add("weather");
-        parsedSentences.add(newParsedSentence);
-
-        List<String> newParsedSentence2 = new LinkedList<>();
-        newParsedSentence2.add("bring");
-        newParsedSentence2.add("someone");
-        newParsedSentence2.add("weather");
-        List<String> expectedDetails = new LinkedList<>();
-        expectedDetails.add("someone");
-        /**/
-
-        /* Expected Result */
-        String expectedProviderName = "OpenWeatherMap";
-        /**/
-
-        Action myAction;
-
-        try {
-            FondamentalAnalyser myFondamentalAnalyser = new FondamentalAnalyser();
-
-            myAction = myFondamentalAnalyser.findAction(newParsedSentence);
-            assertNull(myAction); // La route ne doit pas être trouvée
-
-            /* Ajoute la nouvelle route */
-            myFondamentalAnalyser.createSimilarityBetween(parsedSentences);
-
-            myAction = myFondamentalAnalyser.findAction(newParsedSentence2);
-            assertNotNull(myAction); // La route doit être trouvée
-
-            assertEquals(myAction.getProviderName(), expectedProviderName);
-            assertArrayEquals(myAction.getDetails().toArray(), expectedDetails.toArray());
-            assertTrue(myAction.getPrecisions().isEmpty());
-
-        } catch (SAXException ex) {
-            fail(ex.getMessage());
-        } catch (IOException ex) {
-            fail(ex.getMessage());
-        } catch (Exception ex) {
-            fail(ex.getMessage());
-        }
-    }
 }

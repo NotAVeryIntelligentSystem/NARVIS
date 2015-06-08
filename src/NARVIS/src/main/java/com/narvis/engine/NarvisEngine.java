@@ -31,16 +31,16 @@ import com.narvis.common.tools.executer.ExecuterException;
 import com.narvis.dataaccess.*;
 import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.dataaccess.exception.NoDataException;
-import com.narvis.dataaccess.exception.PersistException;
 import com.narvis.dataaccess.exception.ProviderException;
 import com.narvis.dataaccess.interfaces.*;
 import com.narvis.engine.exception.EngineException;
 import com.narvis.engine.exception.NoActionException;
 import com.narvis.engine.exception.NoSentenceException;
 import com.narvis.frontend.MessageInOut;
-import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -106,22 +106,13 @@ public class NarvisEngine {
             public void run() {
                 try {
                     brainProcess(lastMessage);
-                } catch (IllegalKeywordException ex) {
-                    NarvisLogger.logException(ex);
-                    onError(lastMessage, ex.getNarvisErrorMessage());
-                } catch (NoDataException ex) {
-                    NarvisLogger.logException(ex);
-                    onError(lastMessage, ex.getNarvisErrorMessage());
                 } catch (ProviderException ex) {
-                    NarvisLogger.logException(ex);
-                    onError(lastMessage, ex.getNarvisErrorMessage());
-                } catch (NoActionException | NoSentenceException ex) {
                     NarvisLogger.logException(ex);
                     onError(lastMessage, ex.getNarvisErrorMessage());
                 } catch (EngineException ex) {
                     NarvisLogger.logException(ex);
                     onError(lastMessage, ex.getNarvisErrorMessage());
-                } 
+                }
             }
         });
     }
@@ -137,13 +128,20 @@ public class NarvisEngine {
         parsedSentence = parser.parse(message.getContent());
         Action action = fondamentalAnalyser.findAction(parsedSentence);
         
-        detailsTypes = detailAnalyser.getDetailsTypes(action.getDetails());
+        /* We get the user name from the list of users we have to answer to */
+        String username = "";
+        String[] answerTo = message.getAnswerTo().split(";");
+        if(answerTo.length > 0)
+            username = answerTo[0];
+        
+        detailsTypes = detailAnalyser.getDetailsTypes(action.getDetails(), username);
         IDataProvider provider = this.metaDataProvider.getDataProvider(action.getProviderName());
         String protoAnswer = "";
         
         /* If the provider is NARVIS, we execute an internal action */
         if(action.getProviderName().equals("narvis")){
-            protoAnswer = doInternalAction(action, detailsTypes);
+            InternalActionsExecuter internalActionsExecuter = new InternalActionsExecuter(this);
+            protoAnswer = internalActionsExecuter.executeInternalAction(action, detailsTypes);
             
         /* else, we did the classic way and get the provider that correspond to the action */
         }else{
@@ -163,46 +161,18 @@ public class NarvisEngine {
         
         message.sendToOutput(finalAnswer);
     }
-
     
-    /**
-     * Guide NARVIS to choose the right internal action.
-     * @param action : The action to execute
-     * @return The answer
-     */ 
-    private String doInternalAction(Action action, Map<String, String> detailsTypes) throws EngineException, ProviderException
+    public FondamentalAnalyser getFondamentalAnalyser()
     {
-        String answer = "";
-        if(action.getPrecisions().isEmpty())
-            throw new NoActionException("No internal action found", "I don't understand what you're asking for");
-        
-        switch(action.getPrecisions().get(0))
-        {
-            case "learnsimilaritybetweenroutes":
-                answer = learnSimilarityBetweenRoutes(detailsTypes);
-                break;
-            default:
-                throw new NoActionException("No internal action found", "I don't understand what you're asking for"); 
-        }
-        
-        return answer;
+        return this.fondamentalAnalyser;
     }
     
-    /**
-     * Learn the similarity between sentences that are passed in details.
-     * @param details
-     * @return The success answer if the action has succesfuly
-     * @throws ParseException
-     * @throws EngineException
-     * @throws NoDataException
-     * @throws PersistException 
-     */
-    private String learnSimilarityBetweenRoutes(Map<String, String> details) throws EngineException, ProviderException
+    public Parser getParser()
     {
-        String successAnswer = "I've learned this similarity.";
-        
-        fondamentalAnalyser.createSimilarityBetween(parser.getParsedSentencesFromDetails(details));
-        
-        return successAnswer;
+        return this.parser;
+    }
+    
+    public DetailsAnalyser getDetailsAnalyser(){
+        return this.detailAnalyser;
     }
 }

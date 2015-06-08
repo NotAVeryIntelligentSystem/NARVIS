@@ -10,8 +10,10 @@ import com.narvis.common.extensions.StringExts;
 import com.narvis.dataaccess.impl.FrontEndConfigurationDataProvider;
 import com.narvis.frontend.MessageInOut;
 import com.narvis.frontend.interfaces.IOutput;
+import com.narvis.frontend.twitter.TwitterMessageInOut;
 import java.util.List;
 import twitter4j.Status;
+import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
@@ -24,19 +26,20 @@ public class Output implements IOutput {
     public String nameAPI = "Twitter";
     public String internalName = "nakJarvis";
     private final Twitter twitterLink;
-    private final String moduleName;
 
     
     public Output(Twitter twitter, String moduleName) {
         this.twitterLink = twitter;
-        this.moduleName = moduleName;
     }
 
     @Override
     public void setOuput(MessageInOut m) {
         try {
             for(String s : this.getTweetList(m)){
-                Status status = this.twitterLink.updateStatus(s);
+                //Status status = this.twitterLink.updateStatus(s);
+                StatusUpdate status = new StatusUpdate(s);
+                status.setInReplyToStatusId(((TwitterMessageInOut)m).getIdResponseTo());
+                this.twitterLink.updateStatus(status);
             }
         } catch (TwitterException ex) {
             NarvisLogger.logException(ex);
