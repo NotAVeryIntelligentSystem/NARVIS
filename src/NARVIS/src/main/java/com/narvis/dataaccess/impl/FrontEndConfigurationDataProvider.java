@@ -139,12 +139,12 @@ public final class FrontEndConfigurationDataProvider implements IDataProvider {
         String[] nextkeywords = StringExts.skipFirst(keywords, 1);
         switch (keywords[0]) {
 
-            case API_KEY_FILE_NAME:
+            case API_KEYWORD:
                 return this.apiKeys.getData(nextkeywords);
-            case MODULE_CONF_FILE_NAME:
+            case CONF_KEYWORD:
                 return this.conf.getData(nextkeywords);
         }
-        throw new IllegalKeywordException(FrontEndConfigurationDataProvider.class, keywords, keywords[0] + " does not match " + String.join(", ", API_KEY_FILE_NAME, MODULE_CONF_FILE_NAME), this.errorsLayout.getData("engine"));
+        throw new IllegalKeywordException(FrontEndConfigurationDataProvider.class, keywords, keywords[0] + " does not match " + String.join(", ", API_KEYWORD, CONF_KEYWORD), this.errorsLayout.getData("engine"));
     }
 
 }

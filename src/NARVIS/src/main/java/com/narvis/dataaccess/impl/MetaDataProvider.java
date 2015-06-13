@@ -23,11 +23,9 @@
  */
 package com.narvis.dataaccess.impl;
 
-import com.narvis.common.generics.Pair;
 import com.narvis.dataaccess.interfaces.dataproviders.IDataProvider;
 import com.narvis.dataaccess.interfaces.IMetaDataProvider;
 import com.narvis.frontend.interfaces.IFrontEnd;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 

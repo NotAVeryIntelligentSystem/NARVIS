@@ -23,16 +23,10 @@
  */
 package com.narvis.test.frontend.twitter;
 
-import com.narvis.frontend.MessageInOut;
-import com.narvis.frontend.twitter.output.Output;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -58,16 +52,6 @@ public class TwitterTest {
     @After
     public void tearDown() {
     }
-
-    @Test
-    public void testInstance() {
-        try {
-            Output out = new Output(null, "Twitter");
-        } catch (Exception ex) {
-            fail(ex.getMessage());
-        }
-    }
-
 
 
     // TODO add test methods here.

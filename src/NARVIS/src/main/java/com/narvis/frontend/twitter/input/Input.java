@@ -24,48 +24,35 @@
 package com.narvis.frontend.twitter.input;
 
 import com.narvis.common.debug.NarvisLogger;
-import com.narvis.dataaccess.exception.PersistException;
+import com.narvis.dataaccess.exception.IllegalKeywordException;
 import com.narvis.engine.NarvisEngine;
-import com.narvis.frontend.MessageInOut;
-import com.narvis.frontend.interfaces.IFrontEnd;
-import com.narvis.frontend.interfaces.IInput;
-import com.narvis.frontend.twitter.AccessTwitter;
-import com.narvis.frontend.twitter.TwitterMessageInOut;
+import com.narvis.frontend.interfaces.*;
+import com.narvis.frontend.twitter.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
-import java.util.Timer;
-import java.util.TimerTask;
 import twitter4j.*;
 
 /**
  *
  * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
-public class Input implements IInput  {
-
-    private final static int REFRESH_PERIOD_SECOND = 70;
-    public String internalName = "nakJarvis";
-    private final Timer listenloop;
-    private final Twitter twitterLink;
+public class Input implements IInput, UserStreamListener {
     private final AccessTwitter accessTwitter;
+    private final TwitterStream stream;
 
-    public Input(Twitter twit, AccessTwitter accessTwitter) {
-        this.twitterLink = twit;
-        this.listenloop = new Timer("Twitter listen");
+    public Input(AccessTwitter accessTwitter, TwitterStream stream) {
         this.accessTwitter = accessTwitter;
+        this.stream = stream;
     }
 
-    private String getOtherResponseName(String tweet) {
-        String recepiantsResponse = "";
-        String[] parts = tweet.split(" ");
-        for (String s : parts) {
-            if (s.charAt(0) == '@') { // is a name
-                if (!s.split("@")[1].equals(this.internalName)) { // is not NARVIS
-                    recepiantsResponse += ";" + s.split("@")[1];
-                }
+    private String getOtherResponseName(String tweet) throws IllegalKeywordException {
+        List<String> retVal = new ArrayList();
+        for (String s : tweet.split("\\s+")) {
+            if(s.matches("@.*") && !s.matches("@" + this.accessTwitter.getConf().getData("Conf", "Username"))) {
+                retVal.add(s);
             }
         }
-        return recepiantsResponse;
+        return String.join(";", retVal);
     }
 
     /**
@@ -76,88 +63,185 @@ public class Input implements IInput  {
      * @return A sentence withour Twitter specificity
      */
     private String getCleanTweet(String tweet) {
-        String cleanTweet = "";
-        String[] parts = tweet.replaceAll("\\s+", " ").split(" ");
-        for (String s : parts) {
-            switch (s.charAt(0)) {
-                /* If it's a @ (ex: @nakJarvis), that's mean it's a person. 
-                 To avoid abiguitie, we replace the name of the personne with "someone".
-                 The FrontEnd twitter already know who answer to. */
-                case '@':
-                    cleanTweet += " someone";
-                    break;
-                /* If it's a hashtag, we remove the # and use the it like a normal word */
-                case '#':
-                    cleanTweet += " " + s.substring(1);
-                    break;
-                /* Otherwise, we just put the word at the end of the sentence */
-                default:
-                    cleanTweet += " " + s;
+        StringBuilder retVal = new StringBuilder();
+        for (String s :  tweet.split("\\s+")) {
+            if(s.matches("@.*")) {
+                retVal.append(" someone");
             }
-        }
-        return cleanTweet;
-    }
-
-    private String[] tweetParser(Status status) {
-        String[] returnValue = new String[2];
-        returnValue[0] = getCleanTweet(status.getText());
-        returnValue[1] = status.getUser().getScreenName() + getOtherResponseName(status.getText());
-        return returnValue;
-    }
-
-    public Iterable<MessageInOut> getInput()  {
-        Stack<MessageInOut> retVal = new Stack<>();
-        try {
-            List<Status> statuses = this.twitterLink.getMentionsTimeline();
-            long lastMessageId = Long.parseLong(accessTwitter.getConf().getConf().getData("LastTwitterMessageId"));
-            Status lastStatus = statuses.get(0);
-            this.accessTwitter.getConf().getConf().setData("LastTwitterMessageId", Long.toString(lastStatus.getId()));
-            this.accessTwitter.getConf().persist();
-            if(lastMessageId == 0) {
-                String[] tmp = this.tweetParser(lastStatus);
-                retVal.push(new TwitterMessageInOut(accessTwitter.getConf().getName(), tmp[0], tmp[1], accessTwitter, lastStatus.getId()));
-            }
+            else if(s.matches("#.*")) {
+                retVal.append(s.replace("#", ""));
+            } 
             else {
-                int messageIndex = 0;
-                while(lastStatus.getId() !=  lastMessageId && messageIndex < statuses.size()) {
-                    String[] tmp = this.tweetParser(lastStatus);
-                    retVal.push(new TwitterMessageInOut(accessTwitter.getConf().getName(), tmp[0], tmp[1], accessTwitter, lastStatus.getId()));
-                    messageIndex++;
-                    lastStatus = statuses.get(messageIndex);
-                }
+                retVal.append(" ").append(s);
             }
-            return retVal;
-        } catch (PersistException | TwitterException ex) {
-            NarvisLogger.logException(ex);
         }
-        return retVal;
+        return retVal.toString();
+    }
+    
+    private boolean shouldAnswerTweet(Status status) throws TwitterException {
+        // Checking for favorite is useless here
+        return (status.getUser().getId() != this.stream.getId()) && !status.isRetweet();
+    }
+
+    private TwitterMessageInOut createMessageFromTweet(Status status) throws IllegalKeywordException {
+        return new TwitterMessageInOut(this.accessTwitter.getConf().getName(), 
+                getCleanTweet(status.getText()), status.getUser().getScreenName() + getOtherResponseName(status.getText()),
+                this.accessTwitter, status.getId());
     }
 
     @Override
     public void start() {
-        this.listenloop.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    for(MessageInOut lastMessage : getInput()) {
-                        NarvisLogger.logInfo("From : " + lastMessage.getAnswerTo());
-                        NarvisLogger.logInfo("Received message : " + lastMessage.getContent());
-                        NarvisEngine.getInstance().getMessage(lastMessage);
-                    }
-                } catch (Exception ex) {
-                    NarvisLogger.logException(ex);
-                }
-            }
-        }, 0, REFRESH_PERIOD_SECOND * 1000);
+        this.stream.addListener(this);
+        this.stream.user(); // I don't really know what I'm doing by doing this
     }
 
     @Override
     public void close() {
-        this.listenloop.cancel();
+        this.stream.removeListener(this);
     }
 
     @Override
     public IFrontEnd getFrontEnd() {
         return accessTwitter;
+    }
+
+    @Override
+    public void onStatus(Status status) {
+        try {
+            if(shouldAnswerTweet(status)) {
+                TwitterMessageInOut message = this.createMessageFromTweet(status);
+                NarvisLogger.logInfo("From : " + message.getAnswerTo());
+                NarvisLogger.logInfo("Received message : " + message.getContent());
+                NarvisEngine.getInstance().getMessage(message);
+            }
+            else {
+                NarvisLogger.logInfo("Ignoring following status : " + status.getText());
+            }
+        } catch (Exception ex) {
+            NarvisLogger.logException(ex);
+        }
+    }
+
+    @Override
+    public void onDeletionNotice(StatusDeletionNotice sdn) {
+        NarvisLogger.logInfo("User " + sdn.getUserId() + " deleted tweet : " + sdn.getStatusId());
+    }
+
+    @Override
+    public void onTrackLimitationNotice(int i) {
+        NarvisLogger.logInfo("Track limitation notice, remaining : " + i);
+    }
+
+    @Override
+    public void onScrubGeo(long l, long l1) {
+        NarvisLogger.logInfo("Scrub geo l :" + l + " l1 : " + l1);
+    }
+
+    @Override
+    public void onStallWarning(StallWarning sw) {
+        NarvisLogger.logInfo("Stallwarning received, code : " + sw.getCode() + " message : " + sw.getMessage());
+    }
+
+    @Override
+    public void onException(Exception excptn) {
+        NarvisLogger.logInfo("Received exception.");
+        NarvisLogger.logException(excptn);
+    }
+
+    @Override
+    public void onDeletionNotice(long directMessageId, long userId) {
+        NarvisLogger.logInfo("Received deletion notice from user : " + userId + " direct message id : " + directMessageId);
+    }
+
+    @Override
+    public void onFriendList(long[] friendIds) {
+        for(long id : friendIds) {
+            NarvisLogger.logInfo("onFriendList : " + id);
+        }
+    }
+
+    @Override
+    public void onFavorite(User source, User target, Status favoritedStatus) {
+        NarvisLogger.logInfo("Received fav notice from user : " + source.getId() + " to user : " + target.getId() + " to following message : " + favoritedStatus.getText());
+    }
+
+    @Override
+    public void onUnfavorite(User source, User target, Status unfavoritedStatus) {
+        NarvisLogger.logInfo("Received unfav notice from user : " + source.getId() + " to user : " + target.getId() + " to following message : " + unfavoritedStatus.getText());
+    }
+
+    @Override
+    public void onFollow(User source, User followedUser) {
+        NarvisLogger.logInfo("Received follow notice from user : " + source.getId() + " to followed user : " + followedUser.getId());
+    }
+
+    @Override
+    public void onUnfollow(User source, User unfollowedUser) {
+        NarvisLogger.logInfo("Received unfollow notice from user : " + source.getId() + " to followed user : " + unfollowedUser.getId());
+    }
+
+    @Override
+    public void onDirectMessage(DirectMessage directMessage) {
+        NarvisLogger.logInfo("Received directmessage from user : " + directMessage.getSenderId() + " with content : " + directMessage.getText());
+    }
+
+    @Override
+    public void onUserListMemberAddition(User addedMember, User listOwner, UserList list) {
+        NarvisLogger.logInfo("onUserListMemberAddition");
+    }
+
+    @Override
+    public void onUserListMemberDeletion(User deletedMember, User listOwner, UserList list) {
+        NarvisLogger.logInfo("onUserListMemberDeletion");
+    }
+
+    @Override
+    public void onUserListSubscription(User subscriber, User listOwner, UserList list) {
+        NarvisLogger.logInfo("onUserListSubscription");
+    }
+
+    @Override
+    public void onUserListUnsubscription(User subscriber, User listOwner, UserList list) {
+        NarvisLogger.logInfo("onUserListSubscription");
+    }
+
+    @Override
+    public void onUserListCreation(User listOwner, UserList list) {
+        NarvisLogger.logInfo("onUserListCreation");
+    }
+
+    @Override
+    public void onUserListUpdate(User listOwner, UserList list) {
+        NarvisLogger.logInfo("onUserListUpdate");
+    }
+
+    @Override
+    public void onUserListDeletion(User listOwner, UserList list) {
+        NarvisLogger.logInfo("onUserListDeletion");
+    }
+
+    @Override
+    public void onUserProfileUpdate(User updatedUser) {
+        NarvisLogger.logInfo("onUserProfileUpdate");
+    }
+
+    @Override
+    public void onUserSuspension(long suspendedUser) {
+        NarvisLogger.logInfo("onUserSuspension");
+    }
+
+    @Override
+    public void onUserDeletion(long deletedUser) {
+        NarvisLogger.logInfo("onUserDeletion");
+    }
+
+    @Override
+    public void onBlock(User source, User blockedUser) {
+        NarvisLogger.logInfo("onBlock");
+    }
+
+    @Override
+    public void onUnblock(User source, User unblockedUser) {
+        NarvisLogger.logInfo("onUnblock");
     }
 }

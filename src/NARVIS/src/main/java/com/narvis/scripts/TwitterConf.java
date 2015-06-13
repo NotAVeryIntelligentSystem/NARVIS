@@ -67,7 +67,7 @@ public class TwitterConf {
         retVal.setModuleClassPath(MODULE_CLASS_PATH);
 
         retVal.getEntries().put("LastTwitterMessageId", "0");
-
+        retVal.getEntries().put("Username", "nakJarvis");
         return retVal;
     }
 }

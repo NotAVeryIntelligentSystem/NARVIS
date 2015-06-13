@@ -30,8 +30,6 @@ import com.narvis.frontend.console.AccessConsole;
 import com.narvis.frontend.interfaces.IFrontEnd;
 import com.narvis.frontend.interfaces.IInput;
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Level;
 
 /**
@@ -39,9 +37,6 @@ import java.util.logging.Level;
  * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
 public class Input implements IInput {
-
-    private final static int REFRESH_PERIOD_SECOND = 1;
-
     private final AccessConsole accessConsole;
 
     private final String moduleName;
@@ -53,14 +48,17 @@ public class Input implements IInput {
         this.listenloop = new Thread("Console front end") {
             @Override
             public void run() {
-                while (true) {
+                while (!this.isInterrupted()) {
                     Scanner sc = new Scanner(System.in);
                     String s = sc.nextLine();
-
                     try {
-                        NarvisEngine.getInstance().getMessage(getMessage(s));
+                        if(s.matches("exit")) {
+                            NarvisEngine.getInstance().close();
+                        } else {
+                            NarvisEngine.getInstance().getMessage(getMessage(s));
+                        }
                     } catch (Exception ex) {
-                        NarvisLogger.getInstance().getLogger().log(Level.SEVERE, ex.getMessage());
+                        NarvisLogger.logException(ex);
                     }
                 }
             }
@@ -78,7 +76,7 @@ public class Input implements IInput {
 
     @Override
     public void close() throws Exception {
-
+        this.listenloop.interrupt();
     }
 
     @Override

@@ -23,11 +23,8 @@
  */
 package com.narvis.common.tools.reflection;
 
-import com.narvis.frontend.interfaces.IOutput;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

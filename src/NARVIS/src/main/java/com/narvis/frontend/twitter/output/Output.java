@@ -40,11 +40,9 @@ import twitter4j.TwitterException;
 public class Output implements IOutput {
 
     private static final int MAX_TWEET_LENGTH = 140;
-    public String nameAPI = "Twitter";
-    public String internalName = "nakJarvis";
     private final Twitter twitterLink;
 
-    public Output(Twitter twitter, String moduleName) {
+    public Output(Twitter twitter) {
         this.twitterLink = twitter;
     }
 

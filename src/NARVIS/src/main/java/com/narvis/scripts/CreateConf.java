@@ -37,7 +37,7 @@ import java.nio.file.Files;
  */
 public class CreateConf {
 
-    public static final String ROOT_FOLDER = "../../release";
+    public static final String ROOT_FOLDER = "../../";
 
     public static void main(String[] args) throws Exception {
 
@@ -52,14 +52,14 @@ public class CreateConf {
             //createAnswersModuleFolder(modulesFolder);
             //createStatusModuleFolder(modulesFolder);
             //createWeatherModuleFolder(modulesFolder);
-            createRoutesModuleFolder(modulesFolder);
+            //createRoutesModuleFolder(modulesFolder);
             //createDictionaryModuleFolder(modulesFolder);
             //createUsersModuleFolder(modulesFolder);
             //createNewsConfFolder(modulesFolder);
 
             // Front ends
             File frontendsFolder = createFolder(baseFolder, ConfigurationDataProvider.FRONTENDS_FOLDER_NAME);
-            //createTwitterFrontEndFolder(frontendsFolder);
+            createTwitterFrontEndFolder(frontendsFolder);
             //createConsoleFrontEndFolder(frontendsFolder);
 
             System.out.println("Finished conf creation");
@@ -80,7 +80,7 @@ public class CreateConf {
 
         XmlFileAccess.toFile(myTwitterConf.createErrorsLayout(), new File(layoutFolder, ModuleConfigurationDataProvider.ERRORS_FILE_NAME));
         XmlFileAccess.toFile(myTwitterConf.createModuleConf(), new File(confModuleFolder, FrontEndConfigurationDataProvider.MODULE_CONF_FILE_NAME));
-        XmlFileAccess.toFile(myTwitterConf.createApiKeys(), new File(confModuleFolder, FrontEndConfigurationDataProvider.API_KEY_FILE_NAME));
+        //XmlFileAccess.toFile(myTwitterConf.createApiKeys(), new File(confModuleFolder, FrontEndConfigurationDataProvider.API_KEY_FILE_NAME));
     }
 
     /* Console */

@@ -29,18 +29,13 @@ import com.narvis.common.debug.NarvisLogger;
 import com.narvis.common.tools.executer.Executer;
 import com.narvis.common.tools.executer.ExecuterException;
 import com.narvis.dataaccess.*;
-import com.narvis.dataaccess.exception.IllegalKeywordException;
-import com.narvis.dataaccess.exception.NoDataException;
 import com.narvis.dataaccess.exception.ProviderException;
 import com.narvis.dataaccess.interfaces.*;
 import com.narvis.engine.exception.EngineException;
-import com.narvis.engine.exception.NoActionException;
-import com.narvis.engine.exception.NoSentenceException;
 import com.narvis.frontend.MessageInOut;
+import com.narvis.frontend.interfaces.IFrontEnd;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Singleton that contains the heart of NARVIS. It's the controller that use others class in the engine.
@@ -89,8 +84,9 @@ public class NarvisEngine {
         this.executer.start();
 
         // We starts all front ends
-        for (String frontEnd : this.metaDataProvider.getAvailableFrontEnds()) {
-            this.metaDataProvider.getFrontEnd(frontEnd).start();
+        for (String frontEndStr : this.metaDataProvider.getAvailableFrontEnds()) {
+            IFrontEnd frontEnd = this.metaDataProvider.getFrontEnd(frontEndStr);
+            frontEnd.start();
         }
     }
 
@@ -100,8 +96,9 @@ public class NarvisEngine {
      */
     public void close() throws Exception {
         // We stop all fronts ends
-        for (String frontEnd : this.metaDataProvider.getAvailableFrontEnds()) {
-            this.metaDataProvider.getFrontEnd(frontEnd).close();
+        for (String frontEndStr : this.metaDataProvider.getAvailableFrontEnds()) {
+            IFrontEnd frontEnd = this.metaDataProvider.getFrontEnd(frontEndStr);
+            frontEnd.close();
         }
         this.executer.close();
     }
@@ -112,10 +109,8 @@ public class NarvisEngine {
      * @throws ExecuterException 
      */
     public void getMessage(final MessageInOut lastMessage) throws ExecuterException {
-        this.executer.addToExecute(new Runnable() {
-
-            @Override
-            public void run() {
+        try {
+            this.executer.addToExecute((Runnable) () -> {
                 try {
                     brainProcess(lastMessage);
                 } catch (ProviderException ex) {
@@ -125,8 +120,11 @@ public class NarvisEngine {
                     NarvisLogger.logException(ex);
                     onError(lastMessage, ex.getNarvisErrorMessage());
                 }
-            }
-        });
+            });
+        }
+        catch(Exception ex) {
+            NarvisLogger.logException(ex); // This is unexpected
+        }
     }
 
     /**

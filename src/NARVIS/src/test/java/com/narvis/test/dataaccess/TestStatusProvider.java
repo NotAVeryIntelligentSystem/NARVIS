@@ -59,16 +59,6 @@ public class TestStatusProvider {
     public void tearDown() {
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
-    @Test
-    public void TestConstructor() throws Exception {
-        StatusProvider myRoutesProvider = (StatusProvider) DataAccessFactory.getMetaDataProvider().getDataProvider("HardwareStatus");
-
-    }
 
     @Test
     public void TestGetDataDetails() throws Exception {

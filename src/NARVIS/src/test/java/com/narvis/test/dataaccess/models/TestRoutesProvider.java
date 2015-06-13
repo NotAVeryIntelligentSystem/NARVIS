@@ -23,24 +23,10 @@
  */
 package com.narvis.test.dataaccess.models;
 
-import com.narvis.common.debug.NarvisLogger;
-import com.narvis.dataaccess.DataAccessFactory;
-import com.narvis.dataaccess.interfaces.dataproviders.IDataModelProvider;
-import com.narvis.dataaccess.interfaces.dataproviders.IDataProviderDetails;
-import com.narvis.dataaccess.models.route.RouteNode;
-import com.narvis.engine.Action;
-import com.narvis.engine.DetailsAnalyser;
-import com.narvis.engine.FondamentalAnalyser;
-import com.narvis.engine.Parser;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -67,19 +53,5 @@ public class TestRoutesProvider {
     public void tearDown() {
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
-    @Test
-    public void testInstanciation() throws Exception {
-        try {
-            IDataModelProvider<RouteNode> myRoutesProvider = (IDataModelProvider<RouteNode>) DataAccessFactory.getMetaDataProvider().getDataProvider("Routes");
-        } catch (Exception ex) {
-            NarvisLogger.getInstance().logException(ex);
-            throw ex;
-        }
-    }
 
 }

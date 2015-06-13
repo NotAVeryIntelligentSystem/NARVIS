@@ -34,7 +34,7 @@ import java.util.logging.*;
  */
 public class NarvisLogger {
 
-    private final static boolean DEBUG_MOD = false; // True : use console + file log, False : use only file log
+    private final static boolean DEBUG_MOD = true; // True : use console + file log, False : use only file log
     private static NarvisLogger INSTANCE = null;
 
     /**
@@ -107,11 +107,8 @@ public class NarvisLogger {
                 if (!logDirectory.isDirectory() && !logDirectory.mkdirs()) {
                     INSTANCE.getLogger().warning("Can't create logs directory...");
                 } else {
-                    Date date = new Date();
-                    File logPath = new File(logDirectory.getAbsolutePath(), "narvis-log." + date.getTime() + ".txt");
-
+                    File logPath = new File(logDirectory.getAbsolutePath(), "narvis.log");
                     INSTANCE.getLogger().addHandler(new FileHandler(logPath.getAbsolutePath()));
-
                     /* If the log file is correctly initialized, we disable parents logs that could be console, etc.*/
                     INSTANCE.getLogger().setUseParentHandlers(DEBUG_MOD);
                 }
