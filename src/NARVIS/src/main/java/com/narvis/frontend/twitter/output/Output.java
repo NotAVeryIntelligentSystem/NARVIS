@@ -25,12 +25,10 @@ package com.narvis.frontend.twitter.output;
 
 import com.narvis.common.debug.NarvisLogger;
 import com.narvis.common.extensions.StringExts;
-import com.narvis.dataaccess.impl.FrontEndConfigurationDataProvider;
 import com.narvis.frontend.MessageInOut;
 import com.narvis.frontend.interfaces.IOutput;
 import com.narvis.frontend.twitter.TwitterMessageInOut;
 import java.util.List;
-import twitter4j.Status;
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;

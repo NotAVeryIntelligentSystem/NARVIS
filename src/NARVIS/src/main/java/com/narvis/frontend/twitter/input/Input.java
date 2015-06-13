@@ -31,22 +31,19 @@ import com.narvis.frontend.interfaces.IFrontEnd;
 import com.narvis.frontend.interfaces.IInput;
 import com.narvis.frontend.twitter.AccessTwitter;
 import com.narvis.frontend.twitter.TwitterMessageInOut;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
+import twitter4j.*;
 
 /**
  *
  * @author Yoann LE MOUËL & Alban BONNET & Charles COQUE & Raphaël BLIN
  */
-public class Input implements IInput {
+public class Input implements IInput  {
 
-    private final static int REFRESH_PERIOD_SECOND = 120;
+    private final static int REFRESH_PERIOD_SECOND = 70;
     public String internalName = "nakJarvis";
     private final Timer listenloop;
     private final Twitter twitterLink;
@@ -80,7 +77,7 @@ public class Input implements IInput {
      */
     private String getCleanTweet(String tweet) {
         String cleanTweet = "";
-        String[] parts = tweet.split(" ");
+        String[] parts = tweet.replaceAll("\\s+", " ").split(" ");
         for (String s : parts) {
             switch (s.charAt(0)) {
                 /* If it's a @ (ex: @nakJarvis), that's mean it's a person. 
@@ -108,8 +105,8 @@ public class Input implements IInput {
         return returnValue;
     }
 
-    public List<MessageInOut> getInput() throws PersistException {
-        List<MessageInOut> retVal = new Stack<>();
+    public Iterable<MessageInOut> getInput()  {
+        Stack<MessageInOut> retVal = new Stack<>();
         try {
             List<Status> statuses = this.twitterLink.getMentionsTimeline();
             long lastMessageId = Long.parseLong(accessTwitter.getConf().getConf().getData("LastTwitterMessageId"));
@@ -118,19 +115,19 @@ public class Input implements IInput {
             this.accessTwitter.getConf().persist();
             if(lastMessageId == 0) {
                 String[] tmp = this.tweetParser(lastStatus);
-                retVal.add(new TwitterMessageInOut(accessTwitter.getConf().getName(), tmp[0], tmp[1], accessTwitter, lastStatus.getId()));
+                retVal.push(new TwitterMessageInOut(accessTwitter.getConf().getName(), tmp[0], tmp[1], accessTwitter, lastStatus.getId()));
             }
             else {
                 int messageIndex = 0;
                 while(lastStatus.getId() !=  lastMessageId && messageIndex < statuses.size()) {
                     String[] tmp = this.tweetParser(lastStatus);
-                    retVal.add(new TwitterMessageInOut(accessTwitter.getConf().getName(), tmp[0], tmp[1], accessTwitter, lastStatus.getId()));
+                    retVal.push(new TwitterMessageInOut(accessTwitter.getConf().getName(), tmp[0], tmp[1], accessTwitter, lastStatus.getId()));
                     messageIndex++;
                     lastStatus = statuses.get(messageIndex);
                 }
             }
             return retVal;
-        } catch (TwitterException ex) {
+        } catch (PersistException | TwitterException ex) {
             NarvisLogger.logException(ex);
         }
         return retVal;
@@ -142,8 +139,9 @@ public class Input implements IInput {
             @Override
             public void run() {
                 try {
-                    List<MessageInOut> lastMessages = getInput();
-                    for(MessageInOut lastMessage : lastMessages) {
+                    for(MessageInOut lastMessage : getInput()) {
+                        NarvisLogger.logInfo("From : " + lastMessage.getAnswerTo());
+                        NarvisLogger.logInfo("Received message : " + lastMessage.getContent());
                         NarvisEngine.getInstance().getMessage(lastMessage);
                     }
                 } catch (Exception ex) {
