@@ -24,7 +24,10 @@
 package com.narvis.common.extensions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -95,5 +98,11 @@ public class StringExts {
             retVal[i - count] = items[i];
         }
         return retVal;
+    }
+    
+    public static String[] distinct(String[] items) {
+        Set<String> retVal = new HashSet<>();
+        retVal.addAll(Arrays.asList(items));
+        return retVal.toArray(new String[retVal.size()]);
     }
 }

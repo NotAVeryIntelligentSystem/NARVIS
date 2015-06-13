@@ -73,7 +73,7 @@ public class Output implements IOutput {
     private String getCC(MessageInOut tweetOut) {
         String[] answerTo = tweetOut.getAnswerTo().split(";");
         if (answerTo.length > 1) {
-            return " cc " + String.join(" ", putAtSymbol(StringExts.skipFirst(tweetOut.getAnswerTo().split(";"), 1)));
+            return " cc " + String.join(" ", StringExts.distinct(putAtSymbol(StringExts.skipFirst(tweetOut.getAnswerTo().split(";"), 1))));
         }
         return "";
     }

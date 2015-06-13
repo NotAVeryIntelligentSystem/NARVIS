@@ -78,9 +78,20 @@ public class Input implements IInput, UserStreamListener {
         return retVal.toString();
     }
     
+    private boolean isMentionnedIn(UserMentionEntity[] mentions) throws TwitterException {
+        if(mentions != null) {
+            for(UserMentionEntity mention : mentions) {
+                if(mention.getId() == this.stream.getId()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
     private boolean shouldAnswerTweet(Status status) throws TwitterException {
         // Checking for favorite is useless here
-        return (status.getUser().getId() != this.stream.getId()) && !status.isRetweet();
+        return (status.getUser().getId() != this.stream.getId()) && !status.isRetweet() && isMentionnedIn(status.getUserMentionEntities());
     }
 
     private TwitterMessageInOut createMessageFromTweet(Status status) throws IllegalKeywordException {

@@ -23,6 +23,7 @@
  */
 package com.narvis.common.tools.executer;
 
+import com.narvis.common.debug.NarvisLogger;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -49,12 +50,12 @@ public class Executer implements AutoCloseable {
         this.executionLoop = new Thread(name) {
             @Override
             public void run() {
-                while (!Thread.currentThread().isInterrupted()) {
+                while (!this.isInterrupted()) {
                     try {
                         // Automatically interrupted when this thread is interrupted so we shouldn't worry much
                         toExecute.take().run();
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(Executer.class.getName()).log(Level.SEVERE, null, ex);
+                        NarvisLogger.logException(ex);
                     }
                 }
             }
